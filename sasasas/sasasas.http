@@ -1,0 +1,6 @@
+@sasasas_HostAddress = http://localhost:5168
+
+GET {{sasasas_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
