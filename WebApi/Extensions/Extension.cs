@@ -1,5 +1,9 @@
-﻿using Microsoft.OpenApi.Models;
-
+﻿using Application.Models.Configuration;
+using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Text;
 namespace WebApi.Extensions
 {
     public static class Extension
@@ -45,5 +49,103 @@ namespace WebApi.Extensions
             });
             return services;
         }
+
+        //public static IServiceCollection AddAuthenticationAndAuthorization(this IServiceCollection services, IConfiguration configuration)
+        //{
+        //    services.AddScoped<IJWTService, JWTService>();
+
+        //    var jwtConfig = new JWTConfiguration();
+        //    configuration.GetSection("JWT").Bind(jwtConfig);
+
+        //    services.AddSingleton(jwtConfig);
+
+
+        //    services.AddAuthentication(options =>
+        //    {
+        //        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        //        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        //        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+        //    }).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, setup =>
+        //    {
+        //        setup.TokenValidationParameters = new TokenValidationParameters
+        //        {
+        //            ValidateIssuer = true,
+        //            ValidateAudience = true,
+        //            ValidateLifetime = true,
+        //            ValidateIssuerSigningKey = true,
+        //            ValidAudience = jwtConfig.Audience,
+        //            ValidIssuer = jwtConfig.Issuer,
+        //            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.Secret)),
+        //            ClockSkew = TimeSpan.Zero
+        //        };
+        //    });
+
+        //    services.AddAuthorization();
+        //    return services;
+        //}
+
+        //public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
+        //{
+        //    services.AddScoped<ICourierService, CourierService>();
+        //    services.AddScoped<IWorkerService, WorkerService>();
+        //    services.AddScoped<IPassHashService, PassHashService>();
+        //    services.AddScoped<IAuthService, AuthService>();
+        //    services.AddScoped<IBlobService, BlobService>();
+        //    services.AddScoped<IUserService, UserService>();
+        //    services.AddScoped<IRestaurantService, RestaurantService>();
+        //    services.AddScoped<IMailService, MailService>();
+
+
+        //    services.AddTransient<IValidator<AddAppUserDto>, AddAppUserDtoValidator>();
+        //    services.AddTransient<IValidator<AddBankCardDto>, AddBankCardDtoValidator>();
+        //    services.AddTransient<IValidator<UpdateAppUserDto>, UpdateAppUserDtoValidator>();
+        //    services.AddTransient<IValidator<UpdateAppUserPasswordDto>, UpdateAppUserPasswordDtoValidator>();
+
+        //    var smtpConfig = new SMTPConfiguration();
+        //    configuration.GetSection("SMTP").Bind(smtpConfig);
+        //    services.AddSingleton(smtpConfig);
+
+        //    return services;
+        //}
+
+        //public static IServiceCollection AddRepositories(this IServiceCollection services)
+        //{
+        //    services.AddScoped<IReadCourierRepository, ReadCourierRepository>();
+        //    services.AddScoped<IWriteCourierRepository, WriteCourierRepository>();
+
+        //    services.AddScoped<IWriteRestaurantRepository, WriteRestaurantRepository>();
+        //    services.AddScoped<IReadRestaurantRepository, ReadRestaurantRepository>();
+
+        //    services.AddScoped<IWriteUserRepository, WriteUserRepository>();
+        //    services.AddScoped<IReadUserRepository, ReadUserRepository>();
+
+        //    services.AddScoped<IReadOrderRepository, ReadOrderRepository>();
+        //    services.AddScoped<IWriteOrderRepository, WriteOrderRepository>();
+
+        //    services.AddScoped<IReadFoodRepository, ReadFoodRepository>();
+        //    services.AddScoped<IWriteFoodRepository, WriteFoodRepository>();
+
+        //    services.AddScoped<IReadCategoryRepository, ReadCategoryRepository>();
+        //    services.AddScoped<IWriteCategoryRepository, WriteCategoryRepository>();
+
+        //    services.AddScoped<IReadCourierCommentRepository, ReadCourierCommentRepository>();
+        //    services.AddScoped<IWriteCourierCommentRepository, WriteCourierCommentRepository>();
+
+        //    services.AddScoped<IReadRestaurantCommentRepository, ReadRestaurantCommentRepository>();
+        //    services.AddScoped<IWriteRestaurantCommentRepository, WriteRestaurantCommentRepository>();
+
+        //    services.AddScoped<IReadOrderRatingRepository, ReadOrderRatingRepository>();
+        //    services.AddScoped<IWriteOrderRatingRepository, WriteOrderRatingRepository>();
+
+        //    services.AddScoped<IReadWorkerRepository, ReadWorkerRepository>();
+        //    services.AddScoped<IWriteWorkerRepository, WriteWorkerRepository>();
+
+        //    services.AddScoped<IReadBankCardRepository, ReadBankCardRepository>();
+        //    services.AddScoped<IWriteBankCardRepository, WriteBankCardRepository>();
+
+        //    services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        //    return services;
+        //}
     }
 }

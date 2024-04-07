@@ -1,12 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq.Expressions;
+using Domain.Models.Common;
 
 namespace Application.IRepositories.Repository
 {
-    internal class IReadRepositoriy
+    public interface IReadBankCardRepository<T> where T : BaseEntity
     {
+        IEnumerable<T?> GetAll(bool tracking = true);
+
+        IEnumerable<T?> GetWhere(Expression<Func<T, bool>> expression);
+
+        Task<T?> GetAsync(string id);
+
+        Task<T?> GetAsync(Expression<Func<T, bool>> expression);
     }
+
 }

@@ -8,14 +8,13 @@ using System.Threading.Tasks;
 
 namespace Domain.Models
 {
-    public class Order :BaseEntitiy
+    public class Order :BaseEntity
     {
         public string ShoeStoreId { get; set; }
         public List<string> ShouesIds   { get; set; }
-        public float Price { get; set; }
+        public float Amount { get; set; }
         public DateTime OrderDate { get; set; }
         public DateTime OrderFinishTime { get; set; }
         public OrderStatus OrderStatus { get; set; }
-
     }
 }
