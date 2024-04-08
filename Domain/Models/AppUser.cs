@@ -2,7 +2,7 @@
 
 namespace Domain.Models
 {
-    public class AppUser : BaseEntity
+    public abstract class AppUser : BaseEntity
     {
         public string Name { get; set; }
         public string Surname { get; set; }

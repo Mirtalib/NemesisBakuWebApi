@@ -7,12 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="IRepositories\IClientRepository\" />
-    <Folder Include="IRepositories\IOrderRepository\" />
-    <Folder Include="IRepositories\IShoesRepository\" />
-    <Folder Include="IRepositories\IStoreRepository\" />
-    <Folder Include="IRepositories\IShoesCommentRepository\" />
-    <Folder Include="IRepositories\ICourierRepository\" />
     <Folder Include="Models\DTOs\ClientDTOs\" />
     <Folder Include="Models\DTOs\Courier\" />
     <Folder Include="Models\DTOs\ShoeStoreDTOs\" />

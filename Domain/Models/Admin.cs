@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Models.Common
+namespace Domain.Models
 {
-    public abstract class BaseEntity
+    public class Admin :AppUser
     {
-        public string Id { get; set; } 
+
     }
 }
