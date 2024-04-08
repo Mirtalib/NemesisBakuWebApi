@@ -2,7 +2,7 @@
 
 namespace Domain.Models
 {
-    public class ShoeStore :BaseEntity
+    public class Store :BaseEntity
     {
         public string Name { get; set; }    
         public string Email { get; set; }    

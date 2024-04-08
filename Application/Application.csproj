@@ -7,7 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\DTOs\" />
+    <Folder Include="IRepositories\IClientRepository\" />
+    <Folder Include="IRepositories\IOrderRepository\" />
+    <Folder Include="IRepositories\IShoesRepository\" />
+    <Folder Include="IRepositories\IStoreRepository\" />
+    <Folder Include="IRepositories\IShoesCommentRepository\" />
+    <Folder Include="IRepositories\ICourierRepository\" />
+    <Folder Include="Models\DTOs\ClientDTOs\" />
+    <Folder Include="Models\DTOs\Courier\" />
+    <Folder Include="Models\DTOs\ShoeStoreDTOs\" />
+    <Folder Include="Models\DTOs\ShoesCommentDTOs\" />
+    <Folder Include="Models\DTOs\ShoesDTos\" />
+    <Folder Include="Models\DTOs\OderDTOs\" />
   </ItemGroup>
 
   <ItemGroup>

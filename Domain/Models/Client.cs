@@ -2,12 +2,9 @@
 
 namespace Domain.Models
 {
-    public class Client : BaseEntity
+    public class Client :AppUser
     {
-        public string Name { get; set; }
-        public string Surname { get; set; }
-        public string Email { get; set; }
-        public List<string> CommnetId { get; set; }
+        public List<string> ShoesCommnetId { get; set; }
         public List<string> OrdersId { get; set; }
         public List<string> FavoriShoesIds { get; set; } 
     }

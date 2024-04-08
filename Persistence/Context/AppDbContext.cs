@@ -14,19 +14,21 @@ namespace Persistence.Context
         {
 
             modelBuilder.Entity<Client>().ToContainer("Clients");
-            modelBuilder.Entity<ShoeStore>().ToContainer("ShoeStores");
+            modelBuilder.Entity<Store>().ToContainer("Stores");
             modelBuilder.Entity<Shoes>().ToContainer("Shoes");
             modelBuilder.Entity<Order>().ToContainer("Orders");
             modelBuilder.Entity<ShoesComment>().ToContainer("ShoesComments");
+            modelBuilder.Entity<Courier>().ToContainer("Couriers");
 
             base.OnModelCreating(modelBuilder);
         }
 
 
         DbSet<Client> Clients { get; set; }
-        DbSet<ShoeStore> ShoeStores { get; set; }
+        DbSet<Store> Stores { get; set; }
         DbSet<Shoes> Shoes { get; set; }
         DbSet<Order>  Orders { get; set; }
+        DbSet<Courier>  Couriers { get; set; }
         DbSet<ShoesComment> ShoesComments { get; set; }
 
 
