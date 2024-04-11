@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.Services.IUserServices
 {
-    public interface IShoeStoreService
+    public interface IStoreService
     {
     }
 }

@@ -1,9 +1,31 @@
-﻿using Application.Models.Configuration;
-using FluentValidation;
+﻿using Application.IRepositories;
+using Application.IRepositories.IAdminRepository;
+using Application.IRepositories.IClientRepository;
+using Application.IRepositories.ICourierRepository;
+using Application.IRepositories.IOrderRepository;
+using Application.IRepositories.IShoesCommentRepository;
+using Application.IRepositories.IShoesRepository;
+using Application.IRepositories.IStoreRepository;
+using Application.Models.Configuration;
+using Application.Services.IAuthServices;
+using Application.Services.IHelperServices;
+using Application.Services.IUserServices;
+using Infrastructure.Services.AuthServices;
+using Infrastructure.Services.HelperServices;
+using Infrastructure.Services.UserServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Persistence.Repositories;
+using Persistence.Repositories.AdminRepository;
+using Persistence.Repositories.ClientRepository;
+using Persistence.Repositories.CourierRepository;
+using Persistence.Repositories.OrderRepository;
+using Persistence.Repositories.ShoesCommentRepository;
+using Persistence.Repositories.ShoesRepository;
+using Persistence.Repositories.StoreRepository;
 using System.Text;
+
 namespace WebApi.Extensions
 {
     public static class Extension
@@ -50,102 +72,91 @@ namespace WebApi.Extensions
             return services;
         }
 
-        //public static IServiceCollection AddAuthenticationAndAuthorization(this IServiceCollection services, IConfiguration configuration)
-        //{
-        //    services.AddScoped<IJWTService, JWTService>();
+        public static IServiceCollection AddAuthenticationAndAuthorization(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddScoped<IJWTService, JWTService>();
 
-        //    var jwtConfig = new JWTConfiguration();
-        //    configuration.GetSection("JWT").Bind(jwtConfig);
+            var jwtConfig = new JWTConfiguration();
+            configuration.GetSection("JWT").Bind(jwtConfig);
 
-        //    services.AddSingleton(jwtConfig);
-
-
-        //    services.AddAuthentication(options =>
-        //    {
-        //        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        //        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        //        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-        //    }).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, setup =>
-        //    {
-        //        setup.TokenValidationParameters = new TokenValidationParameters
-        //        {
-        //            ValidateIssuer = true,
-        //            ValidateAudience = true,
-        //            ValidateLifetime = true,
-        //            ValidateIssuerSigningKey = true,
-        //            ValidAudience = jwtConfig.Audience,
-        //            ValidIssuer = jwtConfig.Issuer,
-        //            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.Secret)),
-        //            ClockSkew = TimeSpan.Zero
-        //        };
-        //    });
-
-        //    services.AddAuthorization();
-        //    return services;
-        //}
-
-        //public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
-        //{
-        //    services.AddScoped<ICourierService, CourierService>();
-        //    services.AddScoped<IWorkerService, WorkerService>();
-        //    services.AddScoped<IPassHashService, PassHashService>();
-        //    services.AddScoped<IAuthService, AuthService>();
-        //    services.AddScoped<IBlobService, BlobService>();
-        //    services.AddScoped<IUserService, UserService>();
-        //    services.AddScoped<IRestaurantService, RestaurantService>();
-        //    services.AddScoped<IMailService, MailService>();
+            services.AddSingleton(jwtConfig);
 
 
-        //    services.AddTransient<IValidator<AddAppUserDto>, AddAppUserDtoValidator>();
-        //    services.AddTransient<IValidator<AddBankCardDto>, AddBankCardDtoValidator>();
-        //    services.AddTransient<IValidator<UpdateAppUserDto>, UpdateAppUserDtoValidator>();
-        //    services.AddTransient<IValidator<UpdateAppUserPasswordDto>, UpdateAppUserPasswordDtoValidator>();
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, setup =>
+            {
+                setup.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidAudience = jwtConfig.Audience,
+                    ValidIssuer = jwtConfig.Issuer,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.Secret)),
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
 
-        //    var smtpConfig = new SMTPConfiguration();
-        //    configuration.GetSection("SMTP").Bind(smtpConfig);
-        //    services.AddSingleton(smtpConfig);
+            services.AddAuthorization();
+            return services;
+        }
 
-        //    return services;
-        //}
+        public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
+        {
+            //ervices.AddScoped<ICourierService, CourierService>();
+            // services.AddScoped<IAdminService, AdminService>();
+            // services.AddScoped<IPassHashService, PassHashService>();
 
-        //public static IServiceCollection AddRepositories(this IServiceCollection services)
-        //{
-        //    services.AddScoped<IReadCourierRepository, ReadCourierRepository>();
-        //    services.AddScoped<IWriteCourierRepository, WriteCourierRepository>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IBlobService, BlobService>();
+            services.AddScoped<IClientService, ClientService>();
+            services.AddScoped<IMailService, MailService>();
+            services.AddScoped<IStoreService, StoreService>();
 
-        //    services.AddScoped<IWriteRestaurantRepository, WriteRestaurantRepository>();
-        //    services.AddScoped<IReadRestaurantRepository, ReadRestaurantRepository>();
 
-        //    services.AddScoped<IWriteUserRepository, WriteUserRepository>();
-        //    services.AddScoped<IReadUserRepository, ReadUserRepository>();
+            //services.AddTransient<IValidator<AddAppUserDto>, AddAppUserDtoValidator>();
+            //services.AddTransient<IValidator<AddBankCardDto>, AddBankCardDtoValidator>();
+            //services.AddTransient<IValidator<UpdateAppUserDto>, UpdateAppUserDtoValidator>();
+            //services.AddTransient<IValidator<UpdateAppUserPasswordDto>, UpdateAppUserPasswordDtoValidator>();
 
-        //    services.AddScoped<IReadOrderRepository, ReadOrderRepository>();
-        //    services.AddScoped<IWriteOrderRepository, WriteOrderRepository>();
+            //var smtpConfig = new SMTPConfiguration();
+            //configuration.GetSection("SMTP").Bind(smtpConfig);
+            //services.AddSingleton(smtpConfig);
 
-        //    services.AddScoped<IReadFoodRepository, ReadFoodRepository>();
-        //    services.AddScoped<IWriteFoodRepository, WriteFoodRepository>();
+            return services;
+        }
 
-        //    services.AddScoped<IReadCategoryRepository, ReadCategoryRepository>();
-        //    services.AddScoped<IWriteCategoryRepository, WriteCategoryRepository>();
+        public static IServiceCollection AddRepositories(this IServiceCollection services)
+        {
+            services.AddScoped<IReadCourierRepository, ReadCourierRepository>();
+            services.AddScoped<IWriteCourierRepository, WriteCourierRepository>();
 
-        //    services.AddScoped<IReadCourierCommentRepository, ReadCourierCommentRepository>();
-        //    services.AddScoped<IWriteCourierCommentRepository, WriteCourierCommentRepository>();
+            services.AddScoped<IWriteClientRepository, WriteClientRepository>();
+            services.AddScoped<IReadClientRepository, ReadClientRepository>();
 
-        //    services.AddScoped<IReadRestaurantCommentRepository, ReadRestaurantCommentRepository>();
-        //    services.AddScoped<IWriteRestaurantCommentRepository, WriteRestaurantCommentRepository>();
+            services.AddScoped<IReadOrderRepository, ReadOrderRepository>();
+            services.AddScoped<IWriteOrderRepository, WriteOrderRepository>();
 
-        //    services.AddScoped<IReadOrderRatingRepository, ReadOrderRatingRepository>();
-        //    services.AddScoped<IWriteOrderRatingRepository, WriteOrderRatingRepository>();
+            services.AddScoped<IReadStoreRepository, ReadStoreRepository>();
+            services.AddScoped<IWriteStoreRepository, WriteStoreRepository>();
 
-        //    services.AddScoped<IReadWorkerRepository, ReadWorkerRepository>();
-        //    services.AddScoped<IWriteWorkerRepository, WriteWorkerRepository>();
+            services.AddScoped<IReadShoesCommentRepository, ReadShoesCommentRepository>();
+            services.AddScoped<IWriteShoesCommentRepository, WriteShoesCommentRepository>();
 
-        //    services.AddScoped<IReadBankCardRepository, ReadBankCardRepository>();
-        //    services.AddScoped<IWriteBankCardRepository, WriteBankCardRepository>();
+            services.AddScoped<IReadAdminRepository, ReadAdminRepository>();
+            services.AddScoped<IWriteAdminRepository, WriteAdminRepository>();
 
-        //    services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IReadShoesRepository, ReadShoesRepository>();
+            services.AddScoped<IWriteShoesRepository, WriteShoesRepository>();
 
-        //    return services;
-        //}
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            return services;
+        }
     }
 }

@@ -11,25 +11,23 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwagger();
 
-var app = builder.Build();
-
-
-//var cosmos = new CosmosConfiguration();
-//builder.Configuration.GetSection("Cosmos").Bind(cosmos);
-//builder.Services.AddDbContext<AppDbContext>(op => op.UseCosmos(cosmos.Uri, cosmos.Key, cosmos.DatabaseName));
+var cosmos = new CosmosConfiguration();
+builder.Configuration.GetSection("Cosmos").Bind(cosmos);
+builder.Services.AddDbContext<AppDbContext>(op => op.UseCosmos(cosmos.Uri, cosmos.Key, cosmos.DatabaseName));
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
     .WriteTo.Console()
     .WriteTo.File("logs/ApplicationLog-.txt", rollingInterval: RollingInterval.Day)
     .CreateLogger();
 
-//builder.Services.AddAuthenticationAndAuthorization(builder.Configuration);
-//builder.Services.AddServices(builder.Configuration);
-//builder.Services.AddRepositories();
-//builder.Services.Configure<BlobStorageConfiguration>(builder.Configuration.GetSection("BlobStorage"));
+builder.Services.AddAuthenticationAndAuthorization(builder.Configuration);
+builder.Services.AddServices(builder.Configuration);
+builder.Services.AddRepositories();
 builder.Services.AddDistributedMemoryCache(); // cache
+builder.Services.Configure<BlobStorageConfiguration>(builder.Configuration.GetSection("BlobStorage"));
+var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
