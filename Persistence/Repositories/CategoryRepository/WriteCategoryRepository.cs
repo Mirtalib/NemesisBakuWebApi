@@ -1,4 +1,4 @@
-﻿using Application.IRepositories.IShoesRepository;
+﻿using Application.IRepositories.ICategoryRepository;
 using Domain.Models;
 using Persistence.Context;
 using Persistence.Repositories.Repository;
@@ -8,14 +8,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Persistence.Repositories.ShoesRepository
+namespace Persistence.Repositories.CategoryRepository
 {
-    public class ReadShoesRepository : ReadRepository<Shoe> , IReadShoesRepository 
+    public class WriteCategoryRepository : WriteRepository<Category> , IWriteCategoryRepository
     {
-        public ReadShoesRepository(AppDbContext context)
+        public WriteCategoryRepository(AppDbContext context)
             :base(context)
         {
                 
+
         }
     }
 }

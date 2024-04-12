@@ -1,5 +1,6 @@
 ﻿using Application.IRepositories;
 using Application.IRepositories.IAdminRepository;
+using Application.IRepositories.ICategoryRepository;
 using Application.IRepositories.IClientRepository;
 using Application.IRepositories.ICourierRepository;
 using Application.IRepositories.IOrderRepository;
@@ -7,9 +8,11 @@ using Application.IRepositories.IShoesCommentRepository;
 using Application.IRepositories.IShoesRepository;
 using Application.IRepositories.IStoreRepository;
 using Application.Models.Configuration;
+using Application.Models.DTOs.ShoesDTOs;
 using Application.Services.IAuthServices;
 using Application.Services.IHelperServices;
 using Application.Services.IUserServices;
+using FluentValidation;
 using Infrastructure.Services.AuthServices;
 using Infrastructure.Services.HelperServices;
 using Infrastructure.Services.UserServices;
@@ -18,6 +21,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Persistence.Repositories;
 using Persistence.Repositories.AdminRepository;
+using Persistence.Repositories.CategoryRepository;
 using Persistence.Repositories.ClientRepository;
 using Persistence.Repositories.CourierRepository;
 using Persistence.Repositories.OrderRepository;
@@ -25,6 +29,7 @@ using Persistence.Repositories.ShoesCommentRepository;
 using Persistence.Repositories.ShoesRepository;
 using Persistence.Repositories.StoreRepository;
 using System.Text;
+using WebApi.Validation;
 
 namespace WebApi.Extensions
 {
@@ -108,9 +113,9 @@ namespace WebApi.Extensions
 
         public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
         {
-            //ervices.AddScoped<ICourierService, CourierService>();
-            // services.AddScoped<IAdminService, AdminService>();
-            // services.AddScoped<IPassHashService, PassHashService>();
+            services.AddScoped<ICourierService, CourierService>();
+            services.AddScoped<IAdminService, AdminService>();
+            //services.AddScoped<IPassHashService, PassHashService>();
 
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IBlobService, BlobService>();
@@ -119,7 +124,7 @@ namespace WebApi.Extensions
             services.AddScoped<IStoreService, StoreService>();
 
 
-            //services.AddTransient<IValidator<AddAppUserDto>, AddAppUserDtoValidator>();
+            services.AddTransient<IValidator<AddShoeDto>, AddShoeDtoValidator>();
             //services.AddTransient<IValidator<AddBankCardDto>, AddBankCardDtoValidator>();
             //services.AddTransient<IValidator<UpdateAppUserDto>, UpdateAppUserDtoValidator>();
             //services.AddTransient<IValidator<UpdateAppUserPasswordDto>, UpdateAppUserPasswordDtoValidator>();
@@ -144,6 +149,9 @@ namespace WebApi.Extensions
 
             services.AddScoped<IReadStoreRepository, ReadStoreRepository>();
             services.AddScoped<IWriteStoreRepository, WriteStoreRepository>();
+            
+            services.AddScoped<IReadCategoryRepository, ReadCategoryRepository>();
+            services.AddScoped<IWriteCategoryRepository, WriteCategoryRepository>();
 
             services.AddScoped<IReadShoesCommentRepository, ReadShoesCommentRepository>();
             services.AddScoped<IWriteShoesCommentRepository, WriteShoesCommentRepository>();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Application.Models.DTOs.AuthDTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,6 @@ namespace Application.Services.IAuthServices
 {
     public interface IJWTService
     {
+        AuthTokenDto GenerateSecurityToken(string id, string email, string role);
     }
 }

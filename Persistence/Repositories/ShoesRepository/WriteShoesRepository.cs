@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Persistence.Repositories.ShoesRepository
 {
-    public class WriteShoesRepository : WriteRepository<Shoes> , IWriteShoesRepository
+    public class WriteShoesRepository : WriteRepository<Shoe> , IWriteShoesRepository
     {
         public WriteShoesRepository(AppDbContext context)
             :base(context) 

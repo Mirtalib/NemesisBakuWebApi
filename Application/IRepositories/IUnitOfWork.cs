@@ -1,4 +1,5 @@
 ﻿using Application.IRepositories.IAdminRepository;
+using Application.IRepositories.ICategoryRepository;
 using Application.IRepositories.IClientRepository;
 using Application.IRepositories.ICourierRepository;
 using Application.IRepositories.IOrderRepository;
@@ -30,5 +31,8 @@ namespace Application.IRepositories
 
         IReadOrderRepository ReadOrderRepository { get; }
         IWriteOrderRepository WriteOrderRepository { get;}
+
+        IReadCategoryRepository ReadCategoryRepository { get; }
+        IWriteCategoryRepository WriteCategoryRepository { get; }
     }
 }

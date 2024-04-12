@@ -12,20 +12,24 @@ namespace Persistence.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.Entity<Client>().ToContainer("Clients");
-            //modelBuilder.Entity<Store>().ToContainer("Stores");
-            //modelBuilder.Entity<Shoes>().ToContainer("Shoes");
-            //modelBuilder.Entity<Order>().ToContainer("Orders");
-            //modelBuilder.Entity<ShoesComment>().ToContainer("ShoesComments");
-            //modelBuilder.Entity<Courier>().ToContainer("Couriers");
+            modelBuilder.Entity<Store>().ToContainer("Stores");
+            modelBuilder.Entity<Client>().ToContainer("Clients");
+            modelBuilder.Entity<Shoe>().ToContainer("Shoes");
+            modelBuilder.Entity<Order>().ToContainer("Orders");
+            modelBuilder.Entity<ShoesComment>().ToContainer("ShoesComments");
+            modelBuilder.Entity<Courier>().ToContainer("Couriers");
+            modelBuilder.Entity<Admin>().ToContainer("Admins");
+            modelBuilder.Entity<Category>().ToContainer("Categories");
 
             base.OnModelCreating(modelBuilder);
         }
 
 
         DbSet<Client> Clients { get; set; }
+        DbSet<Category>  Categories { get; set; }
+        DbSet<Admin>  Admins { get; set; }
         DbSet<Store> Stores { get; set; }
-        DbSet<Shoes> Shoes { get; set; }
+        DbSet<Shoe> Shoes { get; set; }
         DbSet<Order>  Orders { get; set; }
         DbSet<Courier>  Couriers { get; set; }
         DbSet<ShoesComment> ShoesComments { get; set; }

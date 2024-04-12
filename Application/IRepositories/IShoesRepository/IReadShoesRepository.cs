@@ -3,7 +3,7 @@ using Domain.Models;
 
 namespace Application.IRepositories.IShoesRepository
 {
-    public interface IReadShoesRepository : IReadRepository<Shoes>
+    public interface IReadShoesRepository : IReadRepository<Shoe>
     {
 
     }

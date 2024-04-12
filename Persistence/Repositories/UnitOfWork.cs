@@ -1,5 +1,6 @@
 ﻿using Application.IRepositories;
 using Application.IRepositories.IAdminRepository;
+using Application.IRepositories.ICategoryRepository;
 using Application.IRepositories.IClientRepository;
 using Application.IRepositories.ICourierRepository;
 using Application.IRepositories.IOrderRepository;
@@ -16,7 +17,7 @@ namespace Persistence.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {
-        public UnitOfWork(IReadAdminRepository readAdminRepository, IWriteAdminRepository writeAdminRepository, IReadClientRepository readClientRepository, IWriteClientRepository writeClientRepository, IReadCourierRepository readCourierRepository, IWriteCourierRepository writeCourierRepository, IReadShoesRepository readShoesRepository, IWriteShoesRepository writeShoesRepository, IReadShoesCommentRepository readShoesCommentRepository, IWriteShoesCommentRepository writeShoesCommentRepository, IReadStoreRepository readStoreRepository, IWriteStoreRepository writeStoreRepository, IReadOrderRepository readOrderRepository, IWriteOrderRepository writeOrderRepository)
+        public UnitOfWork(IReadAdminRepository readAdminRepository, IWriteAdminRepository writeAdminRepository, IReadClientRepository readClientRepository, IWriteClientRepository writeClientRepository, IReadCourierRepository readCourierRepository, IWriteCourierRepository writeCourierRepository, IReadShoesRepository readShoesRepository, IWriteShoesRepository writeShoesRepository, IReadShoesCommentRepository readShoesCommentRepository, IWriteShoesCommentRepository writeShoesCommentRepository, IReadStoreRepository readStoreRepository, IWriteStoreRepository writeStoreRepository, IReadOrderRepository readOrderRepository, IWriteOrderRepository writeOrderRepository, IReadCategoryRepository readCategoryRepository, IWriteCategoryRepository writeCategoryRepository)
         {
             ReadAdminRepository = readAdminRepository;
             WriteAdminRepository = writeAdminRepository;
@@ -32,6 +33,8 @@ namespace Persistence.Repositories
             WriteStoreRepository = writeStoreRepository;
             ReadOrderRepository = readOrderRepository;
             WriteOrderRepository = writeOrderRepository;
+            ReadCategoryRepository = readCategoryRepository;
+            WriteCategoryRepository = writeCategoryRepository;
         }
 
         public IReadAdminRepository ReadAdminRepository { get; }
@@ -61,5 +64,9 @@ namespace Persistence.Repositories
         public IReadOrderRepository ReadOrderRepository { get; }
 
         public IWriteOrderRepository WriteOrderRepository { get; }
+
+        public IReadCategoryRepository ReadCategoryRepository { get; }
+
+        public IWriteCategoryRepository WriteCategoryRepository { get; }
     }
 }

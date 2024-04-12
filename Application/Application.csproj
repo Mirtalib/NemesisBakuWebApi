@@ -8,10 +8,9 @@
 
   <ItemGroup>
     <Folder Include="Models\DTOs\ClientDTOs\" />
-    <Folder Include="Models\DTOs\Courier\" />
+    <Folder Include="Models\DTOs\CourierDTOs\" />
     <Folder Include="Models\DTOs\ShoeStoreDTOs\" />
     <Folder Include="Models\DTOs\ShoesCommentDTOs\" />
-    <Folder Include="Models\DTOs\ShoesDTos\" />
     <Folder Include="Models\DTOs\OderDTOs\" />
   </ItemGroup>
 
