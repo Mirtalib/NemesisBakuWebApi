@@ -1,15 +1,10 @@
 ﻿using Application.IRepositories;
 using Application.Models.DTOs.ShoesDTOs;
+using Application.Models.DTOs.StoreDTOs;
 using Application.Services.IHelperServices;
 using Application.Services.IUserServices;
-using Azure.Core;
 using Domain.Models;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Services.UserServices
 {
@@ -170,9 +165,27 @@ namespace Infrastructure.Services.UserServices
         }
 
 
-
         #endregion
 
 
+        #region Profile
+
+        public async Task<GetStoreProfileDto> GetProfile(string storeId)
+        {
+            var store = await _unitOfWork.ReadStoreRepository.GetAsync(storeId);
+            if (store is null)
+                throw new ArgumentNullException("Store is not found");
+            var storeDto = new GetStoreProfileDto
+            {
+                Id = store.Id,
+                Description = store.Description,
+                Email = store.Email,
+                Name = store.Name,
+            };
+
+            return storeDto;
+        }
+
+        #endregion
     }
 }

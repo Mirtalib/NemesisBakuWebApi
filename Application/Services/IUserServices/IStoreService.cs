@@ -1,4 +1,5 @@
 ﻿using Application.Models.DTOs.ShoesDTOs;
+using Application.Models.DTOs.StoreDTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,12 @@ namespace Application.Services.IUserServices
         Task<GetShoeInfoDto> GetShoeId(string shoeId);
         Task<bool> CreateShoe(AddShoeDto shoe);
         Task<bool> RemoveShoe(string shoeId);
+        #endregion
+
+        #region Profile
+        Task<GetStoreProfileDto> GetProfile(string storeId);
+
+
         #endregion
     }
 }
