@@ -169,7 +169,6 @@ namespace Infrastructure.Services.UserServices
 
 
         #region Profile
-
         public async Task<GetStoreProfileDto> GetProfile(string storeId)
         {
             var store = await _unitOfWork.ReadStoreRepository.GetAsync(storeId);
@@ -184,6 +183,41 @@ namespace Infrastructure.Services.UserServices
             };
 
             return storeDto;
+        }
+        #endregion
+
+
+        #region ShoeSalesStatistics
+        public List<GeneralShoeStatistics> WeeklySalesStatistics(string storeId)
+        {
+            DateTime date = DateTime.Now.AddDays(-7);
+            var orders = _unitOfWork.ReadOrderRepository.GetWhere(x=> x.StoreId == storeId && x.OrderDate > date.Date).ToList();
+            if (orders.Count is 0)
+                throw new ArgumentNullException("Order not Found");
+
+            var shoesDto = new List<GeneralShoeStatistics>();
+            var ShoesIds = new List<string>();
+            foreach (var order in orders)
+                if (order is not null)
+                    foreach (var shoeId in order.ShoesIds)
+                        ShoesIds.Add(shoeId);
+
+            var shoes = _unitOfWork.ReadShoesRepository.GetAll(); 
+            foreach (var item in shoes)
+            {
+                if (item is not null)
+                {
+                    var shoe = ShoesIds.Where(x => x == item.Id).ToList();
+                    shoesDto.Add(new GeneralShoeStatistics
+                    {
+                        ShoeId = item.Id,
+                        Brend = item.Brend,
+                        Model = item.Model,
+                        Size = Convert.ToByte(shoe.Count),
+                    });
+                }
+            }
+            return shoesDto;
         }
 
         #endregion

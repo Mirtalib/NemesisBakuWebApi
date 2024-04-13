@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Models
 {
-    public class Admin :AppUser
+    public class Admin :  AppUser
     {
 
     }

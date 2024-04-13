@@ -11,9 +11,14 @@ namespace WebApi.Controllers
         public StoreController() { }
 
         [HttpPost("Add")]
-        public ActionResult<AddShoeDto> Index([FromForm] AddShoeDto addShoeDto)
+        public ActionResult Index()
         {
-            return Ok(addShoeDto);
+            DateTime date = DateTime.Now.AddDays(-7);
+            if (date.Date < DateTime.Now)
+            {
+                return Ok(date.Date);
+            }
+            return BadRequest("isdeme3di ay gijdillaq");
         }
     }
 }

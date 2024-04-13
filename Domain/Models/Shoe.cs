@@ -14,8 +14,8 @@ namespace Domain.Models
         public string Description { get; set; }
         public string CategoryId { get; set; }
         public string Color { get; set; }
-        public string StoreId { get; set; }
         public float Price { get; set; }
+        public string StoreId { get; set; }
         public List<KeyValuePair<byte, byte>> ShoesSize { get; set; }
         public List<string> ImageUrls { get; set; }
     }

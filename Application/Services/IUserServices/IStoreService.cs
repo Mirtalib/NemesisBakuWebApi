@@ -22,5 +22,7 @@ namespace Application.Services.IUserServices
 
 
         #endregion
+
+        List<GeneralShoeStatistics> WeeklySalesStatistics(string storeId);
     }
 }

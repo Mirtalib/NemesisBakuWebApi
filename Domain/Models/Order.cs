@@ -10,8 +10,8 @@ namespace Domain.Models
 {
     public class Order :BaseEntity
     {
-        public string ShoeStoreId { get; set; }
-        public List<string> ShouesIds   { get; set; }
+        public string StoreId { get; set; }
+        public List<string> ShoesIds   { get; set; }
         public float Amount { get; set; }
         public DateTime OrderDate { get; set; }
         public DateTime OrderFinishTime { get; set; }
