@@ -14,7 +14,7 @@ namespace WebApi.Validation
                 .NotNull()
                 .NotEmpty();
 
-            RuleFor(x=> x.ShoesSize)
+            RuleFor(x=> x.ShoeCountSize)
                 .NotNull();
             
         }

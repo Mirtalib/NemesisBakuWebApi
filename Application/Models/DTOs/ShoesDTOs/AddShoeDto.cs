@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Domain.Models;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace Application.Models.DTOs.ShoesDTOs
         public string Color { get; set; }
         public string StoreId { get; set; }
         public float Price { get; set; }
-        public List<KeyValuePair<byte, byte>> ShoesSize { get; set; } = new List<KeyValuePair<byte, byte>>();
+        public List<ShoeCountSize> ShoeCountSize { get; set; } = new List<ShoeCountSize>();
         public IFormFile[] Images { get; set; } = new IFormFile[6];
     }
 }

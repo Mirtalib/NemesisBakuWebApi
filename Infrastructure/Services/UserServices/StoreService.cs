@@ -47,7 +47,7 @@ namespace Infrastructure.Services.UserServices
                     CategoryId = shoe.CategoryId,
                     Color = shoe.Color,
                     Description = shoe.Description,
-                    ShoesSize = shoe.ShoesSize,
+                    //ShoesSize = shoe.ShoesSize,
                 };
 
 
@@ -190,8 +190,7 @@ namespace Infrastructure.Services.UserServices
         #region ShoeSalesStatistics
         public List<GeneralShoeStatistics> WeeklySalesStatistics(string storeId)
         {
-            DateTime date = DateTime.Now.AddDays(-7);
-            var orders = _unitOfWork.ReadOrderRepository.GetWhere(x=> x.StoreId == storeId && x.OrderDate > date.Date).ToList();
+            var orders = _unitOfWork.ReadOrderRepository.GetWhere(x=> x.StoreId == storeId && x.OrderDate > DateTime.Now.AddDays(-7).Date).ToList();
             if (orders.Count is 0)
                 throw new ArgumentNullException("Order not Found");
 
