@@ -1,4 +1,5 @@
 ﻿using Application.IRepositories;
+using Application.Models.DTOs.CategoryDTOs;
 using Application.Models.DTOs.ShoesDTOs;
 using Application.Models.DTOs.StoreDTOs;
 using Application.Services.IHelperServices;
@@ -21,39 +22,36 @@ namespace Infrastructure.Services.UserServices
             _addShoeValidator = addShoeValidator;
         }
 
-
-
         #region Shoe
 
-        public async Task<bool> CreateShoe(AddShoeDto shoe)
+        public async Task<bool> CreateShoe(AddShoeDto shoeDto)
         {
-            var isValid  = _addShoeValidator.Validate(shoe);
+            var isValid  = _addShoeValidator.Validate(shoeDto);
             if (isValid.IsValid)
             {
-                var store = await _unitOfWork.ReadStoreRepository.GetAsync(shoe.StoreId);
+                var store = await _unitOfWork.ReadStoreRepository.GetAsync(shoeDto.StoreId);
                 if (store is null)
                     throw new ArgumentNullException("Store is not found");
 
-                var category = await _unitOfWork.ReadCategoryRepository.GetAsync(shoe.CategoryId);
+                var category = await _unitOfWork.ReadCategoryRepository.GetAsync(shoeDto.CategoryId);
                 if (category is null)
                     throw new ArgumentNullException("Category is not found");
 
                 var newShoe = new Shoe
                 {
                     Id = Guid.NewGuid().ToString(),
-                    Brend = shoe.Brend,
-                    Model = shoe.Model,
-                    Price = shoe.Price,
-                    CategoryId = shoe.CategoryId,
-                    Color = shoe.Color,
-                    Description = shoe.Description,
-                    //ShoesSize = shoe.ShoesSize,
+                    Brend = shoeDto.Brend,
+                    Model = shoeDto.Model,
+                    Price = shoeDto.Price,
+                    CategoryId = shoeDto.CategoryId,
+                    Color = shoeDto.Color,
+                    Description = shoeDto.Description,
+                    ShoeCountSize = shoeDto.ShoeCountSize
                 };
 
-
-                for (int i = 0; i < shoe.Images.Length; i++)
+                for (int i = 0; i < shoeDto.Images.Length; i++)
                 {
-                    var form = shoe.Images[i];
+                    var form = shoeDto.Images[i];
                     using (var stream = form.OpenReadStream())
                     {
                         var fileName = newShoe.Id + "-" + newShoe.Model + newShoe.Color + i + ".jpg";
@@ -158,15 +156,35 @@ namespace Infrastructure.Services.UserServices
                 CategoryId = shoe.CategoryId,
                 Color = shoe.Color,
                 Description = shoe.Description,
-                ShoesSize = shoe.ShoesSize,
+                ShoeCountSize = shoe.ShoeCountSize,
             };
 
             return shoeDto;
         }
 
-
         #endregion
 
+        #region Category
+
+        public async Task<bool> CreateCategory(CreateCategoryDto dto)
+        {
+            var testCategory = await _unitOfWork.ReadCategoryRepository.GetAsync(x => x.Name.ToLower() == dto.Name.ToLower());
+            if (testCategory is not null)
+                throw new ArgumentException("Wrong Name");
+
+            var newCategory = new Category
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = dto.Name,
+                ShoesId = new List<string>()
+            };
+
+            var result = await _unitOfWork.WriteCategoryRepository.AddAsync(newCategory);
+            await _unitOfWork.WriteCategoryRepository.SaveChangesAsync();
+
+            return result;
+        }
+        #endregion
 
         #region Profile
         public async Task<GetStoreProfileDto> GetProfile(string storeId)
@@ -207,18 +225,18 @@ namespace Infrastructure.Services.UserServices
                 if (item is not null)
                 {
                     var shoe = ShoesIds.Where(x => x == item.Id).ToList();
-                    shoesDto.Add(new GeneralShoeStatistics
-                    {
-                        ShoeId = item.Id,
-                        Brend = item.Brend,
-                        Model = item.Model,
-                        Size = Convert.ToByte(shoe.Count),
-                    });
+                    if (shoe.Count != 0)
+                        shoesDto.Add(new GeneralShoeStatistics
+                        {
+                            ShoeId = item.Id,
+                            Brend = item.Brend,
+                            Model = item.Model,
+                            Size = Convert.ToByte(shoe.Count),
+                        });
                 }
             }
             return shoesDto;
         }
-
         #endregion
     }
 }

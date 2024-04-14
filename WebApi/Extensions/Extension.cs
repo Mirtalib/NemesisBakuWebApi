@@ -125,10 +125,7 @@ namespace WebApi.Extensions
 
 
             services.AddTransient<IValidator<AddShoeDto>, AddShoeDtoValidator>();
-            //services.AddTransient<IValidator<AddBankCardDto>, AddBankCardDtoValidator>();
-            //services.AddTransient<IValidator<UpdateAppUserDto>, UpdateAppUserDtoValidator>();
-            //services.AddTransient<IValidator<UpdateAppUserPasswordDto>, UpdateAppUserPasswordDtoValidator>();
-
+            
             //var smtpConfig = new SMTPConfiguration();
             //configuration.GetSection("SMTP").Bind(smtpConfig);
             //services.AddSingleton(smtpConfig);

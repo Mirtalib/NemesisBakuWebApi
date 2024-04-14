@@ -7,11 +7,6 @@ using Application.IRepositories.IOrderRepository;
 using Application.IRepositories.IShoesCommentRepository;
 using Application.IRepositories.IShoesRepository;
 using Application.IRepositories.IStoreRepository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Persistence.Repositories
 {

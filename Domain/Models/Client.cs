@@ -1,8 +1,6 @@
-﻿using Domain.Models.Common;
-
-namespace Domain.Models
+﻿namespace Domain.Models
 {
-    public class Client :AppUser
+    public class Client: AppUser
     {
         public List<string> ShoesCommnetId { get; set; }
         public List<string> OrdersId { get; set; }

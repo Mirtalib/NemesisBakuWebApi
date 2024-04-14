@@ -1,6 +1,7 @@
-﻿using Application.Models.DTOs.ShoesDTOs;
-using Microsoft.AspNetCore.Http;
+﻿using Application.Models.DTOs.CategoryDTOs;
+using Application.Services.IUserServices;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace WebApi.Controllers
 {
@@ -8,19 +9,33 @@ namespace WebApi.Controllers
     [ApiController]
     public class StoreController : ControllerBase
     {
-        public StoreController() { }
+        private readonly IStoreService _storeService;
 
-        [HttpPost("Add")]
-        public ActionResult Index([FromForm]AddShoeDto dto)
+        public StoreController(IStoreService storeService)
         {
-            var key = new KeyValuePair<byte, byte>();
-             
-            DateTime date = DateTime.Now.AddDays(-7);
-            if (date.Date < DateTime.Now)
-            {
-                return Ok(dto.ShoeCountSize);
-            }
-            return BadRequest("isdeme3di ay gijdillaq");
+            _storeService = storeService;
         }
+
+
+        [HttpPost("createCategory")]
+        public async Task<ActionResult<bool>> CreateCategory(CreateCategoryDto dto)
+        {
+            try
+            {
+                var result = await _storeService.CreateCategory(dto);
+                if (result)
+                {
+                    Log.Information("Create operation completed successfully on [Post] CreateCategory");
+                    return Ok(result);
+                }
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured on [POST] CreateCategory Error ->{ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }

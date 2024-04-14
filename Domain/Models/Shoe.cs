@@ -1,9 +1,4 @@
 ﻿using Domain.Models.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Domain.Models
 {
@@ -16,7 +11,7 @@ namespace Domain.Models
         public string Color { get; set; }
         public float Price { get; set; }
         public string StoreId { get; set; }
-        public List<KeyValuePair<byte, byte>> ShoesSize { get; set; }
+        public List<ShoeCountSize> ShoeCountSize { get; set; } = new List<ShoeCountSize>();
         public List<string> ImageUrls { get; set; }
     }
 }

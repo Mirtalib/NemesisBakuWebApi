@@ -1,10 +1,6 @@
-﻿using Application.Models.DTOs.ShoesDTOs;
+﻿using Application.Models.DTOs.CategoryDTOs;
+using Application.Models.DTOs.ShoesDTOs;
 using Application.Models.DTOs.StoreDTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services.IUserServices
 {
@@ -24,5 +20,9 @@ namespace Application.Services.IUserServices
         #endregion
 
         List<GeneralShoeStatistics> WeeklySalesStatistics(string storeId);
+
+        #region Category
+        Task<bool> CreateCategory(CreateCategoryDto dto);
+        #endregion
     }
 }
