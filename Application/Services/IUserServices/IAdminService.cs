@@ -10,7 +10,7 @@ namespace Application.Services.IUserServices
         #region Store
         Task<bool> CreateStore(AddStoreDto dto);
 
-        //Task<bool> UptadeStore(UpdateRestaurantDto dto);
+        Task<bool> UptadeStore(UpdateStoreDto dto);
 
         //Task<bool> UptadeStorePassword(UptadeRestaurantPasswordDto dto);
         Task<bool> RemoveStore(string storeId);
@@ -24,7 +24,9 @@ namespace Application.Services.IUserServices
         Task<bool> CreateCategory(CreateCategoryDto dto);
 
         Task<bool> RemoveCategory(string categoryId);
-        
+
+        Task<bool> UpdateCategory(UpdateCategoryDto dto);
+
         Task<GetCategoryDto> GetCategory(string categoryId);
 
         List<GetCategoryDto> GetAllCategory();

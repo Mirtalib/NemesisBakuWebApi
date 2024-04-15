@@ -38,6 +38,21 @@ namespace Infrastructure.Services.UserServices
             await _unitOfWork.WriteStoreRepository.SaveChangesAsync();
             return result;
         }
+
+        public async Task<bool> UptadeStore(UpdateStoreDto dto)
+        {
+            var store = await _unitOfWork.ReadStoreRepository.GetAsync(dto.Id);
+            if (store is null)
+                throw new ArgumentNullException("Wrong Store");
+
+            store.Name = dto.Name;
+            store.Description = dto.Description;
+            store.Email = dto.Email;
+
+            var result = await _unitOfWork.WriteStoreRepository.UpdateAsync(store.Id);
+            await _unitOfWork.WriteStoreRepository.SaveChangesAsync();
+            return result;
+        }
         
         public async Task<GetStoreProfileDto> GetStore(string storeId)
         {
@@ -165,6 +180,19 @@ namespace Infrastructure.Services.UserServices
             return categoriesDto;
         }
 
+        public async Task<bool> UpdateCategory(UpdateCategoryDto dto)
+        {
+            var category = await _unitOfWork.ReadCategoryRepository.GetAsync(dto.Id);
+            if (category is null)
+                throw new ArgumentNullException("Wrong Category Id");
+
+            category.Name = dto.Name;
+
+            var result = await _unitOfWork.WriteCategoryRepository.UpdateAsync(category.Id);
+            await _unitOfWork.WriteCategoryRepository.SaveChangesAsync();
+
+            return result;
+        }
 
         #endregion
     }
