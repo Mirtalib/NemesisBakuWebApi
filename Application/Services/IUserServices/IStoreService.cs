@@ -21,8 +21,17 @@ namespace Application.Services.IUserServices
 
         List<GeneralShoeStatistics> WeeklySalesStatistics(string storeId);
 
+
         #region Category
+
         Task<bool> CreateCategory(CreateCategoryDto dto);
+
+        Task<bool> RemoveCategory(string categoryId);
+
+        Task<GetCategoryDto> GetCategory(string categoryId);
+
+        List<GetCategoryDto> GetAllCategory();
+
         #endregion
     }
 }

@@ -3,6 +3,7 @@ using Application.Models.DTOs.CategoryDTOs;
 using Application.Models.DTOs.StoreDTOs;
 using Application.Services.IUserServices;
 using Domain.Models;
+using Microsoft.Azure.Cosmos.Serialization.HybridRow;
 
 namespace Infrastructure.Services.UserServices
 {
@@ -15,24 +16,7 @@ namespace Infrastructure.Services.UserServices
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<bool> CreateCategory(CreateCategoryDto dto)
-        {
-            var testCategory = await _unitOfWork.ReadCategoryRepository.GetAsync(x => x.Name.ToLower() == dto.Name.ToLower());
-            if (testCategory is not null)
-                throw new ArgumentException("Wrong Name");
-
-            var newCategory = new Category
-            {
-                Id = Guid.NewGuid().ToString(),
-                Name = dto.Name,
-                ShoesId = new List<string>()
-            };
-
-            var result = await _unitOfWork.WriteCategoryRepository.AddAsync(newCategory);
-            await _unitOfWork.WriteCategoryRepository.SaveChangesAsync();
-
-            return result;
-        }
+        #region Store
 
         public async Task<bool> CreateStore(AddStoreDto dto)
         {
@@ -46,15 +30,15 @@ namespace Infrastructure.Services.UserServices
                 Name = dto.Name,
                 Description = dto.Description,
                 Email = dto.Email,
-                OrderId = new List<string>(),
-                ShoesId = new List<string>()
+                OrderIds = new List<string>(),
+                ShoesIds = new List<string>()
             };
 
             var result = await _unitOfWork.WriteStoreRepository.AddAsync(newStore); 
             await _unitOfWork.WriteStoreRepository.SaveChangesAsync();
             return result;
         }
-
+        
         public async Task<GetStoreProfileDto> GetStore(string storeId)
         {
             var store = await _unitOfWork.ReadStoreRepository.GetAsync(storeId);
@@ -70,5 +54,118 @@ namespace Infrastructure.Services.UserServices
 
             return storeDto;
         }
+
+        public async Task<bool> RemoveStore(string storeId)
+        {
+            var store = await _unitOfWork.ReadStoreRepository.GetAsync(storeId);
+            if (store is null)
+                throw new ArgumentNullException("Wrong Store");
+
+        
+            foreach (var categoryId in store.CategoryIds)
+            {
+                await RemoveCategory(categoryId);   
+            }
+
+            foreach (var orderId in store.OrderIds)
+            {
+                // remove Order
+            }
+
+            await _unitOfWork.WriteOrderRepository.SaveChangesAsync();
+
+            await _unitOfWork.WriteStoreRepository.RemoveAsync(storeId);
+            await _unitOfWork.WriteStoreRepository.SaveChangesAsync();
+            return true;
+        }
+
+        #endregion
+
+
+        #region Category
+        
+        public async Task<bool> CreateCategory(CreateCategoryDto dto)
+        {
+            var testCategory = await _unitOfWork.ReadCategoryRepository.GetAsync(x => x.Name.ToLower() == dto.Name.ToLower());
+            if (testCategory is not null)
+                throw new ArgumentException("Wrong Name");
+
+            var newCategory = new Category
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = dto.Name,
+                ShoesId = new List<string>(),
+                StoreId = dto.StoreId
+            };
+
+            var result = await _unitOfWork.WriteCategoryRepository.AddAsync(newCategory);
+            await _unitOfWork.WriteCategoryRepository.SaveChangesAsync();
+
+            return result;
+        }
+
+
+        public async Task<bool> RemoveCategory(string categoryId)
+        {
+            var category = await _unitOfWork.ReadCategoryRepository.GetAsync(categoryId);
+            if (category is null)
+                throw new ArgumentNullException("Wrong Category Id");
+
+
+            var shoes = _unitOfWork.ReadShoesRepository.GetWhere(x => x.CategoryId == categoryId).ToList();
+
+            foreach (var shoe in shoes)
+            {
+                // remove shoe
+            }
+
+            var result = await _unitOfWork.WriteCategoryRepository.RemoveAsync(categoryId);
+            await _unitOfWork.WriteCategoryRepository.SaveChangesAsync();
+            return result;
+        }
+
+
+        public async Task<GetCategoryDto> GetCategory(string categoryId)
+        {
+            var category = await _unitOfWork.ReadCategoryRepository.GetAsync(categoryId);
+            if (category is null)
+                throw new ArgumentNullException("Wrong Category Id");
+
+            var categoryDto = new GetCategoryDto
+            {
+                Id = categoryId,
+                Name = category.Name,
+                ShoesIds = category.ShoesId
+            };
+
+            return categoryDto;
+        }
+
+
+        public List<GetCategoryDto> GetAllCategory()
+        {
+            var categories = _unitOfWork.ReadCategoryRepository.GetAll();
+            if (categories.Count() is 0)
+                throw new ArgumentNullException("Wrong No Category");
+
+
+            var categoriesDto = new List<GetCategoryDto>();
+            foreach (var category in categories)
+            {
+                if (category is not null)
+                {
+                    categoriesDto.Add(new GetCategoryDto
+                    {
+                        Id = category.Id,
+                        Name = category.Name,
+                        ShoesIds= category.ShoesId
+                    });
+                }
+            }
+            return categoriesDto;
+        }
+
+
+        #endregion
     }
 }

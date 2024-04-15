@@ -22,6 +22,8 @@ namespace Infrastructure.Services.UserServices
             _addShoeValidator = addShoeValidator;
         }
 
+
+
         #region Shoe
 
         public async Task<bool> CreateShoe(AddShoeDto shoeDto)
@@ -65,7 +67,7 @@ namespace Infrastructure.Services.UserServices
                     }
                 }
 
-                store.ShoesId.Add(newShoe.Id);
+                store.ShoesIds.Add(newShoe.Id);
                 category.ShoesId.Add(newShoe.Id);
 
                 await _unitOfWork.WriteShoesRepository.AddAsync(newShoe);
@@ -101,7 +103,7 @@ namespace Infrastructure.Services.UserServices
             for (int i = 0; i < shoe.ImageUrls.Count; i++)
                 await _blobSerice.DeleteFileAsync(shoe.Id + "-" + shoe.Model + shoe.Color + i + ".jpg");
 
-            store.ShoesId.Remove(shoeId);
+            store.ShoesIds.Remove(shoeId);
             category.ShoesId.Remove(shoeId);
 
 
@@ -164,28 +166,6 @@ namespace Infrastructure.Services.UserServices
 
         #endregion
 
-        #region Category
-
-        public async Task<bool> CreateCategory(CreateCategoryDto dto)
-        {
-            var testCategory = await _unitOfWork.ReadCategoryRepository.GetAsync(x => x.Name.ToLower() == dto.Name.ToLower());
-            if (testCategory is not null)
-                throw new ArgumentException("Wrong Name");
-
-            var newCategory = new Category
-            {
-                Id = Guid.NewGuid().ToString(),
-                Name = dto.Name,
-                ShoesId = new List<string>()
-            };
-
-            var result = await _unitOfWork.WriteCategoryRepository.AddAsync(newCategory);
-            await _unitOfWork.WriteCategoryRepository.SaveChangesAsync();
-
-            return result;
-        }
-        #endregion
-
         #region Profile
         public async Task<GetStoreProfileDto> GetProfile(string storeId)
         {
@@ -204,11 +184,91 @@ namespace Infrastructure.Services.UserServices
         }
         #endregion
 
+        #region Category
+
+        public async Task<bool> CreateCategory(CreateCategoryDto dto)
+        {
+            var testCategory = await _unitOfWork.ReadCategoryRepository.GetAsync(x => x.Name.ToLower() == dto.Name.ToLower());
+            if (testCategory is not null)
+                throw new ArgumentException("Wrong Name");
+
+            var newCategory = new Category
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = dto.Name,
+                ShoesId = new List<string>(),
+                StoreId = dto.StoreId
+            };
+
+            var result = await _unitOfWork.WriteCategoryRepository.AddAsync(newCategory);
+            await _unitOfWork.WriteCategoryRepository.SaveChangesAsync();
+
+            return result;
+        }
+
+        public async Task<bool> RemoveCategory(string categoryId)
+        {
+            var category = await _unitOfWork.ReadCategoryRepository.GetAsync(categoryId);
+            if (category is null)
+                throw new ArgumentNullException("Wrong Category Id");
+
+
+            var shoes = _unitOfWork.ReadShoesRepository.GetWhere(x => x.CategoryId == categoryId).ToList();
+
+            foreach (var shoe in shoes)
+            {
+                // remove shoe
+            }
+
+            var result = await _unitOfWork.WriteCategoryRepository.RemoveAsync(categoryId);
+            await _unitOfWork.WriteCategoryRepository.SaveChangesAsync();
+            return result;
+        }
+
+        public async Task<GetCategoryDto> GetCategory(string categoryId)
+        {
+            var category = await _unitOfWork.ReadCategoryRepository.GetAsync(categoryId);
+            if (category is null)
+                throw new ArgumentNullException("Wrong Category Id");
+
+            var categoryDto = new GetCategoryDto
+            {
+                Id = categoryId,
+                Name = category.Name,
+                ShoesIds = category.ShoesId
+            };
+
+            return categoryDto;
+        }
+
+        public List<GetCategoryDto> GetAllCategory()
+        {
+            var categories = _unitOfWork.ReadCategoryRepository.GetAll();
+            if (categories.Count() is 0)
+                throw new ArgumentNullException("Wrong No Category");
+
+
+            var categoriesDto = new List<GetCategoryDto>();
+            foreach (var category in categories)
+            {
+                if (category is not null)
+                {
+                    categoriesDto.Add(new GetCategoryDto
+                    {
+                        Id = category.Id,
+                        Name = category.Name,
+                        ShoesIds = category.ShoesId
+                    });
+                }
+            }
+            return categoriesDto;
+        }
+        #endregion
 
         #region ShoeSalesStatistics
         public List<GeneralShoeStatistics> WeeklySalesStatistics(string storeId)
         {
-            var orders = _unitOfWork.ReadOrderRepository.GetWhere(x=> x.StoreId == storeId && x.OrderDate > DateTime.Now.AddDays(-7).Date).ToList();
+            var orders = _unitOfWork.ReadOrderRepository.GetWhere(x=> x.StoreId == storeId && x.OrderMakeTime > DateTime.Now.AddDays(-7).Date).ToList();
             if (orders.Count is 0)
                 throw new ArgumentNullException("Order not Found");
 
