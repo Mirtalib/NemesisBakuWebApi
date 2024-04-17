@@ -9,6 +9,7 @@ namespace Application.Services.IUserServices
         #region Shoe
         Task<List<GetShoeDto>> GetAllShoes(string storeId);
         Task<GetShoeInfoDto> GetShoeId(string shoeId);
+        Task<bool> UpdateShoeCount (UpdateShoeCountDto dto);
         Task<bool> CreateShoe(AddShoeDto shoe);
         Task<bool> RemoveShoe(string shoeId);
         #endregion

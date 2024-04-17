@@ -12,7 +12,8 @@ namespace Application.Models.DTOs.ShoesDTOs
         public string Color { get; set; }
         public string StoreId { get; set; }
         public float Price { get; set; }
-        public List<ShoeCountSize> ShoeCountSize { get; set; } = new List<ShoeCountSize>();
+        public byte Count { get; set; }
+        public byte Size { get; set; }
         public IFormFile[] Images { get; set; } = new IFormFile[6];
     }
 }

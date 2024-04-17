@@ -48,7 +48,9 @@ namespace Infrastructure.Services.UserServices
                     CategoryId = shoeDto.CategoryId,
                     Color = shoeDto.Color,
                     Description = shoeDto.Description,
-                    ShoeCountSize = shoeDto.ShoeCountSize
+                    Size = shoeDto.Size,
+                    Count = shoeDto.Count,
+                    StoreId = shoeDto.StoreId,
                 };
 
                 for (int i = 0; i < shoeDto.Images.Length; i++)
@@ -107,17 +109,44 @@ namespace Infrastructure.Services.UserServices
             category.ShoesId.Remove(shoeId);
 
 
-            await _unitOfWork.WriteStoreRepository.UpdateAsync(store.Id);
-            await _unitOfWork.WriteStoreRepository.SaveChangesAsync();
 
             await _unitOfWork.WriteCategoryRepository.UpdateAsync(category.Id);
             await _unitOfWork.WriteCategoryRepository.SaveChangesAsync();
+
+            await _unitOfWork.WriteStoreRepository.UpdateAsync(store.Id);
+            await _unitOfWork.WriteStoreRepository.SaveChangesAsync();
 
             var result =  await _unitOfWork.WriteShoesRepository.RemoveAsync(shoeId);
             await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
 
             return result;
         }
+
+        public async Task<bool> UpdateShoeCount(UpdateShoeCountDto dto)
+        {
+            var store = await _unitOfWork.ReadStoreRepository.GetAsync(dto.StoreId);
+            if (store is null)
+                throw new ArgumentNullException("Store is not found");
+
+
+            var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(dto.StoreId);
+            if (shoe is null)
+                throw new ArgumentNullException("Shoe not found");
+
+            shoe.Count += dto.ShoeCount;
+
+
+
+
+            await _unitOfWork.WriteStoreRepository.UpdateAsync(store.Id);
+            await _unitOfWork.WriteStoreRepository.SaveChangesAsync();
+
+            var result = await _unitOfWork.WriteShoesRepository.UpdateAsync(shoe.Id);
+            await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
+
+            return result;
+        }
+
 
         public async Task<List<GetShoeDto>> GetAllShoes(string storeId)
         {
@@ -158,13 +187,13 @@ namespace Infrastructure.Services.UserServices
                 CategoryId = shoe.CategoryId,
                 Color = shoe.Color,
                 Description = shoe.Description,
-                ShoeCountSize = shoe.ShoeCountSize,
             };
 
             return shoeDto;
         }
 
         #endregion
+
 
         #region Profile
         public async Task<GetStoreProfileDto> GetProfile(string storeId)
@@ -183,6 +212,7 @@ namespace Infrastructure.Services.UserServices
             return storeDto;
         }
         #endregion
+
 
         #region Category
 
@@ -264,6 +294,7 @@ namespace Infrastructure.Services.UserServices
             return categoriesDto;
         }
         #endregion
+        
 
         #region ShoeSalesStatistics
         public List<GeneralShoeStatistics> WeeklySalesStatistics(string storeId)
@@ -297,6 +328,7 @@ namespace Infrastructure.Services.UserServices
             }
             return shoesDto;
         }
+
         #endregion
     }
 }
