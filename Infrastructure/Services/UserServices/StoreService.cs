@@ -135,9 +135,6 @@ namespace Infrastructure.Services.UserServices
 
             shoe.Count += dto.ShoeCount;
 
-
-
-
             await _unitOfWork.WriteStoreRepository.UpdateAsync(store.Id);
             await _unitOfWork.WriteStoreRepository.SaveChangesAsync();
 
@@ -147,7 +144,6 @@ namespace Infrastructure.Services.UserServices
             return result;
         }
 
-
         public async Task<List<GetShoeDto>> GetAllShoes(string storeId)
         {
             var store = await _unitOfWork.ReadStoreRepository.GetAsync(storeId);
@@ -156,7 +152,7 @@ namespace Infrastructure.Services.UserServices
 
             var shoesDto = new List<GetShoeDto>();
             var shoes = _unitOfWork.ReadShoesRepository.GetWhere(x=> x.StoreId == storeId).ToList();
-            foreach (var shoe in shoes)
+            foreach (var  shoe in shoes)
             {
                 if (shoe is not null)
                     shoesDto.Add(new GetShoeDto

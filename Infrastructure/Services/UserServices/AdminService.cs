@@ -98,7 +98,7 @@ namespace Infrastructure.Services.UserServices
 
 
         #region Category
-        
+
         public async Task<bool> CreateCategory(CreateCategoryDto dto)
         {
             var testCategory = await _unitOfWork.ReadCategoryRepository.GetAsync(x => x.Name.ToLower() == dto.Name.ToLower());
