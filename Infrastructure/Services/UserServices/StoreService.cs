@@ -22,8 +22,6 @@ namespace Infrastructure.Services.UserServices
             _addShoeValidator = addShoeValidator;
         }
 
-
-
         #region Shoe
 
         public async Task<bool> CreateShoe(AddShoeDto shoeDto)
@@ -44,30 +42,13 @@ namespace Infrastructure.Services.UserServices
                     Id = Guid.NewGuid().ToString(),
                     Brend = shoeDto.Brend,
                     Model = shoeDto.Model,
-                    Price = shoeDto.Price,
                     CategoryId = shoeDto.CategoryId,
                     Color = shoeDto.Color,
                     Description = shoeDto.Description,
                     Size = shoeDto.Size,
-                    Count = shoeDto.Count,
                     StoreId = shoeDto.StoreId,
+                    ImageUrls = new List<string>()
                 };
-
-                for (int i = 0; i < shoeDto.Images.Length; i++)
-                {
-                    var form = shoeDto.Images[i];
-                    using (var stream = form.OpenReadStream())
-                    {
-                        var fileName = newShoe.Id + "-" + newShoe.Model + newShoe.Color + i + ".jpg";
-                        var contentType = form.ContentType;
-
-                        var blobResult = await _blobSerice.UploadFileAsync(stream, fileName, contentType);
-                        if (blobResult is false)
-                            return false;
-
-                        newShoe.ImageUrls.Add(_blobSerice.GetSignedUrl(fileName));
-                    }
-                }
 
                 store.ShoesIds.Add(newShoe.Id);
                 category.ShoesId.Add(newShoe.Id);
@@ -84,6 +65,33 @@ namespace Infrastructure.Services.UserServices
                 return true;
             }
             throw new ValidationException("No Valid");
+        }
+
+        public async Task<bool> AddShoeImages(AddShoeImageDto dto)
+        {
+            var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(dto.ShoeId);
+            if (shoe is null || shoe.ImageUrls.Count != 0)
+                throw new ArgumentNullException("Shoe not found");
+
+            for (int i = 0; i < dto.Images.Length; i++)
+            {
+                var form = dto.Images[i];
+                using (var stream = form.OpenReadStream())
+                {
+                    var fileName = shoe.Id + "-" + shoe.Model + shoe.Color + i + ".jpg";
+                    var contentType = form.ContentType;
+
+                    var blobResult = await _blobSerice.UploadFileAsync(stream, fileName, contentType);
+                    if (blobResult is false)
+                        return false;
+
+                    shoe.ImageUrls.Add(_blobSerice.GetSignedUrl(fileName));
+                }
+            }
+
+            await _unitOfWork.WriteShoesRepository.UpdateAsync(shoe.Id);
+            await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
+            return true;
         }
 
         public async Task<bool> RemoveShoe(string shoeId)

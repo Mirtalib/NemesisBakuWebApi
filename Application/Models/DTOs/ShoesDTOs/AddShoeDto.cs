@@ -11,9 +11,7 @@ namespace Application.Models.DTOs.ShoesDTOs
         public string CategoryId { get; set; }
         public string Color { get; set; }
         public string StoreId { get; set; }
-        public float Price { get; set; }
-        public byte Count { get; set; }
+        public List<ShoeCountSize> ShoeCountSizes { get; set; }
         public byte Size { get; set; }
-        public IFormFile[] Images { get; set; } = new IFormFile[6];
     }
 }

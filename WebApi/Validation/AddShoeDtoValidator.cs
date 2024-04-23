@@ -10,11 +10,7 @@ namespace WebApi.Validation
             RuleFor(x => x.Brend)
                 .NotEmpty();
 
-            RuleFor(x => x.Images)
-                .NotNull()
-                .NotEmpty();
-
-            RuleFor(x=> x.ShoeCountSize)
+            RuleFor(x=> x.ShoeCountSizes)
                 .NotNull();
             
         }
