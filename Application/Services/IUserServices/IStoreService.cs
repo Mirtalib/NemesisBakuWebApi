@@ -1,4 +1,5 @@
 ﻿using Application.Models.DTOs.CategoryDTOs;
+using Application.Models.DTOs.OderDTOs;
 using Application.Models.DTOs.ShoesDTOs;
 using Application.Models.DTOs.StoreDTOs;
 
@@ -8,6 +9,7 @@ namespace Application.Services.IUserServices
     {
         #region Shoe
         Task<List<GetShoeDto>> GetAllShoes(string storeId);
+        Task<bool> AddShoeImages(AddShoeImageDto dto);
         Task<GetShoeInfoDto> GetShoeId(string shoeId);
         Task<bool> UpdateShoeCount (UpdateShoeCountDto dto);
         Task<bool> CreateShoe(AddShoeDto shoe);
@@ -29,10 +31,21 @@ namespace Application.Services.IUserServices
 
         Task<bool> RemoveCategory(string categoryId);
 
+        Task<bool> UpdateCategory(UpdateCategoryDto dto);
+
         Task<GetCategoryDto> GetCategory(string categoryId);
 
         List<GetCategoryDto> GetAllCategory();
 
         #endregion
+
+        #region Order
+
+        Task<GetOrderDto> GetOrder(string orderId);
+
+        Task<List<GetOrderDto>> GetAllOrder(string storeId);
+
+        #endregion
+
     }
 }

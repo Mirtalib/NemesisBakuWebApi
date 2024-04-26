@@ -10,8 +10,7 @@ namespace Domain.Models
         public string CategoryId { get; set; }
         public string Color { get; set; }
         public float Price { get; set; }
-        public byte Count { get; set; }
-        public byte Size { get; set; }
+        public List<ShoeCountSize> ShoeCountSizes { get; set; }
         public string StoreId { get; set; }
         public List<string> ImageUrls { get; set; }
     }

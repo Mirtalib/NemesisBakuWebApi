@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace Application.Models.DTOs.ShoesDTOs
 {
     public class UpdateShoeCountDto
     {
-        public byte ShoeCount { get; set; }
+        public List<ShoeCountSize> ShoeCountSizes { get; set; }
         public string ShoeId { get; set;}
         public string StoreId { get; set; }
     }

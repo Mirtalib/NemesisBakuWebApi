@@ -1,10 +1,12 @@
 ﻿using Application.IRepositories;
 using Application.Models.DTOs.CategoryDTOs;
+using Application.Models.DTOs.OderDTOs;
 using Application.Models.DTOs.ShoesDTOs;
 using Application.Models.DTOs.StoreDTOs;
 using Application.Services.IHelperServices;
 using Application.Services.IUserServices;
 using Domain.Models;
+using Domain.Models.Enum;
 using FluentValidation;
 
 namespace Infrastructure.Services.UserServices
@@ -45,10 +47,12 @@ namespace Infrastructure.Services.UserServices
                     CategoryId = shoeDto.CategoryId,
                     Color = shoeDto.Color,
                     Description = shoeDto.Description,
-                    Size = shoeDto.Size,
                     StoreId = shoeDto.StoreId,
-                    ImageUrls = new List<string>()
+                    ImageUrls = new List<string>(),
+                    Price = shoeDto.Price,
                 };
+
+                newShoe.ShoeCountSizes.AddRange(shoeDto.ShoeCountSizes);
 
                 store.ShoesIds.Add(newShoe.Id);
                 category.ShoesId.Add(newShoe.Id);
@@ -132,20 +136,23 @@ namespace Infrastructure.Services.UserServices
 
         public async Task<bool> UpdateShoeCount(UpdateShoeCountDto dto)
         {
-            var store = await _unitOfWork.ReadStoreRepository.GetAsync(dto.StoreId);
-            if (store is null)
-                throw new ArgumentNullException("Store is not found");
-
-
-            var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(dto.StoreId);
+            var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(dto.ShoeId);
             if (shoe is null)
                 throw new ArgumentNullException("Shoe not found");
 
-            shoe.Count += dto.ShoeCount;
-
-            await _unitOfWork.WriteStoreRepository.UpdateAsync(store.Id);
-            await _unitOfWork.WriteStoreRepository.SaveChangesAsync();
-
+            shoe.ShoeCountSizes.ForEach(x =>
+            {
+                foreach (var item in dto.ShoeCountSizes)
+                {
+                    if (x.Size == item.Size)
+                    {
+                        x.Count += item.Count;
+                    }
+                    else
+                        shoe.ShoeCountSizes.Add(item);
+                }
+            });
+            
             var result = await _unitOfWork.WriteShoesRepository.UpdateAsync(shoe.Id);
             await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
 
@@ -172,6 +179,7 @@ namespace Infrastructure.Services.UserServices
                         Price = shoe.Price,
                     });
             }
+
             return shoesDto;
         }
 
@@ -246,15 +254,25 @@ namespace Infrastructure.Services.UserServices
             if (category is null)
                 throw new ArgumentNullException("Wrong Category Id");
 
-
-            var shoes = _unitOfWork.ReadShoesRepository.GetWhere(x => x.CategoryId == categoryId).ToList();
-
-            foreach (var shoe in shoes)
+            foreach (var shoeId in category.ShoesId)
             {
-                // remove shoe
+                await RemoveShoe(shoeId);
             }
 
             var result = await _unitOfWork.WriteCategoryRepository.RemoveAsync(categoryId);
+            await _unitOfWork.WriteCategoryRepository.SaveChangesAsync();
+            return result;
+        }
+        
+        public async Task<bool> UpdateCategory(UpdateCategoryDto dto)
+        {
+            var category = await _unitOfWork.ReadCategoryRepository.GetAsync(dto.Id);
+            if (category is null)
+                throw new ArgumentNullException();
+
+            category.Name = dto.Name;
+
+            var result = await _unitOfWork.WriteCategoryRepository.UpdateAsync(category.Id);
             await _unitOfWork.WriteCategoryRepository.SaveChangesAsync();
             return result;
         }
@@ -298,9 +316,93 @@ namespace Infrastructure.Services.UserServices
             return categoriesDto;
         }
         #endregion
-        
+
+
+        #region Order
+
+        public async Task<GetOrderDto> GetOrder(string orderId)
+        {
+            var order = await _unitOfWork.ReadOrderRepository.GetAsync(orderId);
+            if (order is null)
+                throw new ArgumentNullException();
+
+            var orderDto = new GetOrderDto { 
+                Id = orderId,
+                StoreId = order.StoreId,
+                CourierId = order.CourierId,
+                ShoesIds = order.ShoesIds,
+                OrderCommentId = order.OrderCommentId,
+                Amount = order.Amount,
+                OrderFinishTime = order.OrderFinishTime,
+                OrderMakeTime = order.OrderMakeTime,
+                OrderStatus = order.OrderStatus,
+            };
+
+            return orderDto;
+        }
+
+        public async Task<List<GetOrderDto>> GetAllOrder(string storeId)
+        {
+            var store = await _unitOfWork.ReadStoreRepository.GetAsync(storeId);
+            if (store is null)
+                throw new ArgumentNullException();
+
+            var orders = _unitOfWork.ReadOrderRepository.GetWhere(x=> store.OrderIds.Contains(x.Id));
+
+            var ordersDto = new List<GetOrderDto>();
+            foreach (var order in orders)
+            {
+                if (order is not null)
+                    ordersDto.Add(new GetOrderDto
+                    {
+                        Id = order.Id,
+                        StoreId = order.StoreId,
+                        CourierId = order.CourierId,
+                        ShoesIds = order.ShoesIds,
+                        OrderCommentId = order.OrderCommentId,
+                        Amount = order.Amount,
+                        OrderFinishTime = order.OrderFinishTime,
+                        OrderMakeTime = order.OrderMakeTime,
+                        OrderStatus = order.OrderStatus,
+                    });
+            }
+            return ordersDto;
+        }
+
+
+
+        public async Task<List<GetOrderDto>> GetActiveOrder(string storeId)
+        {
+            var store = await _unitOfWork.ReadStoreRepository.GetAsync(storeId);
+            if (store is null)
+                throw new ArgumentNullException();
+
+            var orders = _unitOfWork.ReadOrderRepository.GetWhere(x => store.OrderIds.Contains(x.Id) && x.OrderStatus != OrderStatus.Rated);
+
+            var ordersDto = new List<GetOrderDto>();
+            foreach (var order in orders)
+            {
+                if (order is not null)
+                    ordersDto.Add(new GetOrderDto
+                    {
+                        Id = order.Id,
+                        StoreId = order.StoreId,
+                        CourierId = order.CourierId,
+                        ShoesIds = order.ShoesIds,
+                        OrderCommentId = order.OrderCommentId,
+                        Amount = order.Amount,
+                        OrderFinishTime = order.OrderFinishTime,
+                        OrderMakeTime = order.OrderMakeTime,
+                        OrderStatus = order.OrderStatus,
+                    });
+            }
+            return ordersDto;
+        }
+        #endregion
+
 
         #region ShoeSalesStatistics
+
         public List<GeneralShoeStatistics> WeeklySalesStatistics(string storeId)
         {
             var orders = _unitOfWork.ReadOrderRepository.GetWhere(x=> x.StoreId == storeId && x.OrderMakeTime > DateTime.Now.AddDays(-7).Date).ToList();
@@ -315,6 +417,8 @@ namespace Infrastructure.Services.UserServices
                         ShoesIds.Add(shoeId);
 
             var shoes = _unitOfWork.ReadShoesRepository.GetAll(); 
+            // var shoes2 = _unitOfWork.ReadShoesRepository.GetWhere(x=> ShoesIds.Contains(x.Id)); 
+
             foreach (var item in shoes)
             {
                 if (item is not null)
