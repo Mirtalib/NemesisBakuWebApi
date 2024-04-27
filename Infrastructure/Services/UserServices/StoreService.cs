@@ -370,15 +370,12 @@ namespace Infrastructure.Services.UserServices
         }
 
 
-
         public async Task<List<GetOrderDto>> GetActiveOrder(string storeId)
         {
             var store = await _unitOfWork.ReadStoreRepository.GetAsync(storeId);
             if (store is null)
                 throw new ArgumentNullException();
-
             var orders = _unitOfWork.ReadOrderRepository.GetWhere(x => store.OrderIds.Contains(x.Id) && x.OrderStatus != OrderStatus.Rated);
-
             var ordersDto = new List<GetOrderDto>();
             foreach (var order in orders)
             {
@@ -391,13 +388,14 @@ namespace Infrastructure.Services.UserServices
                         ShoesIds = order.ShoesIds,
                         OrderCommentId = order.OrderCommentId,
                         Amount = order.Amount,
-                        OrderFinishTime = order.OrderFinishTime,
                         OrderMakeTime = order.OrderMakeTime,
                         OrderStatus = order.OrderStatus,
                     });
             }
             return ordersDto;
         }
+
+
         #endregion
 
 
@@ -417,8 +415,6 @@ namespace Infrastructure.Services.UserServices
                         ShoesIds.Add(shoeId);
 
             var shoes = _unitOfWork.ReadShoesRepository.GetAll(); 
-            // var shoes2 = _unitOfWork.ReadShoesRepository.GetWhere(x=> ShoesIds.Contains(x.Id)); 
-
             foreach (var item in shoes)
             {
                 if (item is not null)
