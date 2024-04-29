@@ -6,6 +6,7 @@ using Application.IRepositories.IOrderRepository;
 using Application.IRepositories.IShoesCommentRepository;
 using Application.IRepositories.IShoesRepository;
 using Application.IRepositories.IStoreRepository;
+using Application.IRepositories.IOrderCommentRepository;
 
 namespace Application.IRepositories
 {
@@ -34,5 +35,9 @@ namespace Application.IRepositories
 
         IReadCategoryRepository ReadCategoryRepository { get; }
         IWriteCategoryRepository WriteCategoryRepository { get; }
+
+
+        IReadOrderCommentRepository ReadOrderCommentRepository { get; }
+        IWriteOrderCommentRepository WriteOrderCommentRepository { get; }
     }
 }

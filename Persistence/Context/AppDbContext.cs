@@ -20,6 +20,7 @@ namespace Persistence.Context
             modelBuilder.Entity<Courier>().ToContainer("Couriers");
             modelBuilder.Entity<Admin>().ToContainer("Admins");
             modelBuilder.Entity<Category>().ToContainer("Categories");
+            modelBuilder.Entity<OrderComment>().ToContainer("OrderComments");
 
             base.OnModelCreating(modelBuilder);
         }
@@ -33,6 +34,7 @@ namespace Persistence.Context
         DbSet<Order>  Orders { get; set; }
         DbSet<Courier>  Couriers { get; set; }
         DbSet<ShoesComment> ShoesComments { get; set; }
+        DbSet<OrderComment> OrderComments   { get; set; }
 
 
     }

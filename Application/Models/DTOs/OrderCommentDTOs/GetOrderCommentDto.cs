@@ -1,14 +1,14 @@
-﻿using Domain.Models.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Models
+namespace Application.Models.DTOs.OrderCommentDTOs
 {
-    public class OrderComment :BaseEntity
+    public class GetOrderCommentDto
     {
+        public string Id { get; set; }
         public string OrderId { get; set; }
         public string ClientId { get; set; }
         public string CourierId { get; set; }

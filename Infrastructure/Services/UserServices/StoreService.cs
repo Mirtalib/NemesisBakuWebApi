@@ -5,6 +5,7 @@ using Application.Models.DTOs.ShoesDTOs;
 using Application.Models.DTOs.StoreDTOs;
 using Application.Services.IHelperServices;
 using Application.Services.IUserServices;
+using Application.Models.DTOs.OrderCommentDTOs;
 using Domain.Models;
 using Domain.Models.Enum;
 using FluentValidation;
@@ -233,7 +234,7 @@ namespace Infrastructure.Services.UserServices
             var testCategory = await _unitOfWork.ReadCategoryRepository.GetAsync(x => x.Name.ToLower() == dto.Name.ToLower());
             if (testCategory is not null)
                 throw new ArgumentException("Wrong Name");
-
+             
             var newCategory = new Category
             {
                 Id = Guid.NewGuid().ToString(),
@@ -388,6 +389,7 @@ namespace Infrastructure.Services.UserServices
                         ShoesIds = order.ShoesIds,
                         OrderCommentId = order.OrderCommentId,
                         Amount = order.Amount,
+                        OrderFinishTime = default,
                         OrderMakeTime = order.OrderMakeTime,
                         OrderStatus = order.OrderStatus,
                     });
@@ -398,6 +400,38 @@ namespace Infrastructure.Services.UserServices
 
         #endregion
 
+
+        #region Order Comment
+
+        public async Task<GetOrderCommentDto> GetOrderComment(string orderCommentId)
+        {
+            var orderComment = await _unitOfWork.ReadOrderCommentRepository.GetAsync(orderCommentId);
+            if (orderComment is null)
+                throw new ArgumentNullException();
+
+
+            var orderCommentDto = new GetOrderCommentDto
+            {
+                Id= orderComment.Id,
+                ClientId = orderComment.ClientId,
+                Content = orderComment.Content,
+                CourierId= orderComment.CourierId,
+                OrderId= orderComment.OrderId,
+                Rate = orderComment.Rate,
+            };
+
+            return orderCommentDto;
+        }
+
+
+
+        public async Task<List<GetOrderCommentDto>> GetOrderAllComment(string orderCommentId)
+        {
+            return null;
+        }
+
+
+        #endregion
 
         #region ShoeSalesStatistics
 

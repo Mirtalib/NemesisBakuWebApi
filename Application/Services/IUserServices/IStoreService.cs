@@ -1,4 +1,5 @@
-﻿using Application.Models.DTOs.CategoryDTOs;
+﻿using Application.IRepositories;
+using Application.Models.DTOs.CategoryDTOs;
 using Application.Models.DTOs.OderDTOs;
 using Application.Models.DTOs.ShoesDTOs;
 using Application.Models.DTOs.StoreDTOs;
@@ -45,6 +46,7 @@ namespace Application.Services.IUserServices
 
         Task<List<GetOrderDto>> GetAllOrder(string storeId);
 
+        Task<List<GetOrderDto>> GetActiveOrder(string storeId);
         #endregion
 
     }

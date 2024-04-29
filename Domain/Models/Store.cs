@@ -9,6 +9,7 @@ namespace Domain.Models
         public string Description { get; set; }
         public List<string> ShoesIds { get; set; }
         public List<string> OrderIds { get; set; }
+        public List<string> OrderCommentIds { get; set; }
         public List<string> CategoryIds { get;set; }
     }
 }
