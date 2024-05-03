@@ -6,7 +6,8 @@ namespace Domain.Models
     public class Order :BaseEntity
     {
         public string StoreId { get; set; }
-        public List<string> ShoesIds   { get; set; }
+        public List<OderShoeSizeCount> ShoesIds { get; set; }
+        public string ClientId { get; set; }
         public string CourierId { get; set; }
         public string OrderCommentId { get; set; }
         public float Amount { get; set; }

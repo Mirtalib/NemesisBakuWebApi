@@ -342,6 +342,28 @@ namespace Infrastructure.Services.UserServices
             return orderDto;
         }
 
+
+        public async Task<bool> InLastDecidesSituation(InLastSituationOrderDto orderDto)
+        {
+            var order = await _unitOfWork.ReadOrderRepository.GetAsync(orderDto.OrderId);
+            if (order is null)
+                throw new ArgumentNullException();
+
+            if (orderDto.IsLast)
+            {
+                order.OrderStatus = OrderStatus.Confirmed;
+                var result = await _unitOfWork.WriteOrderRepository.UpdateAsync(order.Id);
+                await _unitOfWork.WriteOrderRepository.SaveChangesAsync();
+                return result;
+            }
+            
+            order.OrderStatus = OrderStatus.Rejected;
+            await _unitOfWork.WriteOrderRepository.UpdateAsync(order.Id);
+            await _unitOfWork.WriteOrderRepository.SaveChangesAsync();
+            return true;
+        }
+
+
         public async Task<List<GetOrderDto>> GetAllOrder(string storeId)
         {
             var store = await _unitOfWork.ReadStoreRepository.GetAsync(storeId);
@@ -395,6 +417,20 @@ namespace Infrastructure.Services.UserServices
                     });
             }
             return ordersDto;
+        }
+
+
+        public async Task<bool> UpdateOrderStatus(UpdateOrderStatusDto orderDto)
+        {
+            var order = await _unitOfWork.ReadOrderRepository.GetAsync(orderDto.OrderId);
+            if (order is null)
+                throw new ArgumentNullException();
+
+            order.OrderStatus = orderDto.OrderStatus;
+
+            var result = await _unitOfWork.WriteOrderRepository.UpdateAsync(order.Id);
+            await _unitOfWork.WriteOrderRepository.SaveChangesAsync();
+            return result;
         }
 
 
@@ -475,7 +511,7 @@ namespace Infrastructure.Services.UserServices
             foreach (var order in orders)
                 if (order is not null)
                     foreach (var shoeId in order.ShoesIds)
-                        ShoesIds.Add(shoeId);
+                        ShoesIds.Add(shoeId.ShoeId);
 
             var shoes = _unitOfWork.ReadShoesRepository.GetAll(); 
             foreach (var item in shoes)
@@ -502,23 +538,23 @@ namespace Infrastructure.Services.UserServices
 
         public async Task<List<DetailsShoeStatisticsDto>> DetailsShoeStatistics(string shoeId)
         {
-            var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(shoeId);
-            if (shoe is null)
-                throw new ArgumentNullException();
+            //var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(shoeId);
+            //if (shoe is null)
+            //    throw new ArgumentNullException();
 
-            var orders  = _unitOfWork.ReadOrderRepository.GetWhere(order => order.ShoesIds.Contains(shoe.Id));
-            if (orders.Count() == 0)
-                throw new ArgumentNullException();
-
-
-            foreach (var order in orders)
-            {
-                if (order is not null)
-                {
+            //var orders  = _unitOfWork.ReadOrderRepository.GetWhere(order => order.ShoesIds.Contains(shoe.ShoeCountSizes));
+            //if (orders.Count() == 0)
+            //    throw new ArgumentNullException();
 
 
-                }
-            }
+            //foreach (var order in orders)
+            //{
+            //    if (order is not null)
+            //    {
+
+
+            //    }
+            //}
 
             return null;
         }

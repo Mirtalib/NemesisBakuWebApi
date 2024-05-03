@@ -23,9 +23,6 @@ namespace Application.Services.IUserServices
 
         #endregion
 
-        List<GeneralShoeStatisticsDto> WeeklySalesStatistics(string storeId);
-
-
         #region Category
 
         Task<bool> CreateCategory(CreateCategoryDto dto);
@@ -47,7 +44,13 @@ namespace Application.Services.IUserServices
         Task<List<GetOrderDto>> GetAllOrder(string storeId);
 
         Task<List<GetOrderDto>> GetActiveOrder(string storeId);
+
+        Task<bool> InLastDecidesSituation(InLastSituationOrderDto orderDto);
+
+        Task<bool> UpdateOrderStatus(UpdateOrderStatusDto orderDto);
         #endregion
+
+        List<GeneralShoeStatisticsDto> WeeklySalesStatistics(string storeId);
 
     }
 }

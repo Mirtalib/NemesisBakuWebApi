@@ -1,4 +1,5 @@
-﻿using Domain.Models.Enum;
+﻿using Domain.Models;
+using Domain.Models.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Application.Models.DTOs.OderDTOs
     {
         public string Id { get; set; }
         public string StoreId { get; set; }
-        public List<string> ShoesIds { get; set; }
+        public List<OderShoeSizeCount> ShoesIds { get; set; }
         public string CourierId { get; set; }
         public string OrderCommentId { get; set; }
         public float Amount { get; set; }
