@@ -3,6 +3,7 @@ using Application.IRepositories.IAdminRepository;
 using Application.IRepositories.ICategoryRepository;
 using Application.IRepositories.IClientRepository;
 using Application.IRepositories.ICourierRepository;
+using Application.IRepositories.IOrderCommentRepository;
 using Application.IRepositories.IOrderRepository;
 using Application.IRepositories.IShoesCommentRepository;
 using Application.IRepositories.IShoesRepository;
@@ -24,6 +25,7 @@ using Persistence.Repositories.AdminRepository;
 using Persistence.Repositories.CategoryRepository;
 using Persistence.Repositories.ClientRepository;
 using Persistence.Repositories.CourierRepository;
+using Persistence.Repositories.OrderCommentRepository;
 using Persistence.Repositories.OrderRepository;
 using Persistence.Repositories.ShoesCommentRepository;
 using Persistence.Repositories.ShoesRepository;
@@ -158,6 +160,9 @@ namespace WebApi.Extensions
 
             services.AddScoped<IReadShoesRepository, ReadShoesRepository>();
             services.AddScoped<IWriteShoesRepository, WriteShoesRepository>();
+            
+            services.AddScoped<IReadOrderCommentRepository, ReadOrderCommentRepository>();
+            services.AddScoped<IWriteOrderCommentRepository, WriteOrderCommentRepository>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 

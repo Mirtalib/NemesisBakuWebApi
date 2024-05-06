@@ -17,7 +17,8 @@ namespace Infrastructure.Services.UserServices
             _blobSerice = blobSerice;
         }
 
-
+        #region Order
+        
         public async Task<bool> MakeOrder(MakeOrderDto dto)
         {
             var store = await _unitOfWork.ReadStoreRepository.GetAsync(dto.StoreId);
@@ -67,6 +68,9 @@ namespace Infrastructure.Services.UserServices
 
             return result;
         }
+
+
+        #endregion
 
     }
 }

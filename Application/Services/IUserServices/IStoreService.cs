@@ -39,15 +39,17 @@ namespace Application.Services.IUserServices
 
         #region Order
 
+        Task<bool> InLastDecidesSituation(InLastSituationOrderDto orderDto);
+
+        Task<bool> UpdateOrderStatus(UpdateOrderStatusDto orderDto);
+
         Task<GetOrderDto> GetOrder(string orderId);
 
         Task<List<GetOrderDto>> GetAllOrder(string storeId);
 
         Task<List<GetOrderDto>> GetActiveOrder(string storeId);
 
-        Task<bool> InLastDecidesSituation(InLastSituationOrderDto orderDto);
-
-        Task<bool> UpdateOrderStatus(UpdateOrderStatusDto orderDto);
+        Task<bool> RemoveOrder(string orderId);
         #endregion
 
         List<GeneralShoeStatisticsDto> WeeklySalesStatistics(string storeId);

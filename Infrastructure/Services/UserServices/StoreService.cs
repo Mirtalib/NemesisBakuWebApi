@@ -9,6 +9,7 @@ using Application.Models.DTOs.OrderCommentDTOs;
 using Domain.Models;
 using Domain.Models.Enum;
 using FluentValidation;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace Infrastructure.Services.UserServices
 {
@@ -97,6 +98,39 @@ namespace Infrastructure.Services.UserServices
             await _unitOfWork.WriteShoesRepository.UpdateAsync(shoe.Id);
             await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<bool> UpdateShoeImage(UpdateShoeImageDto dto)
+        {
+            var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(dto.ShoeId);
+            if (shoe is null || shoe.ImageUrls.Count != 0)
+                throw new ArgumentNullException("Shoe not found");
+
+
+
+            for (int i = 0; i < shoe.ImageUrls.Count; i++)
+                await _blobSerice.DeleteFileAsync(shoe.Id + "-" + shoe.Model + shoe.Color + i + ".jpg");
+
+
+            for (int i = 0; i < dto.Images.Length; i++)
+            {
+                var form = dto.Images[i];
+                using (var stream = form.OpenReadStream())
+                {
+                    var fileName = shoe.Id + "-" + shoe.Model + shoe.Color + i + ".jpg";
+                    var contentType = form.ContentType;
+
+                    var blobResult = await _blobSerice.UploadFileAsync(stream, fileName, contentType);
+                    if (blobResult is false)
+                        return false;
+
+                    shoe.ImageUrls.Add(_blobSerice.GetSignedUrl(fileName));
+                }
+            }
+
+            var result =  await _unitOfWork.WriteShoesRepository.UpdateAsync(shoe.Id);
+            await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
+            return result;
         }
 
         public async Task<bool> RemoveShoe(string shoeId)
@@ -316,32 +350,11 @@ namespace Infrastructure.Services.UserServices
             }
             return categoriesDto;
         }
+
         #endregion
 
 
         #region Order
-
-        public async Task<GetOrderDto> GetOrder(string orderId)
-        {
-            var order = await _unitOfWork.ReadOrderRepository.GetAsync(orderId);
-            if (order is null)
-                throw new ArgumentNullException();
-
-            var orderDto = new GetOrderDto { 
-                Id = orderId,
-                StoreId = order.StoreId,
-                CourierId = order.CourierId,
-                ShoesIds = order.ShoesIds,
-                OrderCommentId = order.OrderCommentId,
-                Amount = order.Amount,
-                OrderFinishTime = order.OrderFinishTime,
-                OrderMakeTime = order.OrderMakeTime,
-                OrderStatus = order.OrderStatus,
-            };
-
-            return orderDto;
-        }
-
 
         public async Task<bool> InLastDecidesSituation(InLastSituationOrderDto orderDto)
         {
@@ -364,6 +377,28 @@ namespace Infrastructure.Services.UserServices
         }
 
 
+        public async Task<GetOrderDto> GetOrder(string orderId)
+        {
+            var order = await _unitOfWork.ReadOrderRepository.GetAsync(orderId);
+            if (order is null)
+                throw new ArgumentNullException();
+
+            var orderDto = new GetOrderDto { 
+                Id = orderId,
+                StoreId = order.StoreId,
+                CourierId = order.CourierId,
+                OrderCommentId = order.OrderCommentId,
+                Amount = order.Amount,
+                OrderFinishTime = order.OrderFinishTime,
+                OrderMakeTime = order.OrderMakeTime,
+                OrderStatus = order.OrderStatus,
+            };
+            orderDto.ShoesIds.AddRange(order.ShoesIds);
+
+            return orderDto;
+        }
+
+
         public async Task<List<GetOrderDto>> GetAllOrder(string storeId)
         {
             var store = await _unitOfWork.ReadStoreRepository.GetAsync(storeId);
@@ -376,7 +411,8 @@ namespace Infrastructure.Services.UserServices
             foreach (var order in orders)
             {
                 if (order is not null)
-                    ordersDto.Add(new GetOrderDto
+                {
+                    var orderDto = new GetOrderDto
                     {
                         Id = order.Id,
                         StoreId = order.StoreId,
@@ -387,7 +423,12 @@ namespace Infrastructure.Services.UserServices
                         OrderFinishTime = order.OrderFinishTime,
                         OrderMakeTime = order.OrderMakeTime,
                         OrderStatus = order.OrderStatus,
-                    });
+                    };
+                    orderDto.ShoesIds.AddRange(order.ShoesIds);
+
+                    ordersDto.Add(orderDto);
+
+                }
             }
             return ordersDto;
         }
@@ -434,6 +475,48 @@ namespace Infrastructure.Services.UserServices
         }
 
 
+        public async Task<bool> RemoveOrder(string orderId)
+        {
+            var order = await _unitOfWork.ReadOrderRepository.GetAsync(orderId);
+            if (order is null)
+                throw new ArgumentNullException();
+
+            var store = await _unitOfWork.ReadStoreRepository.GetAsync(order.StoreId);
+            if (store is null)
+                throw new ArgumentNullException();
+
+            var client = await _unitOfWork.ReadClientRepository.GetAsync(order.ClientId);
+            if (client is null)
+                throw new ArgumentNullException();
+
+            var courier = await _unitOfWork.ReadCourierRepository.GetAsync(order.CourierId);
+            if (courier is null)
+                throw new ArgumentNullException();
+
+
+            store.OrderIds.Remove(orderId);
+            client.OrdersId.Remove(orderId);
+            courier.OrderIds.Remove(orderId);
+            
+            await _unitOfWork.WriteStoreRepository.UpdateAsync(store.Id);
+            await _unitOfWork.WriteStoreRepository.SaveChangesAsync();
+
+            await _unitOfWork.WriteClientRepository.UpdateAsync(client.Id);
+            await _unitOfWork.WriteClientRepository.SaveChangesAsync();
+
+            await _unitOfWork.WriteCourierRepository.UpdateAsync(courier.Id);
+            await _unitOfWork.WriteCourierRepository.SaveChangesAsync();
+
+            await _unitOfWork.WriteOrderCommentRepository.RemoveAsync(order.OrderCommentId);
+            await _unitOfWork.WriteOrderCommentRepository.SaveChangesAsync();
+
+            var result = await _unitOfWork.WriteOrderRepository.RemoveAsync(orderId);
+            await _unitOfWork.WriteOrderRepository.SaveChangesAsync();
+
+            return result;
+        }
+
+
         #endregion
 
 
@@ -461,7 +544,7 @@ namespace Infrastructure.Services.UserServices
 
 
 
-        public async Task<List<GetOrderCommentDto>> GetAllOrderComment()
+        public List<GetOrderCommentDto> GetAllOrderComment()
         {
             var orderComments = _unitOfWork.ReadOrderCommentRepository.GetAll();
 
@@ -556,7 +639,7 @@ namespace Infrastructure.Services.UserServices
             //    }
             //}
 
-            return null;
+            throw new NotImplementedException();
         }
 
 

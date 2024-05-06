@@ -1,4 +1,5 @@
 ﻿using Application.Models.DTOs.CategoryDTOs;
+using Application.Models.DTOs.OderDTOs;
 using Application.Models.DTOs.StoreDTOs;
 
 namespace Application.Services.IUserServices
@@ -32,6 +33,22 @@ namespace Application.Services.IUserServices
         List<GetCategoryDto> GetAllCategory();
 
         #endregion
+
+
+        #region Order
+
+        Task<bool> UpdateOrderStatus(UpdateOrderStatusDto orderDto);
+
+        Task<GetOrderDto> GetOrder(string orderId);
+
+        Task<List<GetOrderDto>> GetAllOrder(string storeId);
+
+        Task<List<GetOrderDto>> GetActiveOrder(string storeId);
+
+        Task<bool> RemoveOrder(string orderId);
+
+        #endregion
+
 
     }
 }

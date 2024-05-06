@@ -1,8 +1,10 @@
 ﻿using Application.IRepositories;
 using Application.Models.DTOs.CategoryDTOs;
+using Application.Models.DTOs.OderDTOs;
 using Application.Models.DTOs.StoreDTOs;
 using Application.Services.IUserServices;
 using Domain.Models;
+using Domain.Models.Enum;
 using Microsoft.Azure.Cosmos.Serialization.HybridRow;
 
 namespace Infrastructure.Services.UserServices
@@ -193,6 +195,153 @@ namespace Infrastructure.Services.UserServices
 
             return result;
         }
+
+        #endregion
+
+
+        #region Order
+
+
+        public async Task<GetOrderDto> GetOrder(string orderId)
+        {
+            var order = await _unitOfWork.ReadOrderRepository.GetAsync(orderId);
+            if (order is null)
+                throw new ArgumentNullException();
+
+            var orderDto = new GetOrderDto
+            {
+                Id = orderId,
+                StoreId = order.StoreId,
+                CourierId = order.CourierId,
+                OrderCommentId = order.OrderCommentId,
+                Amount = order.Amount,
+                OrderFinishTime = order.OrderFinishTime,
+                OrderMakeTime = order.OrderMakeTime,
+                OrderStatus = order.OrderStatus,
+            };
+            orderDto.ShoesIds.AddRange(order.ShoesIds);
+
+            return orderDto;
+        }
+
+
+        public async Task<List<GetOrderDto>> GetAllOrder(string storeId)
+        {
+            var store = await _unitOfWork.ReadStoreRepository.GetAsync(storeId);
+            if (store is null)
+                throw new ArgumentNullException();
+
+            var orders = _unitOfWork.ReadOrderRepository.GetWhere(x => store.OrderIds.Contains(x.Id));
+
+            var ordersDto = new List<GetOrderDto>();
+            foreach (var order in orders)
+            {
+                if (order is not null)
+                {
+                    var orderDto = new GetOrderDto
+                    {
+                        Id = order.Id,
+                        StoreId = order.StoreId,
+                        CourierId = order.CourierId,
+                        ShoesIds = order.ShoesIds,
+                        OrderCommentId = order.OrderCommentId,
+                        Amount = order.Amount,
+                        OrderFinishTime = order.OrderFinishTime,
+                        OrderMakeTime = order.OrderMakeTime,
+                        OrderStatus = order.OrderStatus,
+                    };
+                    orderDto.ShoesIds.AddRange(order.ShoesIds);
+
+                    ordersDto.Add(orderDto);
+
+                }
+            }
+            return ordersDto;
+        }
+
+
+        public async Task<List<GetOrderDto>> GetActiveOrder(string storeId)
+        {
+            var store = await _unitOfWork.ReadStoreRepository.GetAsync(storeId);
+            if (store is null)
+                throw new ArgumentNullException();
+            var orders = _unitOfWork.ReadOrderRepository.GetWhere(x => store.OrderIds.Contains(x.Id) && x.OrderStatus != OrderStatus.Rated);
+            var ordersDto = new List<GetOrderDto>();
+            foreach (var order in orders)
+            {
+                if (order is not null)
+                    ordersDto.Add(new GetOrderDto
+                    {
+                        Id = order.Id,
+                        StoreId = order.StoreId,
+                        CourierId = order.CourierId,
+                        ShoesIds = order.ShoesIds,
+                        OrderCommentId = order.OrderCommentId,
+                        Amount = order.Amount,
+                        OrderFinishTime = default,
+                        OrderMakeTime = order.OrderMakeTime,
+                        OrderStatus = order.OrderStatus,
+                    });
+            }
+            return ordersDto;
+        }
+
+
+        public async Task<bool> UpdateOrderStatus(UpdateOrderStatusDto orderDto)
+        {
+            var order = await _unitOfWork.ReadOrderRepository.GetAsync(orderDto.OrderId);
+            if (order is null)
+                throw new ArgumentNullException();
+
+            order.OrderStatus = orderDto.OrderStatus;
+
+            var result = await _unitOfWork.WriteOrderRepository.UpdateAsync(order.Id);
+            await _unitOfWork.WriteOrderRepository.SaveChangesAsync();
+            return result;
+        }
+
+
+        public async Task<bool> RemoveOrder(string orderId)
+        {
+            var order = await _unitOfWork.ReadOrderRepository.GetAsync(orderId);
+            if (order is null)
+                throw new ArgumentNullException();
+
+            var store = await _unitOfWork.ReadStoreRepository.GetAsync(order.StoreId);
+            if (store is null)
+                throw new ArgumentNullException();
+
+            var client = await _unitOfWork.ReadClientRepository.GetAsync(order.ClientId);
+            if (client is null)
+                throw new ArgumentNullException();
+
+            var courier = await _unitOfWork.ReadCourierRepository.GetAsync(order.CourierId);
+            if (courier is null)
+                throw new ArgumentNullException();
+
+
+            store.OrderIds.Remove(orderId);
+            client.OrdersId.Remove(orderId);
+            courier.OrderIds.Remove(orderId);
+
+            await _unitOfWork.WriteStoreRepository.UpdateAsync(store.Id);
+            await _unitOfWork.WriteStoreRepository.SaveChangesAsync();
+
+            await _unitOfWork.WriteClientRepository.UpdateAsync(client.Id);
+            await _unitOfWork.WriteClientRepository.SaveChangesAsync();
+
+            await _unitOfWork.WriteCourierRepository.UpdateAsync(courier.Id);
+            await _unitOfWork.WriteCourierRepository.SaveChangesAsync();
+
+            await _unitOfWork.WriteOrderCommentRepository.RemoveAsync(order.OrderCommentId);
+            await _unitOfWork.WriteOrderCommentRepository.SaveChangesAsync();
+
+            var result = await _unitOfWork.WriteOrderRepository.RemoveAsync(orderId);
+            await _unitOfWork.WriteOrderRepository.SaveChangesAsync();
+
+            return result;
+        }
+
 
         #endregion
     }
