@@ -9,7 +9,6 @@
   <ItemGroup>
     <Folder Include="Models\DTOs\ClientDTOs\" />
     <Folder Include="Models\DTOs\CourierDTOs\" />
-    <Folder Include="Models\DTOs\ShoesCommentDTOs\" />
   </ItemGroup>
 
   <ItemGroup>

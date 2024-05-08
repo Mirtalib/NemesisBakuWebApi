@@ -9,6 +9,7 @@ using Application.Models.DTOs.OrderCommentDTOs;
 using Domain.Models;
 using Domain.Models.Enum;
 using FluentValidation;
+using Application.Models.DTOs.ShoesCommentDTOs;
 using Microsoft.AspNetCore.Components.Forms;
 
 namespace Infrastructure.Services.UserServices
@@ -581,6 +582,88 @@ namespace Infrastructure.Services.UserServices
         #endregion
 
 
+        #region Shoe Comment
+
+
+        public async Task<List<GetShoeCommentDto>> GetAllShoeComment(string shoeId)
+        {
+            var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(shoeId);
+            if (shoe is null)
+                throw new ArgumentNullException();
+
+            var commentsDto = new List<GetShoeCommentDto>();
+
+            foreach (var commentId in shoe.ShoeCommentId)
+            {
+                var comment = await _unitOfWork.ReadShoesCommentRepository.GetAsync(commentId);
+                if (comment is not null)
+                    commentsDto.Add(new GetShoeCommentDto
+                    {
+                        Id = comment.Id,
+                        ClientId = comment.ClientId,
+                        ShoesId = comment.ShoesId,
+                        Content = comment.Content,
+                        OrderId = comment.OrderId,
+                        Rate = comment.Rate,
+                    });
+            }
+
+            return commentsDto;
+
+        }
+
+
+        public async Task<GetShoeCommentDto> GetShoeComment(string commentId)
+        {
+            var comment = await _unitOfWork.ReadShoesCommentRepository.GetAsync(commentId);
+            if (comment is null)
+                throw new ArgumentNullException();
+
+            var commentDto = new GetShoeCommentDto
+            {
+                Id = comment.Id,
+                ClientId = comment.ClientId,
+                ShoesId = comment.ShoesId,
+                Content = comment.Content,
+                OrderId = comment.OrderId,
+                Rate = comment.Rate,
+            };
+            return commentDto;
+        }
+
+        public async Task<bool> RemoveShoeComment(string commentId)
+        {
+            var comment = await _unitOfWork.ReadShoesCommentRepository.GetAsync(commentId);
+            if (comment is null)
+                throw new ArgumentNullException();
+
+            var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(comment.ShoesId);
+            if (shoe is null)
+                throw new ArgumentNullException();
+
+            var client = await _unitOfWork.ReadClientRepository.GetAsync(comment.ClientId);
+            if (client is null)
+                throw new ArgumentNullException();
+
+            shoe.ShoeCommentId.Remove(commentId);
+            client.ShoesCommnetId.Remove(commentId);
+
+
+            await _unitOfWork.WriteClientRepository.UpdateAsync(client.Id);
+            await _unitOfWork.WriteClientRepository.SaveChangesAsync();
+
+            await _unitOfWork.WriteShoesRepository.UpdateAsync(shoe.Id);
+            await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
+
+            var result = await _unitOfWork.WriteShoesCommentRepository.RemoveAsync(commentId);
+            await _unitOfWork.WriteShoesCommentRepository.SaveChangesAsync();
+
+            return result;
+        }
+
+        #endregion
+
+
         #region ShoeSalesStatistics
 
         public List<GeneralShoeStatisticsDto> WeeklySalesStatistics(string storeId)
@@ -641,6 +724,7 @@ namespace Infrastructure.Services.UserServices
 
             throw new NotImplementedException();
         }
+
 
 
         #endregion

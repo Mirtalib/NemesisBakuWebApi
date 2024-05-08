@@ -11,6 +11,7 @@ namespace Domain.Models
         public string Color { get; set; }
         public float Price { get; set; }
         public List<ShoeCountSize> ShoeCountSizes { get; set; }
+        public List<string> ShoeCommentId { get; set; }
         public string StoreId { get; set; }
         public List<string> ImageUrls { get; set; }
     }

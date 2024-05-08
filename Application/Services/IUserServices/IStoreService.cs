@@ -1,6 +1,7 @@
 ﻿using Application.IRepositories;
 using Application.Models.DTOs.CategoryDTOs;
 using Application.Models.DTOs.OderDTOs;
+using Application.Models.DTOs.ShoesCommentDTOs;
 using Application.Models.DTOs.ShoesDTOs;
 using Application.Models.DTOs.StoreDTOs;
 
@@ -17,11 +18,13 @@ namespace Application.Services.IUserServices
         Task<bool> RemoveShoe(string shoeId);
         #endregion
 
+
         #region Profile
         Task<GetStoreProfileDto> GetProfile(string storeId);
 
 
         #endregion
+
 
         #region Category
 
@@ -37,6 +40,7 @@ namespace Application.Services.IUserServices
 
         #endregion
 
+
         #region Order
 
         Task<bool> InLastDecidesSituation(InLastSituationOrderDto orderDto);
@@ -50,6 +54,18 @@ namespace Application.Services.IUserServices
         Task<List<GetOrderDto>> GetActiveOrder(string storeId);
 
         Task<bool> RemoveOrder(string orderId);
+        #endregion
+
+
+        #region ShoeComment
+
+        Task<List<GetShoeCommentDto>> GetAllShoeComment(string shoeId);
+
+        Task<GetShoeCommentDto> GetShoeComment(string commentId);
+
+        Task<bool> RemoveShoeComment(string commentId);
+
+
         #endregion
 
         List<GeneralShoeStatisticsDto> WeeklySalesStatistics(string storeId);

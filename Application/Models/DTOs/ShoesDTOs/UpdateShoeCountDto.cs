@@ -11,6 +11,5 @@ namespace Application.Models.DTOs.ShoesDTOs
     {
         public List<ShoeCountSize> ShoeCountSizes { get; set; }
         public string ShoeId { get; set;}
-        public string StoreId { get; set; }
     }
 }
