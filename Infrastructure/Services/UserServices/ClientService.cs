@@ -1,5 +1,7 @@
 ﻿using Application.IRepositories;
+using Application.Models.DTOs.ClientDTOs;
 using Application.Models.DTOs.OderDTOs;
+using Application.Models.DTOs.ShoesDTOs;
 using Application.Services.IHelperServices;
 using Application.Services.IUserServices;
 using Domain.Models;
@@ -9,16 +11,165 @@ namespace Infrastructure.Services.UserServices
     public class ClientService : IClientService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IBlobService _blobSerice;
 
-        public ClientService(IUnitOfWork unitOfWork, IBlobService blobSerice)
+        public ClientService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _blobSerice = blobSerice;
         }
 
+
+
+        #region Shoe 
+
+        public async Task<List<GetShoeDto>> GetAllShoes(string storeId)
+        {
+            var store = await _unitOfWork.ReadStoreRepository.GetAsync(storeId);
+            if (store is null)
+                throw new ArgumentNullException("Store is not found");
+
+            var shoesDto = new List<GetShoeDto>();
+            var shoes = _unitOfWork.ReadShoesRepository.GetWhere(x => x.StoreId == storeId).ToList();
+            foreach (var shoe in shoes)
+            {
+                if (shoe is not null)
+                    shoesDto.Add(new GetShoeDto
+                    {
+                        Id = shoe.Id,
+                        Brend = shoe.Brend,
+                        ImageUrls = shoe.ImageUrls,
+                        Model = shoe.Model,
+                        Price = shoe.Price,
+                    });
+            }
+
+            return shoesDto;
+        }
+
+        public async Task<List<GetShoeDto>> GetShoeByCategoryId(string categoryId)
+        {
+            var category = await _unitOfWork.ReadCategoryRepository.GetAsync(categoryId);
+            if (category is null)
+                throw new ArgumentNullException($"Category {categoryId}");
+
+
+            var shoes = _unitOfWork.ReadShoesRepository.GetWhere(shoe => shoe.CategoryId == categoryId);
+
+            var shoesDto = new List<GetShoeDto>();
+            foreach (var shoe in shoes)
+            {
+                if (shoe is not null)
+                    shoesDto.Add(new GetShoeDto
+                    {
+                        Id = shoe.Id,
+                        Brend = shoe.Brend,
+                        ImageUrls = shoe.ImageUrls,
+                        Model = shoe.Model,
+                        Price = shoe.Price,
+                    });
+            }
+
+            return shoesDto;
+        }
+
+
+        public async Task<GetShoeInfoDto> GetShoeId(string shoeId)
+        {
+            var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(shoeId);
+            if (shoe is null)
+                throw new ArgumentNullException("Shoe not found");
+
+            var shoeDto = new GetShoeInfoDto
+            {
+                Id = shoe.Id,
+                Brend = shoe.Brend,
+                ImageUrls = shoe.ImageUrls,
+                Model = shoe.Model,
+                Price = shoe.Price,
+                CategoryId = shoe.CategoryId,
+                Color = shoe.Color,
+                Description = shoe.Description,
+            };
+
+            return shoeDto;
+        }
+
+
+        #endregion
+
+
+        #region Favori List
+
+
+        public async Task<List<GetShoeDto>> GetFavoriteList(string clientId)
+        {
+            var client = await _unitOfWork.ReadClientRepository.GetAsync(clientId);
+            if (client is null)
+                throw new ArgumentNullException();
+
+            var shoes = _unitOfWork.ReadShoesRepository.GetWhere(shoe => client.FavoriShoesIds.Contains(shoe.Id));
+
+
+            var shoesDto = new List<GetShoeDto>();
+            foreach (var shoe in shoes)
+            {
+                if (shoe is not null)
+                    shoesDto.Add(new GetShoeDto
+                    {
+                        Id = shoe.Id,
+                        Brend = shoe.Brend,
+                        ImageUrls = shoe.ImageUrls,
+                        Model = shoe.Model,
+                        Price = shoe.Price,
+                    });
+            }
+
+            return shoesDto;
+        }
+
+        public async Task<bool> AddToShoeFavoriteList(AddFavoriteListDto dto)
+        {
+            var client = await _unitOfWork.ReadClientRepository.GetAsync(dto.ClientId);
+            if (client is null)
+                throw new ArgumentNullException();
+            var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(dto.ShoeId);
+            if (shoe is null)
+                throw new ArgumentNullException();
+
+
+            client.FavoriShoesIds.Add(shoe.Id);
+
+            var result = await _unitOfWork.WriteClientRepository.UpdateAsync(client.Id);
+            await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
+
+            return result;
+        }
+
+
+
+        public async Task<bool> RemoveToShoeFavoriteList(RemoveFavoriteListDto dto)
+        {
+            var client = await _unitOfWork.ReadClientRepository.GetAsync(dto.ClientId);
+            if (client is null)
+                throw new ArgumentNullException();
+            var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(dto.ShoeId);
+            if (shoe is null)
+                throw new ArgumentNullException();
+
+
+            client.FavoriShoesIds.Remove(shoe.Id);
+
+            var result = await _unitOfWork.WriteClientRepository.UpdateAsync(client.Id);
+            await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
+
+            return result;
+
+        }
+        #endregion
+
+
+
         #region Order
-        
+
         public async Task<bool> MakeOrder(MakeOrderDto dto)
         {
             var store = await _unitOfWork.ReadStoreRepository.GetAsync(dto.StoreId);
