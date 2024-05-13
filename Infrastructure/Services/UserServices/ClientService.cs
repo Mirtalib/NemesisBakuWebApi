@@ -45,6 +45,7 @@ namespace Infrastructure.Services.UserServices
             return shoesDto;
         }
 
+
         public async Task<List<GetShoeDto>> GetShoeByCategoryId(string categoryId)
         {
             var category = await _unitOfWork.ReadCategoryRepository.GetAsync(categoryId);
@@ -97,6 +98,7 @@ namespace Infrastructure.Services.UserServices
         #endregion
 
 
+
         #region Favori List
 
 
@@ -126,6 +128,7 @@ namespace Infrastructure.Services.UserServices
             return shoesDto;
         }
 
+
         public async Task<bool> AddToShoeFavoriteList(AddFavoriteListDto dto)
         {
             var client = await _unitOfWork.ReadClientRepository.GetAsync(dto.ClientId);
@@ -143,7 +146,6 @@ namespace Infrastructure.Services.UserServices
 
             return result;
         }
-
 
 
         public async Task<bool> RemoveToShoeFavoriteList(RemoveFavoriteListDto dto)
@@ -164,11 +166,13 @@ namespace Infrastructure.Services.UserServices
             return result;
 
         }
+
         #endregion
 
 
 
         #region Order
+
 
         public async Task<bool> MakeOrder(MakeOrderDto dto)
         {
@@ -191,18 +195,19 @@ namespace Infrastructure.Services.UserServices
             foreach (var shoeId in dto.ShoesIds)
             {
                 var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(shoeId.ShoeId);
-                foreach (var item in shoe.ShoeCountSizes)
-                {
-                    var x = dto.ShoesIds.FirstOrDefault(x => x.Size == item.Size && x.Count - item.Count < 0);
-                    if (x == default)
-                        throw new ArgumentException();
+                if (shoe is not null)
+                    foreach (var item in shoe.ShoeCountSizes)
+                    {
+                        var x = dto.ShoesIds.FirstOrDefault(x => x.Size == item.Size && x.Count - item.Count < 0);
+                        if (x == default)
+                            throw new ArgumentException();
 
-                    item.Count -= x.Count;
+                        item.Count -= x.Count;
 
-                    newOrder.ShoesIds.Add(x);
-                    await _unitOfWork.WriteShoesRepository.UpdateAsync(shoe.Id);
-                    await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
-                }
+                        newOrder.ShoesIds.Add(x);
+                        await _unitOfWork.WriteShoesRepository.UpdateAsync(shoe.Id);
+                        await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
+                    }
             }
 
             store.OrderIds.Add(newOrder.Id);
@@ -219,6 +224,39 @@ namespace Infrastructure.Services.UserServices
 
             return result;
         }
+
+
+        public List<GetOrderDto> GetAllOrder(string clientId)
+        {
+            var orders = _unitOfWork.ReadOrderRepository.GetWhere(order => order.ClientId == clientId);
+            if (orders.Count() == 0)
+                throw new ArgumentNullException();
+
+            var ordersDto = new List<GetOrderDto>();
+            foreach (var order in orders)
+            {
+                if (order is not null)
+                {
+                    var orderDto = new GetOrderDto
+                    {
+                        Id = order.Id,
+                        StoreId = order.StoreId,
+                        CourierId = order.CourierId,
+                        OrderCommentId = order.OrderCommentId,
+                        Amount = order.Amount,
+                        OrderFinishTime = order.OrderFinishTime,
+                        OrderMakeTime = order.OrderMakeTime,
+                        OrderStatus = order.OrderStatus,
+                        ShoesIds = new List<OderShoeSizeCount>()
+                    };
+                    orderDto.ShoesIds.AddRange(order.ShoesIds);
+
+                    ordersDto.Add(orderDto);
+                }
+            }
+            return ordersDto;
+        }
+
 
 
         #endregion
