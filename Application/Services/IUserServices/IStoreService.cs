@@ -16,6 +16,7 @@ namespace Application.Services.IUserServices
         Task<bool> UpdateShoeCount (UpdateShoeCountDto dto);
         Task<bool> CreateShoe(AddShoeDto shoe);
         Task<bool> RemoveShoe(string shoeId);
+        Task<bool> UpdateShoe(UpdateShoeDto dto);
         #endregion
 
 

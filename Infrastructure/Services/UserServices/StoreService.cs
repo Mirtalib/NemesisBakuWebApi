@@ -195,6 +195,26 @@ namespace Infrastructure.Services.UserServices
             return result;
         }
 
+        public async Task<bool> UpdateShoe(UpdateShoeDto dto)
+        {
+            var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(dto.Id);
+            if (shoe is null)
+                throw new ArgumentNullException();
+
+            shoe.Description = dto.Description;
+            shoe.Price = dto.Price;
+            shoe.Brend = dto.Brend;
+            shoe.Model = dto.Model;
+            shoe.CategoryId = dto.CategoryId;
+            shoe.StoreId = dto.StoreId;
+            shoe.Color = dto.Color;
+
+            var result = await _unitOfWork.WriteShoesRepository.UpdateAsync(shoe.Id);
+            await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
+
+            return result;
+        }
+
         public async Task<List<GetShoeDto>> GetAllShoes(string storeId)
         {
             var store = await _unitOfWork.ReadStoreRepository.GetAsync(storeId);
