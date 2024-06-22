@@ -134,42 +134,6 @@ namespace Infrastructure.Services.UserServices
             return result;
         }
 
-        public async Task<bool> RemoveShoe(string shoeId)
-        {
-            var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(shoeId);
-            if (shoe is null)
-                throw new ArgumentNullException("Shoe not found");
-
-            var store = await _unitOfWork.ReadStoreRepository.GetAsync(shoe.StoreId);
-            if (store is null)
-                throw new ArgumentNullException("Store is not found");
-
-            var category = await _unitOfWork.ReadCategoryRepository.GetAsync(shoe.CategoryId);
-            if (category is null)
-                throw new ArgumentNullException("Category is not found");
-
-
-
-            for (int i = 0; i < shoe.ImageUrls.Count; i++)
-                await _blobSerice.DeleteFileAsync(shoe.Id + "-" + shoe.Model + shoe.Color + i + ".jpg");
-
-            store.ShoesIds.Remove(shoeId);
-            category.ShoesId.Remove(shoeId);
-
-
-
-            await _unitOfWork.WriteCategoryRepository.UpdateAsync(category.Id);
-            await _unitOfWork.WriteCategoryRepository.SaveChangesAsync();
-
-            await _unitOfWork.WriteStoreRepository.UpdateAsync(store.Id);
-            await _unitOfWork.WriteStoreRepository.SaveChangesAsync();
-
-            var result =  await _unitOfWork.WriteShoesRepository.RemoveAsync(shoeId);
-            await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
-
-            return result;
-        }
-
         public async Task<bool> UpdateShoeCount(UpdateShoeCountDto dto)
         {
             var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(dto.ShoeId);
@@ -210,6 +174,42 @@ namespace Infrastructure.Services.UserServices
             shoe.Color = dto.Color;
 
             var result = await _unitOfWork.WriteShoesRepository.UpdateAsync(shoe.Id);
+            await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
+
+            return result;
+        }
+
+        public async Task<bool> RemoveShoe(string shoeId)
+        {
+            var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(shoeId);
+            if (shoe is null)
+                throw new ArgumentNullException("Shoe not found");
+
+            var store = await _unitOfWork.ReadStoreRepository.GetAsync(shoe.StoreId);
+            if (store is null)
+                throw new ArgumentNullException("Store is not found");
+
+            var category = await _unitOfWork.ReadCategoryRepository.GetAsync(shoe.CategoryId);
+            if (category is null)
+                throw new ArgumentNullException("Category is not found");
+
+
+
+            for (int i = 0; i < shoe.ImageUrls.Count; i++)
+                await _blobSerice.DeleteFileAsync(shoe.Id + "-" + shoe.Model + shoe.Color + i + ".jpg");
+
+            store.ShoesIds.Remove(shoeId);
+            category.ShoesId.Remove(shoeId);
+
+
+
+            await _unitOfWork.WriteCategoryRepository.UpdateAsync(category.Id);
+            await _unitOfWork.WriteCategoryRepository.SaveChangesAsync();
+
+            await _unitOfWork.WriteStoreRepository.UpdateAsync(store.Id);
+            await _unitOfWork.WriteStoreRepository.SaveChangesAsync();
+
+            var result =  await _unitOfWork.WriteShoesRepository.RemoveAsync(shoeId);
             await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
 
             return result;
@@ -563,8 +563,6 @@ namespace Infrastructure.Services.UserServices
             return orderCommentDto;
         }
 
-
-
         public List<GetOrderCommentDto> GetAllOrderComment()
         {
             var orderComments = _unitOfWork.ReadOrderCommentRepository.GetAll();
@@ -585,7 +583,6 @@ namespace Infrastructure.Services.UserServices
             }
             return orderCommentDto;
         }
-
 
         public async Task<bool> RemoveOrderComment(string orderCommentId)
         {
@@ -631,7 +628,6 @@ namespace Infrastructure.Services.UserServices
             return commentsDto;
 
         }
-
 
         public async Task<GetShoeCommentDto> GetShoeComment(string commentId)
         {
