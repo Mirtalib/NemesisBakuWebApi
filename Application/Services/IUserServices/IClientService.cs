@@ -37,5 +37,14 @@ namespace Application.Services.IUserServices
 
         #endregion
 
+
+        #region Shopping List
+
+        Task<List<GetShoeDto>> GetShoppingList(string clientId);
+
+
+        Task<bool> AddToShoeShoppingList(AddShoppingListDto dto);
+        #endregion
+
     }
 }
