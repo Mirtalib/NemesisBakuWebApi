@@ -1,5 +1,7 @@
 ﻿using Application.Models.DTOs.CategoryDTOs;
 using Application.Models.DTOs.OderDTOs;
+using Application.Models.DTOs.OrderCommentDTOs;
+using Application.Models.DTOs.ShoesCommentDTOs;
 using Application.Models.DTOs.StoreDTOs;
 
 namespace Application.Services.IUserServices
@@ -49,6 +51,28 @@ namespace Application.Services.IUserServices
 
         #endregion
 
+
+        #region ShoeComment
+
+        Task<List<GetShoeCommentDto>> GetAllShoeComment(string shoeId);
+
+        Task<GetShoeCommentDto> GetShoeComment(string commentId);
+
+        Task<bool> RemoveShoeComment(string commentId);
+
+
+        #endregion
+
+
+        #region Order Comment
+
+        Task<GetOrderCommentDto> GetOrderComment(string orderCommentId);
+
+        List<GetOrderCommentDto> GetAllOrderComment();
+
+        Task<bool> RemoveOrderComment(string orderCommentId);
+
+        #endregion
 
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Application.IRepositories;
 using Application.Models.DTOs.CategoryDTOs;
 using Application.Models.DTOs.OderDTOs;
+using Application.Models.DTOs.OrderCommentDTOs;
 using Application.Models.DTOs.ShoesCommentDTOs;
 using Application.Models.DTOs.ShoesDTOs;
 using Application.Models.DTOs.StoreDTOs;
@@ -66,6 +67,17 @@ namespace Application.Services.IUserServices
 
         Task<bool> RemoveShoeComment(string commentId);
 
+
+        #endregion
+
+
+        #region Order Comment
+
+        Task<GetOrderCommentDto> GetOrderComment(string orderCommentId);
+
+        List<GetOrderCommentDto> GetAllOrderComment();
+
+        Task<bool> RemoveOrderComment(string orderCommentId);
 
         #endregion
 

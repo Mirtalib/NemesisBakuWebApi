@@ -98,7 +98,6 @@ namespace Infrastructure.Services.UserServices
         #endregion
 
 
-
         #region Favori List
 
 
@@ -168,7 +167,6 @@ namespace Infrastructure.Services.UserServices
         }
 
         #endregion
-
 
 
         #region Order
@@ -255,6 +253,32 @@ namespace Infrastructure.Services.UserServices
             return ordersDto;
         }
 
+
+
+        public async Task<GetOrderDto> GetOrder(string orderId)
+        {
+            var order = await _unitOfWork.ReadOrderRepository.GetAsync(orderId);
+            if (order == null)
+                throw new ArgumentNullException("");
+
+            var orderDto = new GetOrderDto
+            {
+                Id = orderId,
+                StoreId = order.StoreId,
+                CourierId = order.CourierId,
+                ClientId = order.ClientId,
+                Amount = order.Amount,
+                OrderCommentId = order.OrderCommentId,
+                OrderFinishTime = order.OrderFinishTime,
+                OrderMakeTime = order.OrderMakeTime,
+                OrderStatus = order.OrderStatus,
+            };
+
+            orderDto.ShoesIds.AddRange(order.ShoesIds);
+
+            return orderDto;
+
+        }
         #endregion
 
 

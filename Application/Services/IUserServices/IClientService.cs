@@ -35,6 +35,7 @@ namespace Application.Services.IUserServices
 
         List<GetOrderDto> GetAllOrder(string clientId);
 
+        Task<GetOrderDto> GetOrder(string orderId);
         #endregion
 
 

@@ -1,4 +1,5 @@
 ﻿using Application.IRepositories;
+using Application.Models.DTOs.CourierDTOs;
 using Application.Models.DTOs.OderDTOs;
 using Application.Services.IUserServices;
 
@@ -45,6 +46,31 @@ namespace Infrastructure.Services.UserServices
             return orderDto;
         }
 
+
+        public async Task<GetOrderDto> GetOrder(string orderId)
+        {
+            var order =await _unitOfWork.ReadOrderRepository.GetAsync(orderId);
+            if (order == null)
+                throw new ArgumentNullException("");
+
+            var orderDto = new GetOrderDto
+            {
+                Id = orderId,
+                StoreId= order.StoreId,
+                CourierId = order.CourierId,
+                ClientId = order.ClientId,
+                Amount = order.Amount,
+                OrderCommentId = order.OrderCommentId,
+                OrderFinishTime = order.OrderFinishTime,
+                OrderMakeTime = order.OrderMakeTime,
+                OrderStatus = order.OrderStatus,
+            };
+
+            orderDto.ShoesIds.AddRange(order.ShoesIds);
+
+            return orderDto;
+
+        }
 
 
         #endregion

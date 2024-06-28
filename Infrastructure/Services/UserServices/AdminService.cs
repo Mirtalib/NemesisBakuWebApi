@@ -1,6 +1,8 @@
 ﻿using Application.IRepositories;
 using Application.Models.DTOs.CategoryDTOs;
 using Application.Models.DTOs.OderDTOs;
+using Application.Models.DTOs.OrderCommentDTOs;
+using Application.Models.DTOs.ShoesCommentDTOs;
 using Application.Models.DTOs.StoreDTOs;
 using Application.Services.IUserServices;
 using Domain.Models;
@@ -339,6 +341,145 @@ namespace Infrastructure.Services.UserServices
             var result = await _unitOfWork.WriteOrderRepository.RemoveAsync(orderId);
             await _unitOfWork.WriteOrderRepository.SaveChangesAsync();
 
+            return result;
+        }
+
+
+        #endregion
+        
+        
+        #region Shoe Comment
+
+
+        public async Task<List<GetShoeCommentDto>> GetAllShoeComment(string shoeId)
+        {
+            var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(shoeId);
+            if (shoe is null)
+                throw new ArgumentNullException();
+
+            var commentsDto = new List<GetShoeCommentDto>();
+
+            foreach (var commentId in shoe.ShoeCommentId)
+            {
+                var comment = await _unitOfWork.ReadShoesCommentRepository.GetAsync(commentId);
+                if (comment is not null)
+                    commentsDto.Add(new GetShoeCommentDto
+                    {
+                        Id = comment.Id,
+                        ClientId = comment.ClientId,
+                        ShoesId = comment.ShoesId,
+                        Content = comment.Content,
+                        OrderId = comment.OrderId,
+                        Rate = comment.Rate,
+                    });
+            }
+
+            return commentsDto;
+
+        }
+
+        public async Task<GetShoeCommentDto> GetShoeComment(string commentId)
+        {
+            var comment = await _unitOfWork.ReadShoesCommentRepository.GetAsync(commentId);
+            if (comment is null)
+                throw new ArgumentNullException();
+
+            var commentDto = new GetShoeCommentDto
+            {
+                Id = comment.Id,
+                ClientId = comment.ClientId,
+                ShoesId = comment.ShoesId,
+                Content = comment.Content,
+                OrderId = comment.OrderId,
+                Rate = comment.Rate,
+            };
+            return commentDto;
+        }
+
+        public async Task<bool> RemoveShoeComment(string commentId)
+        {
+            var comment = await _unitOfWork.ReadShoesCommentRepository.GetAsync(commentId);
+            if (comment is null)
+                throw new ArgumentNullException();
+
+            var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(comment.ShoesId);
+            if (shoe is null)
+                throw new ArgumentNullException();
+
+            var client = await _unitOfWork.ReadClientRepository.GetAsync(comment.ClientId);
+            if (client is null)
+                throw new ArgumentNullException();
+
+            shoe.ShoeCommentId.Remove(commentId);
+            client.ShoesCommnetId.Remove(commentId);
+
+
+            await _unitOfWork.WriteClientRepository.UpdateAsync(client.Id);
+            await _unitOfWork.WriteClientRepository.SaveChangesAsync();
+
+            await _unitOfWork.WriteShoesRepository.UpdateAsync(shoe.Id);
+            await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
+
+            var result = await _unitOfWork.WriteShoesCommentRepository.RemoveAsync(commentId);
+            await _unitOfWork.WriteShoesCommentRepository.SaveChangesAsync();
+
+            return result;
+        }
+
+        #endregion
+
+
+        #region Order Comment
+
+        public async Task<GetOrderCommentDto> GetOrderComment(string orderCommentId)
+        {
+            var orderComment = await _unitOfWork.ReadOrderCommentRepository.GetAsync(orderCommentId);
+            if (orderComment is null)
+                throw new ArgumentNullException();
+
+
+            var orderCommentDto = new GetOrderCommentDto
+            {
+                Id = orderComment.Id,
+                ClientId = orderComment.ClientId,
+                Content = orderComment.Content,
+                CourierId = orderComment.CourierId,
+                OrderId = orderComment.OrderId,
+                Rate = orderComment.Rate,
+            };
+
+            return orderCommentDto;
+        }
+
+        public List<GetOrderCommentDto> GetAllOrderComment()
+        {
+            var orderComments = _unitOfWork.ReadOrderCommentRepository.GetAll();
+
+            var orderCommentDto = new List<GetOrderCommentDto>();
+            foreach (var orderComment in orderComments)
+            {
+                if (orderComment is not null)
+                    orderCommentDto.Add(new GetOrderCommentDto
+                    {
+                        ClientId = orderComment.Id,
+                        Content = orderComment.Content,
+                        CourierId = orderComment.CourierId,
+                        Id = orderComment.OrderId,
+                        Rate = orderComment.Rate,
+                        OrderId = orderComment.OrderId,
+                    });
+            }
+            return orderCommentDto;
+        }
+
+        public async Task<bool> RemoveOrderComment(string orderCommentId)
+        {
+            var orderComment = await _unitOfWork.ReadOrderCommentRepository.GetAsync(orderCommentId);
+            if (orderComment is null)
+                throw new ArgumentNullException("");
+
+            var result = await _unitOfWork.WriteOrderCommentRepository.RemoveAsync(orderCommentId);
+            await _unitOfWork.WriteOrderCommentRepository.SaveChangesAsync();
             return result;
         }
 

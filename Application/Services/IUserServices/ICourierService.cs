@@ -7,10 +7,13 @@ namespace Application.Services.IUserServices
         #region Order
 
         List<GetOrderDto> GetAllOrder(string courierId);
-        
 
+        Task<GetOrderDto> GetOrder(string orderId);
 
 
         #endregion
+
+
+
     }
 }
