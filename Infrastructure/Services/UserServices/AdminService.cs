@@ -117,6 +117,9 @@ namespace Infrastructure.Services.UserServices
                 StoreId = dto.StoreId
             };
 
+            await _unitOfWork.WriteStoreRepository.UpdateAsync(dto.StoreId);
+            await _unitOfWork.WriteStoreRepository.SaveChangesAsync();
+
             var result = await _unitOfWork.WriteCategoryRepository.AddAsync(newCategory);
             await _unitOfWork.WriteCategoryRepository.SaveChangesAsync();
 
@@ -137,6 +140,10 @@ namespace Infrastructure.Services.UserServices
             {
                 // remove shoe
             }
+
+
+            await _unitOfWork.WriteStoreRepository.RemoveAsync(category.StoreId);
+            await _unitOfWork.WriteStoreRepository.SaveChangesAsync();
 
             var result = await _unitOfWork.WriteCategoryRepository.RemoveAsync(categoryId);
             await _unitOfWork.WriteCategoryRepository.SaveChangesAsync();
