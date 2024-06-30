@@ -45,6 +45,8 @@ namespace Application.Services.IUserServices
 
 
         Task<bool> AddToShoeShoppingList(AddShoppingListDto dto);
+
+        Task<bool> RemoveToShoeShoppingList(RemoveShoppingListDto dto);
         #endregion
 
     }

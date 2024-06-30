@@ -222,6 +222,7 @@ namespace Infrastructure.Services.UserServices
             return result;
         }
 
+
         public List<GetOrderDto> GetAllOrder(string clientId)
         {
             var orders = _unitOfWork.ReadOrderRepository.GetWhere(order => order.ClientId == clientId);
@@ -252,7 +253,6 @@ namespace Infrastructure.Services.UserServices
             }
             return ordersDto;
         }
-
 
 
         public async Task<GetOrderDto> GetOrder(string orderId)
