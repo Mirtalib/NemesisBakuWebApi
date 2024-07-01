@@ -53,6 +53,7 @@ namespace Infrastructure.Services.UserServices
                     StoreId = shoeDto.StoreId,
                     ImageUrls = new List<string>(),
                     Price = shoeDto.Price,
+                    ShoeCommentId = new List<string>(),
                 };
 
                 newShoe.ShoeCountSizes.AddRange(shoeDto.ShoeCountSizes);
@@ -74,7 +75,8 @@ namespace Infrastructure.Services.UserServices
             throw new ValidationException("No Valid");
         }
 
-        public async Task<bool> AddShoeImages(AddShoeImageDto dto)
+
+        public async Task<bool> CreateShoeImages(AddShoeImageDto dto)
         {
             var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(dto.ShoeId);
             if (shoe is null || shoe.ImageUrls.Count != 0)
@@ -100,6 +102,7 @@ namespace Infrastructure.Services.UserServices
             await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
             return true;
         }
+
 
         public async Task<bool> UpdateShoeImage(UpdateShoeImageDto dto)
         {
@@ -133,6 +136,7 @@ namespace Infrastructure.Services.UserServices
             await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
             return result;
         }
+
 
         public async Task<bool> UpdateShoeCount(UpdateShoeCountDto dto)
         {
@@ -279,6 +283,45 @@ namespace Infrastructure.Services.UserServices
 
             return storeDto;
         }
+
+        public async Task<bool> UptadeStore(UpdateStoreDto dto)
+        {
+            var store = await _unitOfWork.ReadStoreRepository.GetAsync(dto.Id);
+            if (store is null)
+                throw new ArgumentNullException("Wrong Store");
+
+            store.Name = dto.Name;
+            store.Description = dto.Description;
+            store.Email = dto.Email;
+
+            var result = await _unitOfWork.WriteStoreRepository.UpdateAsync(store.Id);
+            await _unitOfWork.WriteStoreRepository.SaveChangesAsync();
+            return result;
+        }
+
+        public async Task<bool> RemoveStore(string storeId)
+        {
+            var store = await _unitOfWork.ReadStoreRepository.GetAsync(storeId);
+            if (store is null)
+                throw new ArgumentNullException("Wrong Store");
+
+
+            foreach (var categoryId in store.CategoryIds)
+            {
+                await RemoveCategory(categoryId);
+            }
+
+            foreach (var orderId in store.OrderIds)
+            {
+                // remove Order
+            }
+
+            await _unitOfWork.WriteOrderRepository.SaveChangesAsync();
+
+            await _unitOfWork.WriteStoreRepository.RemoveAsync(storeId);
+            await _unitOfWork.WriteStoreRepository.SaveChangesAsync();
+            return true;
+        }
         #endregion
 
 
@@ -333,6 +376,7 @@ namespace Infrastructure.Services.UserServices
             return result;
         }
 
+
         public async Task<GetCategoryDto> GetCategory(string categoryId)
         {
             var category = await _unitOfWork.ReadCategoryRepository.GetAsync(categoryId);
@@ -348,6 +392,7 @@ namespace Infrastructure.Services.UserServices
 
             return categoryDto;
         }
+
 
         public List<GetCategoryDto> GetAllCategory()
         {

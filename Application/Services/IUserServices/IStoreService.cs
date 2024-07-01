@@ -11,8 +11,10 @@ namespace Application.Services.IUserServices
     public interface IStoreService
     {
         #region Shoe
+
         Task<List<GetShoeDto>> GetAllShoes(string storeId);
-        Task<bool> AddShoeImages(AddShoeImageDto dto);
+        Task<bool> CreateShoeImages(AddShoeImageDto dto);
+        Task<bool> UpdateShoeImage(UpdateShoeImageDto dto);
         Task<GetShoeInfoDto> GetShoeId(string shoeId);
         Task<bool> UpdateShoeCount (UpdateShoeCountDto dto);
         Task<bool> CreateShoe(AddShoeDto shoe);
@@ -24,7 +26,9 @@ namespace Application.Services.IUserServices
         #region Profile
         Task<GetStoreProfileDto> GetProfile(string storeId);
 
+        Task<bool> UptadeStore(UpdateStoreDto dto);
 
+        Task<bool> RemoveStore(string storeId);
         #endregion
 
 
