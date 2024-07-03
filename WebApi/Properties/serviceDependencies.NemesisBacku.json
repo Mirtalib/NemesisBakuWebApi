@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "apis1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.ApiManagement/service/NemesisBaku/apis/WebApi",
+      "type": "apis.azure"
+    },
+    "mssql1": {
+      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Web/sites/NemesisBacku/providers/Microsoft.ServiceLinker/linkers/ConnectionStringsDefault2_4AC04AFC42",
+      "secretStore": "AzureAppSettings",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/nemesisnewdbserver/databases/nemesisnew_db",
+      "type": "mssql.azure",
+      "connectionId": "ConnectionStrings:Default2"
+    }
+  }
+}

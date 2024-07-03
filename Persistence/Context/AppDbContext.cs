@@ -12,16 +12,6 @@ namespace Persistence.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Store>().ToContainer("Stores");
-            modelBuilder.Entity<Client>().ToContainer("Clients");
-            modelBuilder.Entity<Shoe>().ToContainer("Shoes");
-            modelBuilder.Entity<Order>().ToContainer("Orders");
-            modelBuilder.Entity<ShoesComment>().ToContainer("ShoesComments");
-            modelBuilder.Entity<Courier>().ToContainer("Couriers");
-            modelBuilder.Entity<Admin>().ToContainer("Admins");
-            modelBuilder.Entity<Category>().ToContainer("Categories");
-            modelBuilder.Entity<OrderComment>().ToContainer("OrderComments");
-
             base.OnModelCreating(modelBuilder);
         }
 
