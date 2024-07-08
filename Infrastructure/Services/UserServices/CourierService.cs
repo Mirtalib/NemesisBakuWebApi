@@ -2,6 +2,7 @@
 using Application.Models.DTOs.CourierDTOs;
 using Application.Models.DTOs.OderDTOs;
 using Application.Services.IUserServices;
+using Domain.Models;
 
 namespace Infrastructure.Services.UserServices
 {
@@ -25,25 +26,28 @@ namespace Infrastructure.Services.UserServices
                 throw new ArgumentNullException("You do not have an Order");
             
 
-            var orderDto = new List<GetOrderDto>();
+            var ordersDto = new List<GetOrderDto>();
 
             foreach (var order in orders)
             {
                 if (order is not null)
-                    orderDto.Add(new GetOrderDto
+                {
+                    var orderDto = new GetOrderDto
                     {
                         Id = order.Id,
-                        CourierId = courierId,
-                        
                         StoreId = order.StoreId,
+                        CourierId = order.CourierId,
                         Amount = order.Amount,
                         OrderCommentId = order.OrderCommentId,
                         OrderFinishTime = order.OrderFinishTime,
                         OrderMakeTime = order.OrderMakeTime,
                         OrderStatus = order.OrderStatus,
-                    });
+                    };
+                    orderDto.ShoesIds.AddRange(order.ShoesIds);
+                    ordersDto.Add(orderDto);
+                }
             }
-            return orderDto;
+            return ordersDto;
         }
 
 
@@ -58,7 +62,6 @@ namespace Infrastructure.Services.UserServices
                 Id = orderId,
                 StoreId= order.StoreId,
                 CourierId = order.CourierId,
-                ClientId = order.ClientId,
                 Amount = order.Amount,
                 OrderCommentId = order.OrderCommentId,
                 OrderFinishTime = order.OrderFinishTime,
@@ -75,5 +78,29 @@ namespace Infrastructure.Services.UserServices
 
         #endregion
 
+
+        #region Profile 
+
+        public async Task<GetCourierProfileDto> GetProfile(string courierId)
+        {
+            var courier = await _unitOfWork.ReadCourierRepository.GetAsync(courierId);
+            if (courier is null)
+                throw new ArgumentNullException();
+
+            var courierDto = new GetCourierProfileDto
+            {
+                Id= courierId,
+                BrithDate = courier.BrithDate,
+                Email = courier.Email,
+                Surname = courier.Surname,
+                Name = courier.Name,
+                OrderSize = courier.OrderIds.Count(),
+                PhoneNumber = courier.PhoneNumber,
+                Rate = courier.Rate,
+            };
+
+            return courierDto;
+        }
+        #endregion
     }
 }

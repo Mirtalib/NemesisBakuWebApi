@@ -187,6 +187,12 @@ namespace WebApi.Controllers
         #endregion
 
 
+        #region Order
+
+
+        #endregion
+
+
         #region Shoe Comment
 
         [HttpGet("GetAllShoeComment")]
@@ -286,8 +292,27 @@ namespace WebApi.Controllers
         }
 
 
-
+        [HttpGet("removeOrderComment")]
+        public async Task<ActionResult<bool>> RemoveOrderComment(string orderCommentId)
+        {
+            try
+            {
+                var result =await _adminService.RemoveOrderComment(orderCommentId);
+                if (result)
+                    return Ok(result);
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured on [DELETE] RemoveOrderComment Error ->{ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
 
         #endregion
+
+
+
+
     }
 }

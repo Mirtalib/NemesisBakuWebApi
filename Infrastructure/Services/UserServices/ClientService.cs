@@ -327,8 +327,6 @@ namespace Infrastructure.Services.UserServices
             await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
 
             return result;
-
-
         }
 
 
