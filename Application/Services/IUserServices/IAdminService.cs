@@ -39,13 +39,9 @@ namespace Application.Services.IUserServices
 
         #region Order
 
-        Task<bool> UpdateOrderStatus(UpdateOrderStatusDto orderDto);
-
         Task<GetOrderDto> GetOrder(string orderId);
 
         Task<List<GetOrderDto>> GetAllOrder(string storeId);
-
-        Task<List<GetOrderDto>> GetActiveOrder(string storeId);
 
         Task<bool> RemoveOrder(string orderId);
 

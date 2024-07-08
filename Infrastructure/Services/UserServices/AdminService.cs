@@ -269,47 +269,6 @@ namespace Infrastructure.Services.UserServices
         }
 
 
-        public async Task<List<GetOrderDto>> GetActiveOrder(string storeId)
-        {
-            var store = await _unitOfWork.ReadStoreRepository.GetAsync(storeId);
-            if (store is null)
-                throw new ArgumentNullException();
-            var orders = _unitOfWork.ReadOrderRepository.GetWhere(x => store.OrderIds.Contains(x.Id) && x.OrderStatus != OrderStatus.Rated);
-            var ordersDto = new List<GetOrderDto>();
-            foreach (var order in orders)
-            {
-                if (order is not null)
-                    ordersDto.Add(new GetOrderDto
-                    {
-                        Id = order.Id,
-                        StoreId = order.StoreId,
-                        CourierId = order.CourierId,
-                        ShoesIds = order.ShoesIds,
-                        OrderCommentId = order.OrderCommentId,
-                        Amount = order.Amount,
-                        OrderFinishTime = default,
-                        OrderMakeTime = order.OrderMakeTime,
-                        OrderStatus = order.OrderStatus,
-                    });
-            }
-            return ordersDto;
-        }
-
-
-        public async Task<bool> UpdateOrderStatus(UpdateOrderStatusDto orderDto)
-        {
-            var order = await _unitOfWork.ReadOrderRepository.GetAsync(orderDto.OrderId);
-            if (order is null)
-                throw new ArgumentNullException();
-
-            order.OrderStatus = orderDto.OrderStatus;
-
-            var result = await _unitOfWork.WriteOrderRepository.UpdateAsync(order.Id);
-            await _unitOfWork.WriteOrderRepository.SaveChangesAsync();
-            return result;
-        }
-
-
         public async Task<bool> RemoveOrder(string orderId)
         {
             var order = await _unitOfWork.ReadOrderRepository.GetAsync(orderId);

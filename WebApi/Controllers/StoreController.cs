@@ -330,9 +330,6 @@ namespace WebApi.Controllers
 
         #endregion
 
-
-
-
         #region Order
 
         [HttpPost("inLastDecidesSituation")]
