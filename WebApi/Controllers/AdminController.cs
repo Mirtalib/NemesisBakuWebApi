@@ -1,4 +1,5 @@
 ﻿using Application.Models.DTOs.CategoryDTOs;
+using Application.Models.DTOs.OrderCommentDTOs;
 using Application.Models.DTOs.ShoesCommentDTOs;
 using Application.Models.DTOs.StoreDTOs;
 using Application.Services.IUserServices;
@@ -6,6 +7,7 @@ using Domain.Models;
 using Infrastructure.Services.UserServices;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
+using System.ComponentModel.Design;
 
 namespace WebApi.Controllers
 {
@@ -204,6 +206,7 @@ namespace WebApi.Controllers
             }
         }
 
+
         [HttpGet("getShoeComment")]
         public async Task<ActionResult<GetShoeCommentDto>> GetShoeComment(string commentId)
         {
@@ -241,6 +244,50 @@ namespace WebApi.Controllers
 
 
         #endregion
-        
+
+
+        #region Order Comment
+
+
+        [HttpGet("getOrderComment")]
+        public async Task<ActionResult<GetOrderCommentDto>> GetOrderComment(string orderCommentId)
+        {
+            try
+            {
+                var result = await _adminService.GetOrderComment(orderCommentId);
+                if (result is not null)
+                    return Ok(result);
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured on [GET] GetOrderComment Error ->{ex.Message}");
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+
+        [HttpGet("getAllOrderComment")]
+        public ActionResult<List<GetOrderCommentDto>> GetAllOrderComment()
+        {
+            try
+            {
+                var result =  _adminService.GetAllOrderComment();
+                if (result is not null)
+                    return Ok(result);
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured on [GET] GetAllOrderComment Error ->{ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+
+
+        #endregion
     }
 }
