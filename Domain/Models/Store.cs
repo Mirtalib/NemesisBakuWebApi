@@ -8,8 +8,8 @@ namespace Domain.Models
         public string Email { get; set; }    
         public string Description { get; set; }
         public List<string> Addresses { get; set; }
-        public List<string> ShoesIds { get; set; }
-        public List<string> OrderIds { get; set; }
-        public List<string> CategoryIds { get;set; }
+        public List<Shoe> Shoes { get; set; }
+        public List<Order> Orders { get; set; }
+        public List<Category> Categorys { get;set; }
     }
 }

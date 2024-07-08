@@ -21,7 +21,7 @@ namespace Infrastructure.Services.UserServices
 
         public List<GetOrderDto> GetAllOrder(string courierId)
         {
-            var orders = _unitOfWork.ReadOrderRepository.GetWhere(order => order.CourierId == courierId);
+            var orders = _unitOfWork.ReadOrderRepository.GetWhere(order => order.Courier.Id == courierId);
             if (orders.Count() == 0)
                 throw new ArgumentNullException("You do not have an Order");
             
@@ -35,15 +35,15 @@ namespace Infrastructure.Services.UserServices
                     var orderDto = new GetOrderDto
                     {
                         Id = order.Id,
-                        StoreId = order.StoreId,
-                        CourierId = order.CourierId,
+                        StoreId = order.Store.Id,
+                        CourierId = order.Courier.Id,
                         Amount = order.Amount,
-                        OrderCommentId = order.OrderCommentId,
+                        OrderCommentId = order.OrderComment.Id,
                         OrderFinishTime = order.OrderFinishTime,
                         OrderMakeTime = order.OrderMakeTime,
                         OrderStatus = order.OrderStatus,
                     };
-                    orderDto.ShoesIds.AddRange(order.ShoesIds);
+                    orderDto.ShoesIds.AddRange(order.Shoes);
                     ordersDto.Add(orderDto);
                 }
             }
@@ -60,16 +60,16 @@ namespace Infrastructure.Services.UserServices
             var orderDto = new GetOrderDto
             {
                 Id = orderId,
-                StoreId= order.StoreId,
-                CourierId = order.CourierId,
+                StoreId= order.Store.Id,
+                CourierId = order.Courier.Id,
                 Amount = order.Amount,
-                OrderCommentId = order.OrderCommentId,
+                OrderCommentId = order.OrderComment.Id,
                 OrderFinishTime = order.OrderFinishTime,
                 OrderMakeTime = order.OrderMakeTime,
                 OrderStatus = order.OrderStatus,
             };
 
-            orderDto.ShoesIds.AddRange(order.ShoesIds);
+            orderDto.ShoesIds.AddRange(order.Shoes);
 
             return orderDto;
 
@@ -94,7 +94,7 @@ namespace Infrastructure.Services.UserServices
                 Email = courier.Email,
                 Surname = courier.Surname,
                 Name = courier.Name,
-                OrderSize = courier.OrderIds.Count(),
+                OrderSize = courier.Orders.Count(),
                 PhoneNumber = courier.PhoneNumber,
                 Rate = courier.Rate,
             };

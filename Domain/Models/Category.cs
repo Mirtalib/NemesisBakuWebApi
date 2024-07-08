@@ -4,8 +4,8 @@ namespace Domain.Models
 {
     public class Category : BaseEntity
     {
-        public string StoreId { get; set; }
+        public Store Store { get; set; }
         public string Name { get; set; }
-        public List<string> ShoesId { get; set; }
+        public List<Shoe> Shoes { get; set; }
     }
 }

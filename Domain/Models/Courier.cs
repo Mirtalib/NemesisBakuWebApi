@@ -2,7 +2,7 @@
 {
     public class Courier :AppUser
     {
-        public List<string> OrderIds { get; set; }
+        public List<Order> Orders { get; set; }
         public byte Rate {  get; set; }
     }
 }

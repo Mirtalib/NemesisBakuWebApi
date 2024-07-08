@@ -9,9 +9,9 @@ namespace Domain.Models
 {
     public class OrderComment :BaseEntity
     {
-        public string OrderId { get; set; }
-        public string ClientId { get; set; }
-        public string CourierId { get; set; }
+        public Order Order { get; set; }
+        public Client Client { get; set; }
+        public Courier Courier { get; set; }
         public string Content { get; set; }
         public byte Rate { get; set; }
     }
