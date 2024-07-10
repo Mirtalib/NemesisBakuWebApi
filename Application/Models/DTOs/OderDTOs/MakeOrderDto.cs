@@ -11,6 +11,6 @@ namespace Application.Models.DTOs.OderDTOs
     {
         public string StoreId { get; set; }
         public string ClientId { get; set; }
-        public List<OderShoeSizeCount> ShoesIds { get; set; }
+        public List<OrderShoeSizeCount> ShoesIds { get; set; }
     }
 }

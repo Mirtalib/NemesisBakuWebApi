@@ -9,7 +9,7 @@ namespace Domain.Models
         public Client Client { get; set; }
         public Courier Courier { get; set; }
         public OrderComment OrderComment { get; set; }
-        public List<OderShoeSizeCount> Shoes { get; set; }
+        public List<OrderShoeSizeCount> Shoes { get; set; }
         public float Amount { get; set; }
         public DateTime OrderMakeTime { get; set; }
         public DateTime OrderFinishTime { get; set; }

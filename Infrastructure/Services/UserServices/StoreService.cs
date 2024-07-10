@@ -28,9 +28,9 @@ namespace Infrastructure.Services.UserServices
         }
 
         //#region Shoe
-        //public async Task<bool> CreateShoe(AddShoeDto shoeDto)
+        public async Task<bool> CreateShoe(AddShoeDto shoeDto)
         //{
-        //    var isValid  = _addShoeValidator.Validate(shoeDto);
+        //    var isValid = _addShoeValidator.Validate(shoeDto);
         //    if (isValid.IsValid)
         //    {
         //        var store = await _unitOfWork.ReadStoreRepository.GetAsync(shoeDto.StoreId);

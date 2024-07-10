@@ -246,7 +246,7 @@ namespace Infrastructure.Services.UserServices
                         OrderFinishTime = order.OrderFinishTime,
                         OrderMakeTime = order.OrderMakeTime,
                         OrderStatus = order.OrderStatus,
-                        ShoesIds = new List<OderShoeSizeCount>()
+                        ShoesIds = new List<OrderShoeSizeCount>()
                     };
                     orderDto.ShoesIds.AddRange(order.Shoes);
 

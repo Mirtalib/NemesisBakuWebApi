@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+// OderShoeSizeCountConfiguration
 namespace Domain.Models
 {
-    public class OderShoeSizeCount :BaseEntity
+    public class OrderShoeSizeCount :BaseEntity
     {
         public Shoe Shoe { get; set; }
         public byte Size { get; set; }
