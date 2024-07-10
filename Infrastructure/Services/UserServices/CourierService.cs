@@ -55,7 +55,7 @@ namespace Infrastructure.Services.UserServices
         {
             var order =await _unitOfWork.ReadOrderRepository.GetAsync(orderId);
             if (order == null)
-                throw new ArgumentNullException("");
+                throw new ArgumentNullException("Order not found");
 
             var orderDto = new GetOrderDto
             {
@@ -85,7 +85,7 @@ namespace Infrastructure.Services.UserServices
         {
             var courier = await _unitOfWork.ReadCourierRepository.GetAsync(courierId);
             if (courier is null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("Profile not found");
 
             var courierDto = new GetCourierProfileDto
             {
