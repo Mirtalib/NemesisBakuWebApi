@@ -17,7 +17,7 @@ namespace WebApi.Controllers
 
         public ClientController(IClientService clientService)
         {
-            this._clientService = clientService;
+            _clientService = clientService;
         }
 
 
