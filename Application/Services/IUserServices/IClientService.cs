@@ -1,4 +1,5 @@
 ﻿using Application.Models.DTOs.ClientDTOs;
+using Application.Models.DTOs.CourierDTOs;
 using Application.Models.DTOs.OderDTOs;
 using Application.Models.DTOs.ShoesDTOs;
 
@@ -49,5 +50,12 @@ namespace Application.Services.IUserServices
         Task<bool> RemoveToShoeShoppingList(RemoveShoppingListDto dto);
         #endregion
 
+
+        #region Profile
+
+
+        Task<GetClientProfileDto> GetProfile(string clientId);
+
+        #endregion
     }
 }

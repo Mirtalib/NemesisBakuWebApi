@@ -11,82 +11,82 @@ namespace Application.Services.IUserServices
     public interface IStoreService
     {
 
-        //#region Shoe
+        #region Shoe
 
-        //Task<List<GetShoeDto>> GetAllShoes(string storeId);
-        //Task<bool> CreateShoeImages(AddShoeImageDto dto);
-        //Task<bool> UpdateShoeImage(UpdateShoeImageDto dto);
-        //Task<GetShoeInfoDto> GetShoeId(string shoeId);
-        //Task<bool> UpdateShoeCount (UpdateShoeCountDto dto);
-        //Task<bool> CreateShoe(AddShoeDto shoe);
-        //Task<bool> RemoveShoe(string shoeId);
-        //Task<bool> UpdateShoe(UpdateShoeDto dto);
-        //#endregion
-
-
-        //#region Profile
-        //Task<GetStoreProfileDto> GetProfile(string storeId);
-
-        //Task<bool> UptadeStore(UpdateStoreDto dto);
-
-        //Task<bool> RemoveStore(string storeId);
-        //#endregion
+        Task<List<GetShoeDto>> GetAllShoes(string storeId);
+        Task<bool> CreateShoeImages(AddShoeImageDto dto);
+        Task<bool> UpdateShoeImage(UpdateShoeImageDto dto);
+        Task<GetShoeInfoDto> GetShoeId(string shoeId);
+        Task<bool> UpdateShoeCount(UpdateShoeCountDto dto);
+        Task<bool> CreateShoe(AddShoeDto shoe);
+        Task<bool> RemoveShoe(string shoeId);
+        Task<bool> UpdateShoe(UpdateShoeDto dto);
+        #endregion
 
 
-        //#region Category
+        #region Profile
+        Task<GetStoreProfileDto> GetProfile(string storeId);
 
-        //Task<bool> CreateCategory(CreateCategoryDto dto);
+        Task<bool> UptadeStore(UpdateStoreDto dto);
 
-        //Task<bool> RemoveCategory(string categoryId);
-
-        //Task<bool> UpdateCategory(UpdateCategoryDto dto);
-
-        //Task<GetCategoryDto> GetCategory(string categoryId);
-
-        //List<GetCategoryDto> GetAllCategory();
-
-        //#endregion
+        Task<bool> RemoveStore(string storeId);
+        #endregion
 
 
-        //#region Order
+        #region Category
 
-        //Task<bool> InLastDecidesSituation(InLastSituationOrderDto orderDto);
+        Task<bool> CreateCategory(CreateCategoryDto dto);
 
-        //Task<bool> UpdateOrderStatus(UpdateOrderStatusDto orderDto);
+        Task<bool> RemoveCategory(string categoryId);
 
-        //Task<GetOrderDto> GetOrder(string orderId);
+        Task<bool> UpdateCategory(UpdateCategoryDto dto);
 
-        //Task<List<GetOrderDto>> GetAllOrder(string storeId);
+        Task<GetCategoryDto> GetCategory(string categoryId);
 
-        //Task<List<GetOrderDto>> GetActiveOrder(string storeId);
+        List<GetCategoryDto> GetAllCategory();
 
-        //Task<bool> RemoveOrder(string orderId);
-        //#endregion
-
-
-        //#region ShoeComment
-
-        //Task<List<GetShoeCommentDto>> GetAllShoeComment(string shoeId);
-
-        //Task<GetShoeCommentDto> GetShoeComment(string commentId);
-
-        //Task<bool> RemoveShoeComment(string commentId);
+        #endregion
 
 
-        //#endregion
+        #region Order
+
+        Task<bool> InLastDecidesSituation(InLastSituationOrderDto orderDto);
+
+        Task<bool> UpdateOrderStatus(UpdateOrderStatusDto orderDto);
+
+        Task<GetOrderDto> GetOrder(string orderId);
+
+        Task<List<GetOrderDto>> GetAllOrder(string storeId);
+
+        Task<List<GetOrderDto>> GetActiveOrder(string storeId);
+
+        Task<bool> RemoveOrder(string orderId);
+        #endregion
 
 
-        //#region Order Comment
+        #region ShoeComment
 
-        //Task<GetOrderCommentDto> GetOrderComment(string orderCommentId);
+        Task<List<GetShoeCommentDto>> GetAllShoeComment(string shoeId);
 
-        //List<GetOrderCommentDto> GetAllOrderComment();
+        Task<GetShoeCommentDto> GetShoeComment(string commentId);
 
-        //Task<bool> RemoveOrderComment(string orderCommentId);
+        Task<bool> RemoveShoeComment(string commentId);
 
-        //#endregion
 
-        //List<GeneralShoeStatisticsDto> WeeklySalesStatistics(string storeId);
+        #endregion
+
+
+        #region Order Comment
+
+        Task<GetOrderCommentDto> GetOrderComment(string orderCommentId);
+
+        List<GetOrderCommentDto> GetAllOrderComment();
+
+        Task<bool> RemoveOrderComment(string orderCommentId);
+
+        #endregion
+
+        List<GeneralShoeStatisticsDto> WeeklySalesStatistics(string storeId);
 
     }
 }

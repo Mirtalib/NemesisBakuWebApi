@@ -1,4 +1,5 @@
 ﻿using Application.Models.DTOs.CategoryDTOs;
+using Application.Models.DTOs.OderDTOs;
 using Application.Models.DTOs.OrderCommentDTOs;
 using Application.Models.DTOs.ShoesCommentDTOs;
 using Application.Models.DTOs.StoreDTOs;
@@ -28,16 +29,13 @@ namespace WebApi.Controllers
         #region Store
         
         [HttpPost("createStore")]
-        public async Task<ActionResult<bool>> CreateStore(AddStoreDto storeDto)
+        public async Task<ActionResult<bool>> CreateStore(AddStoreDto dto)
         {
             try
             {
-                var result = await _adminService.CreateStore(storeDto);
+                var result = await _adminService.CreateStore(dto);
                 if (result)
-                {
-                    Log.Information("Create operation completed successfully on [Post] CreateStore");
                     return Ok(result);
-                }
                 return BadRequest();
             }
             catch (Exception ex)
@@ -53,7 +51,10 @@ namespace WebApi.Controllers
         {
             try
             {
-                return Ok(await _adminService.GetStore(storeId));
+                var result = await _adminService.GetStore(storeId);
+                if (result is not null)
+                    return Ok(result);
+                return BadRequest();
             }
             catch (Exception ex)
             {
@@ -68,7 +69,10 @@ namespace WebApi.Controllers
         {
             try
             {
-                return Ok(await _adminService.UptadeStore(dto));
+                var result = await _adminService.UptadeStore(dto);
+                if (result)
+                    return Ok(result);
+                return BadRequest();
             }
             catch (Exception ex)
             {
@@ -83,7 +87,10 @@ namespace WebApi.Controllers
         {
             try
             {
-                return Ok(await _adminService.GetStore(storeId));
+                var result = await _adminService.RemoveStore(storeId);
+                if (result)
+                    return Ok(result);
+                return BadRequest();
             }
             catch (Exception ex)
             {
@@ -104,10 +111,8 @@ namespace WebApi.Controllers
             {
                 var result = await _adminService.CreateCategory(dto);
                 if (result)
-                {
-                    Log.Information("Create operation completed successfully on [Post] CreateCategory");
                     return Ok(result);
-                }
+                
                 return BadRequest();
             }
             catch (Exception ex)
@@ -124,8 +129,10 @@ namespace WebApi.Controllers
         {
             try
             {
-                // Log.Information("Create operation completed successfully on [Post] CreateCategory");
-                return Ok(await _adminService.RemoveCategory(categoryId));
+                var result = await _adminService.RemoveCategory(categoryId);
+                if (result)
+                    return Ok(result);
+                return BadRequest();
             }
             catch (Exception ex)
             {
@@ -141,7 +148,10 @@ namespace WebApi.Controllers
         {
             try
             {
-                return Ok(await _adminService.GetCategory(categoryId));
+                var result = await _adminService.GetCategory(categoryId);
+                if (result is not null)
+                    return Ok(result);
+                return BadRequest();
             }
             catch (Exception ex)
             {
@@ -157,7 +167,10 @@ namespace WebApi.Controllers
         {
             try
             {
-                return Ok( _adminService.GetAllCategory());
+                var result = _adminService.GetAllCategory();
+                if (result is not null)
+                    return Ok(result);
+                return BadRequest();
             }
             catch (Exception ex)
             {
@@ -190,6 +203,57 @@ namespace WebApi.Controllers
         #region Order
 
 
+        [HttpGet("getOrder")]
+        public async Task<ActionResult<GetOrderDto>> GetOrder(string orderId)
+        {
+            try
+            {
+                var result = await _adminService.GetOrder(orderId);
+                if (result is not null)
+                    return Ok(result);
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured on [GET] GetOrder Error ->{ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpGet("getAllOrder")]
+        public async Task<ActionResult<List<GetOrderDto>>> GetAllOrder(string storeId)
+        {
+            try
+            {
+                var result = await _adminService.GetAllOrder(storeId);
+                if (result is not null)
+                    return Ok(result);
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured on [GET] GetAllOrder Error ->{ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("removeOrder")]
+        public async Task<ActionResult<bool>> RemoveOrder(string orderId)
+        {
+            try
+            {
+                var result = await _adminService.RemoveOrder(orderId);
+                if (result)
+                    return Ok(result);
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured on [DELETE] RemoveOrder Error ->{ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
         #endregion
 
 
@@ -308,6 +372,7 @@ namespace WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
 
         #endregion
 

@@ -1,4 +1,5 @@
-﻿using Application.Models.DTOs.OderDTOs;
+﻿using Application.Models.DTOs.CourierDTOs;
+using Application.Models.DTOs.OderDTOs;
 
 namespace Application.Services.IUserServices
 {
@@ -13,7 +14,10 @@ namespace Application.Services.IUserServices
 
         #endregion
 
+        #region Profile
 
+        Task<GetCourierProfileDto> GetProfile(string courierId);
+        #endregion
 
     }
 }

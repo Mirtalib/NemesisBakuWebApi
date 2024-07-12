@@ -27,79 +27,83 @@ namespace Infrastructure.Services.UserServices
         }
 
         #region Shoe
-        //public async Task<bool> CreateShoe(AddShoeDto shoeDto)
-        //{
-        //    var isValid = _addShoeValidator.Validate(shoeDto);
-        //    if (isValid.IsValid)
-        //    {
-        //        var store = await _unitOfWork.ReadStoreRepository.GetAsync(shoeDto.StoreId);
-        //        if (store is null)
-        //            throw new ArgumentNullException("Store is not found");
+        public async Task<bool> CreateShoe(AddShoeDto shoeDto)
+        {
+            var isValid = _addShoeValidator.Validate(shoeDto);
+            if (isValid.IsValid)
+            {
+                var store = await _unitOfWork.ReadStoreRepository.GetAsync(shoeDto.StoreId);
+                if (store is null)
+                    throw new ArgumentNullException("Store is not found");
 
-        //        var category = await _unitOfWork.ReadCategoryRepository.GetAsync(shoeDto.CategoryId);
-        //        if (category is null)
-        //            throw new ArgumentNullException("Category is not found");
+                var category = await _unitOfWork.ReadCategoryRepository.GetAsync(shoeDto.CategoryId);
+                if (category is null)
+                    throw new ArgumentNullException("Category is not found");
 
-        //        var newShoe = new Shoe
-        //        {
-        //            Id = Guid.NewGuid().ToString(),
-        //            Brend = shoeDto.Brend,
-        //            Model = shoeDto.Model,
-        //            Category = shoeDto.CategoryId,
-        //            Color = shoeDto.Color,
-        //            Description = shoeDto.Description,
-        //            Store = shoeDto.StoreId,
-        //            ImageUrls = new List<string>(),
-        //            Price = shoeDto.Price,
-        //            ShoeComments = new List<string>(),
-        //        };
+                
 
-        //        newShoe.ShoeCountSizes.AddRange(shoeDto.ShoeCountSizes);
+                var newShoe = new Shoe
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Brend = shoeDto.Brend,
+                    Model = shoeDto.Model,
+                    Category = category,
+                    Color = shoeDto.Color,
+                    Description = shoeDto.Description,
+                    Store = store,
+                    ImageUrls = new List<string>(),
+                    Price = shoeDto.Price,
+                    ShoeComments = new List<ShoesComment>(),
+                    ShoeCountSizes = new List<ShoeCountSize>()
+                    
+                };
 
-        //        store.Shoes.Add(newShoe.Id);
-        //        category.Shoes.Add(newShoe.Id);
+                newShoe.ShoeCountSizes.AddRange(shoeDto.ShoeCountSizes);
 
-        //        await _unitOfWork.WriteShoesRepository.AddAsync(newShoe);
-        //        await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
+                store.Shoes.Add(newShoe);
+                category.Shoes.Add(newShoe);
 
-        //        await _unitOfWork.WriteStoreRepository.UpdateAsync(store.Id);
-        //        await _unitOfWork.WriteStoreRepository.SaveChangesAsync();
+                await _unitOfWork.WriteShoesRepository.AddAsync(newShoe);
+                await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
 
-        //        await _unitOfWork.WriteCategoryRepository.UpdateAsync(category.Id);
-        //        await _unitOfWork.WriteCategoryRepository.SaveChangesAsync();
+                await _unitOfWork.WriteStoreRepository.UpdateAsync(store.Id);
+                await _unitOfWork.WriteStoreRepository.SaveChangesAsync();
 
-        //        return true;
-        //    }
-        //    throw new ValidationException("No Valid");
-        //}
+                await _unitOfWork.WriteCategoryRepository.UpdateAsync(category.Id);
+                await _unitOfWork.WriteCategoryRepository.SaveChangesAsync();
+
+                return true;
+            }
+            throw new ValidationException("No Valid");
+        }
 
 
-        //public async Task<bool> CreateShoeImages(AddShoeImageDto dto)
-        //{
-        //    var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(dto.ShoeId);
-        //    if (shoe is null || shoe.ImageUrls.Count != 0)
-        //        throw new ArgumentNullException("Shoe not found");
+        public async Task<bool> CreateShoeImages(AddShoeImageDto dto)
+        {
+            var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(dto.ShoeId);
+            if (shoe is null || shoe.ImageUrls.Count != 0)
+                throw new ArgumentNullException("Shoe not found");
 
-        //    for (int i = 0; i < dto.Images.Length; i++)
-        //    {
-        //        var form = dto.Images[i];
-        //        using (var stream = form.OpenReadStream())
-        //        {
-        //            var fileName = shoe.Id + "-" + shoe.Model + shoe.Color + i + ".jpg";
-        //            var contentType = form.ContentType;
+            for (int i = 0; i < dto.Images.Length; i++)
+            {
+                var form = dto.Images[i];
+                using (var stream = form.OpenReadStream())
+                {
+                    var fileName = shoe.Id + "-" + shoe.Model + shoe.Color + i + ".jpg";
+                    var contentType = form.ContentType;
 
-        //            var blobResult = await _blobSerice.UploadFileAsync(stream, fileName, contentType);
-        //            if (blobResult is false)
-        //                return false;
+                    var blobResult = await _blobSerice.UploadFileAsync(stream, fileName, contentType);
+                    if (blobResult is false)
+                        return false;
 
-        //            shoe.ImageUrls.Add(_blobSerice.GetSignedUrl(fileName));
-        //        }
-        //    }
+                    shoe.ImageUrls.Add(_blobSerice.GetSignedUrl(fileName));
+                }
+            }
 
-        //    await _unitOfWork.WriteShoesRepository.UpdateAsync(shoe.Id);
-        //    await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
-        //    return true;
-        //}
+            await _unitOfWork.WriteShoesRepository.UpdateAsync(shoe.Id);
+            await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
+            return true;
+        }
 
 
         public async Task<bool> UpdateShoeImage(UpdateShoeImageDto dto)
@@ -750,42 +754,42 @@ namespace Infrastructure.Services.UserServices
         #endregion
 
 
-        //#region ShoeSalesStatistics
+        #region ShoeSalesStatistics
 
-        //public List<GeneralShoeStatisticsDto> WeeklySalesStatistics(string storeId)
-        //{
-        //    var orders = _unitOfWork.ReadOrderRepository.GetWhere(x=> x.StoreId == storeId && x.OrderMakeTime > DateTime.Now.AddDays(-7).Date).ToList();
-        //    if (orders.Count is 0)
-        //        throw new ArgumentNullException("Order not Found");
+        public List<GeneralShoeStatisticsDto> WeeklySalesStatistics(string storeId)
+        {
+            var orders = _unitOfWork.ReadOrderRepository.GetWhere(x => x.Store.Id == storeId && x.OrderMakeTime > DateTime.Now.AddDays(-7).Date).ToList();
+            if (orders.Count is 0)
+                throw new ArgumentNullException("Order not Found");
 
-        //    var shoesDto = new List<GeneralShoeStatisticsDto>();
-        //    var ShoesIds = new List<string>();
-        //    foreach (var order in orders)
-        //        if (order is not null)
-        //            foreach (var shoeId in order.Shoes)
-        //                ShoesIds.Add(shoeId.ShoeId);
+            var shoesDto = new List<GeneralShoeStatisticsDto>();
+            var ShoesIds = new List<string>();
+            foreach (var order in orders)
+                if (order is not null)
+                    foreach (var shoe in order.Shoes)
+                        ShoesIds.Add(shoe.Id);
 
-        //    var shoes = _unitOfWork.ReadShoesRepository.GetAll(); 
-        //    foreach (var item in shoes)
-        //    {
-        //        if (item is not null)
-        //        {
-        //            var shoe = ShoesIds.Where(x => x == item.Id).ToList();
-        //            if (shoe.Count != 0)
-        //                shoesDto.Add(new GeneralShoeStatisticsDto
-        //                {
-        //                    ShoeId = item.Id,
-        //                    Brend = item.Brend,
-        //                    Model = item.Model,
-        //                    Color = item.Color,
-        //                    Price = item.Price,
-        //                    Count = Convert.ToByte(shoe.Count),
-        //                    ImageUrl = item.ImageUrls[0]
-        //                });
-        //        }
-        //    }
-        //    return shoesDto;
-        //}
+            var shoes = _unitOfWork.ReadShoesRepository.GetAll();
+            foreach (var item in shoes)
+            {
+                if (item is not null)
+                {
+                    var shoe = ShoesIds.Where(x => x == item.Id).ToList();
+                    if (shoe.Count != 0)
+                        shoesDto.Add(new GeneralShoeStatisticsDto
+                        {
+                            ShoeId = item.Id,
+                            Brend = item.Brend,
+                            Model = item.Model,
+                            Color = item.Color,
+                            Price = item.Price,
+                            Count = Convert.ToByte(shoe.Count),
+                            ImageUrl = item.ImageUrls[0]
+                        });
+                }
+            }
+            return shoesDto;
+        }
 
 
         //public async Task<List<DetailsShoeStatisticsDto>> DetailsShoeStatistics(string shoeId)
@@ -813,7 +817,7 @@ namespace Infrastructure.Services.UserServices
 
 
 
-        //#endregion
+        #endregion
     }
 }
 

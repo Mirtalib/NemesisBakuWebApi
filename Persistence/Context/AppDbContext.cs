@@ -13,17 +13,17 @@ namespace Persistence.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new AdminConfiguration());
-            modelBuilder.ApplyConfiguration(new ClientConfiguration());
-            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
-            modelBuilder.ApplyConfiguration(new CourierConfiguration());
-            modelBuilder.ApplyConfiguration(new OrderConfiguration());
-            modelBuilder.ApplyConfiguration(new OrderCommentConfiguration());
-            modelBuilder.ApplyConfiguration(new OrderShoeSizeCountConfiguration());
-            modelBuilder.ApplyConfiguration(new ShoeConfiguration());
-            modelBuilder.ApplyConfiguration(new ShoeCountSizeConfiguration());
-            modelBuilder.ApplyConfiguration(new ShoeCommentConfiguration());
-            modelBuilder.ApplyConfiguration(new StoreConfiguration());
+            //modelBuilder.ApplyConfiguration(new AdminConfiguration());
+            //modelBuilder.ApplyConfiguration(new ClientConfiguration());
+            //modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+            //modelBuilder.ApplyConfiguration(new CourierConfiguration());
+            //modelBuilder.ApplyConfiguration(new OrderConfiguration());
+            //modelBuilder.ApplyConfiguration(new OrderCommentConfiguration());
+            //modelBuilder.ApplyConfiguration(new OrderShoeSizeCountConfiguration());
+            //modelBuilder.ApplyConfiguration(new ShoeConfiguration());
+            //modelBuilder.ApplyConfiguration(new ShoeCountSizeConfiguration());
+            //modelBuilder.ApplyConfiguration(new ShoeCommentConfiguration());
+            //modelBuilder.ApplyConfiguration(new StoreConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }

@@ -2,7 +2,6 @@
 using Application.Models.DTOs.ClientDTOs;
 using Application.Models.DTOs.OderDTOs;
 using Application.Models.DTOs.ShoesDTOs;
-using Application.Services.IHelperServices;
 using Application.Services.IUserServices;
 using Domain.Models;
 
@@ -349,6 +348,32 @@ namespace Infrastructure.Services.UserServices
 
             return result;
         }
+
+        #endregion
+
+
+        #region Profile
+
+        public async Task<GetClientProfileDto> GetProfile(string clientId)
+        {
+            var client = await _unitOfWork.ReadClientRepository.GetAsync(clientId);
+            if (client is null)
+                throw new ArgumentNullException();
+
+            var clientDto = new GetClientProfileDto
+            {
+                Id = client.Id,
+                Name = client.Name,
+                Surname = client.Surname,
+                PhoneNumber = client.PhoneNumber,
+                BrithDate = client.BrithDate,
+                Email = client.Email,
+                Address = client.Address,
+            };
+            return clientDto;
+        }
+
+
         #endregion
 
     }
