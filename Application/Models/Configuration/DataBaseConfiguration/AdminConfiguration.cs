@@ -8,6 +8,8 @@ namespace Application.Models.Configuration.DataBaseConfiguration
     {
         public void Configure(EntityTypeBuilder<Admin> builder)
         {
+
+
             throw new NotImplementedException();
         }
     }
