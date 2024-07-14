@@ -56,6 +56,7 @@ namespace Application.Services.IUserServices
 
         Task<GetClientProfileDto> GetProfile(string clientId);
 
+        Task<bool> RemoveProfile(string clientId);
         #endregion
     }
 }

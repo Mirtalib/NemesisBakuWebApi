@@ -17,6 +17,7 @@ namespace Infrastructure.Services.UserServices
             _unitOfWork = unitOfWork;
         }
 
+
         #region Order
 
         public List<GetOrderDto> GetAllOrder(string courierId)
@@ -101,6 +102,47 @@ namespace Infrastructure.Services.UserServices
 
             return courierDto;
         }
+
+        public async Task<bool> RemoveProfile(string courierId)
+        {
+            var courier = await _unitOfWork.ReadCourierRepository.GetAsync(courierId);
+            if (courier is null)
+                throw new ArgumentNullException("");
+
+            foreach (var order in courier.Orders)
+            {
+                order.Courier = new();
+                _unitOfWork.WriteOrderRepository.Update(order);
+                await _unitOfWork.WriteOrderRepository.SaveChangesAsync();
+            }
+
+            var result = _unitOfWork.WriteCourierRepository.Remove(courier);
+            await _unitOfWork.WriteCourierRepository.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> UpdateProfile(UpdateCourierProfileDto dto)
+        {
+            var courier = await _unitOfWork.ReadCourierRepository.GetAsync(dto.Id);
+            if (courier is null)
+                throw new ArgumentNullException("");
+
+
+            courier.Name = dto.Name;
+            courier.Surname = dto.Surname;
+            courier.PhoneNumber = dto.PhoneNumber;
+            courier.BrithDate = dto.BrithDate;
+            courier.Email = dto.Email;
+
+
+            var result = _unitOfWork.WriteCourierRepository.Update(courier);
+            await _unitOfWork.WriteCourierRepository.SaveChangesAsync();
+
+            return result;
+        }
+
+
+
         #endregion
     }
 }

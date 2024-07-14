@@ -142,6 +142,7 @@ namespace Infrastructure.Services.UserServices
 
             foreach (var shoe in shoes)
             {
+            
                 // remove shoe
             }
 

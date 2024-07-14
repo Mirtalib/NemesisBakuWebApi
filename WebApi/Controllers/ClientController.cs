@@ -3,6 +3,7 @@ using Application.Models.DTOs.OderDTOs;
 using Application.Models.DTOs.ShoesDTOs;
 using Application.Services.IUserServices;
 using Domain.Models;
+using Infrastructure.Services.UserServices;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
@@ -223,6 +224,43 @@ namespace WebApi.Controllers
 
         #endregion
 
+        #region Profile
+
+        [HttpGet("getProfile")]
+        public async Task<ActionResult<GetClientProfileDto>> GetProfile(string clientId)
+        {
+            try
+            {
+                var result = await _clientService.GetProfile(clientId);
+                if (result is not null)
+                    return Ok(result);
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured on [GET] GetProfile Error ->{ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpDelete("removeProfile")]
+        public async Task<ActionResult<bool>> RemoveProfile(string clientId)
+        {
+            try
+            {
+                var result = await _clientService.RemoveProfile(clientId);
+                if (result)
+                    return Ok(result);
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured on [DELETE] RemoveProfile Error ->{ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+        #endregion
 
     }
 }

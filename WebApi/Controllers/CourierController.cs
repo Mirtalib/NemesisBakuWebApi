@@ -84,6 +84,40 @@ namespace WebApi.Controllers
 
         }
 
+        [HttpDelete("removeProfile")]
+        public async Task<ActionResult<bool>> RemoveProfile(string courierId)
+        {
+            try
+            {
+                var result = await _courierService.RemoveProfile(courierId);
+                if (result)
+                    return Ok(result);
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured on [DELETE] RemoveProfile Error ->{ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpPost("updateProfile")]
+        public async Task<ActionResult<bool>> UpdateProfile(UpdateCourierProfileDto dto)
+        {
+            try
+            {
+                var result = await _courierService.UpdateProfile(dto);
+                if (result)
+                    return Ok(result);
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured on [POST] UpdateProfile Error ->{ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
         #endregion
     }
 

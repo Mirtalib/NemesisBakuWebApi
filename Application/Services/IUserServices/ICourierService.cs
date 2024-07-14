@@ -17,6 +17,11 @@ namespace Application.Services.IUserServices
         #region Profile
 
         Task<GetCourierProfileDto> GetProfile(string courierId);
+
+        Task<bool> RemoveProfile(string courierId);
+
+        Task<bool> UpdateProfile(UpdateCourierProfileDto dto);
+
         #endregion
 
     }

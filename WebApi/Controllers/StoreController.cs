@@ -20,6 +20,8 @@ namespace WebApi.Controllers
         {
             _storeService = storeService;
         }
+
+
         #region Shoe
         [HttpPost("createShoe")]
         public async Task<ActionResult<bool>> CreateShoe(AddShoeDto dto)
@@ -228,7 +230,6 @@ namespace WebApi.Controllers
         #endregion
 
 
-
         #region Category
 
         [HttpPost("createCategory")]
@@ -323,6 +324,7 @@ namespace WebApi.Controllers
 
 
         #endregion
+
 
         #region Order
 
@@ -434,6 +436,7 @@ namespace WebApi.Controllers
 
 
         #endregion
+
 
         #region Order Comment
 

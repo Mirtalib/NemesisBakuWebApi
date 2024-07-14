@@ -5,7 +5,6 @@ namespace Domain.Models
     public class ShoesComment :BaseEntity
     {
         public Shoe Shoe { get; set; }
-        public Order Order { get; set; }
         public Client Client { get; set; }
         public string Content { get; set; }
         public byte Rate { get; set; }

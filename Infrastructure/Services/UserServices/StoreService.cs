@@ -336,7 +336,7 @@ namespace Infrastructure.Services.UserServices
             await _unitOfWork.WriteStoreRepository.SaveChangesAsync();
             return true;
         }
-#endregion
+    #endregion
 
 
         #region Category

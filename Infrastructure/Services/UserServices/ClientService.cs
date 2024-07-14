@@ -373,6 +373,40 @@ namespace Infrastructure.Services.UserServices
             return clientDto;
         }
 
+        public async Task<bool> RemoveProfile(string clientId)
+        {
+            var client = await _unitOfWork.ReadClientRepository.GetAsync(clientId);
+            if (client is null)
+                throw new ArgumentNullException();
+
+            foreach (var shoesComment in client.ShoesCommnets)
+            {
+                var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(shoesComment.Id);
+                if (shoe is null)
+                    throw new ArgumentNullException();
+
+                shoe.ShoeComments.Remove(shoesComment);
+
+                _unitOfWork.WriteShoesRepository.Update(shoe);
+                await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
+            }
+
+
+            foreach (var order in client.Orders)
+            {
+                order.Client = new();
+
+                _unitOfWork.WriteOrderRepository.Update(order);
+                await _unitOfWork.WriteOrderRepository.SaveChangesAsync();
+            }
+
+
+            var result = _unitOfWork.WriteClientRepository.Remove(client);
+            await _unitOfWork.WriteClientRepository.SaveChangesAsync();
+
+            return result;
+        }
+
 
         #endregion
 
