@@ -1,9 +1,11 @@
 ﻿using Application.IRepositories;
 using Application.Models.DTOs.ClientDTOs;
 using Application.Models.DTOs.OderDTOs;
+using Application.Models.DTOs.ShoesCommentDTOs;
 using Application.Models.DTOs.ShoesDTOs;
 using Application.Services.IUserServices;
 using Domain.Models;
+using System.Drawing;
 
 namespace Infrastructure.Services.UserServices
 {
@@ -283,7 +285,7 @@ namespace Infrastructure.Services.UserServices
         #endregion
 
 
-        #region ShoppingList
+        #region Shopping List
 
 
         public async Task<List<GetShoeDto>> GetShoppingList(string clientId)
@@ -407,8 +409,87 @@ namespace Infrastructure.Services.UserServices
             return result;
         }
 
+        public async Task<bool> UpdateProfile(UpdateClientProfileDto dto)
+        {
+
+            var client = await _unitOfWork.ReadClientRepository.GetAsync(dto.Id);
+            if (client is null)
+                throw new ArgumentNullException();
+
+            client.Name = dto.Name;
+            client.Surname = dto.Surname;
+            client.Email = dto.Email;
+            client.BrithDate = dto.BrithDate;
+            client.PhoneNumber = dto.PhoneNumber;
+            client.Address = dto.Address;
+
+            var result = _unitOfWork.WriteClientRepository.Update(client);
+            await _unitOfWork.WriteClientRepository.SaveChangesAsync();
+
+            return result;
+        }
 
         #endregion
 
+
+        #region Shoe Comment
+
+
+        public async Task<bool> CreateShoeComment(CreateShoeCommentDto dto)
+        {
+            var client = await _unitOfWork.ReadClientRepository.GetAsync(dto.ClientId);
+            if (client is null)
+                throw new ArgumentNullException();
+
+            var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(dto.ShoeId);
+            if (shoe is null)
+                throw new ArgumentNullException();
+
+
+            foreach (var order in client.Orders)
+            {
+                foreach (var orderShoe in order.Shoes)
+                {
+                    if (orderShoe.Id == shoe.Id)
+                    {
+                        var shoeComment = new ShoesComment
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            Client = client,
+                            Shoe = shoe,
+                            Content = dto.Content,
+                            Rate = dto.Rate,
+                        };
+                        var result = await _unitOfWork.WriteShoesCommentRepository.AddAsync(shoeComment);
+                        await _unitOfWork.WriteShoesCommentRepository.SaveChangesAsync();
+                        return result;
+                    }
+                }
+            }
+
+
+            throw new ArgumentException();
+        }
+
+        public async Task<bool> RemoveShoeComment(string shoeCommentId)
+        {
+
+            var shoeComment = await _unitOfWork.ReadShoesCommentRepository.GetAsync(shoeCommentId);
+            if (shoeComment is null)
+                throw new ArgumentNullException();
+
+
+            shoeComment.Client.ShoesCommnets.Remove(shoeComment);
+
+            _unitOfWork.WriteClientRepository.Update(shoeComment.Client);
+            await _unitOfWork.WriteClientRepository.SaveChangesAsync();
+
+            var result = _unitOfWork.WriteShoesCommentRepository.Remove(shoeComment);
+            await _unitOfWork.WriteShoesCommentRepository.SaveChangesAsync();
+
+            return result;
+        }
+
+        #endregion
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Application.Models.DTOs.ClientDTOs;
-using Application.Models.DTOs.CourierDTOs;
 using Application.Models.DTOs.OderDTOs;
+using Application.Models.DTOs.ShoesCommentDTOs;
 using Application.Models.DTOs.ShoesDTOs;
 
 namespace Application.Services.IUserServices
@@ -57,6 +57,17 @@ namespace Application.Services.IUserServices
         Task<GetClientProfileDto> GetProfile(string clientId);
 
         Task<bool> RemoveProfile(string clientId);
+
+        Task<bool> UpdateProfile(UpdateClientProfileDto dto);
         #endregion
+
+
+        #region Shoe Comment
+        public Task<bool> CreateShoeComment(CreateShoeCommentDto dto);
+
+        public Task<bool> RemoveShoeComment(string shoeCommentId);
+        #endregion
+
+
     }
 }

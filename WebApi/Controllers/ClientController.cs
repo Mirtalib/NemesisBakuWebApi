@@ -1,5 +1,6 @@
 ﻿using Application.Models.DTOs.ClientDTOs;
 using Application.Models.DTOs.OderDTOs;
+using Application.Models.DTOs.ShoesCommentDTOs;
 using Application.Models.DTOs.ShoesDTOs;
 using Application.Services.IUserServices;
 using Domain.Models;
@@ -22,54 +23,41 @@ namespace WebApi.Controllers
         }
 
 
+        #region Shoe Comment
 
-        #region Shoe 
-
-        [HttpGet("getAllShoes")]
-        public async Task<ActionResult<List<GetShoeDto>>> GetAllShoes(string storeId)
+        [HttpPost("createShoeComment")]
+        public async Task<ActionResult<bool>> CreateShoeComment(CreateShoeCommentDto dto)
         {
             try
             {
-                return Ok(await _clientService.GetAllShoes(storeId));
+                var result = await _clientService.CreateShoeComment(dto);
+                if (result)
+                    return Ok(result);
+                return BadRequest();
             }
             catch (Exception ex)
             {
-                Log.Error($"Error occured on [GET] GetAllShoes => {ex.Message}");
+                Log.Error($"Error occured on [POST] CreateShoeComment Error -> {ex.Message}");
                 return BadRequest(ex.Message);
             }
         }
 
-
-        [HttpGet("getShoeByCategoryId")]
-        public async Task<ActionResult<List<GetShoeDto>>> GetShoeByCategoryId(string categoryId)
+        [HttpDelete("removeShoeComment")]
+        public async Task<ActionResult<bool>> RemoveShoeComment(string shoeCommentId)
         {
             try
             {
-                return Ok(await _clientService.GetShoeByCategoryId(categoryId));
+                var result = await _clientService.RemoveShoeComment(shoeCommentId);
+                if (result)
+                    return Ok(result);
+                return BadRequest();
             }
             catch (Exception ex)
             {
-                Log.Error($"Error occured on [GET] GetShoeByCategoryId => {ex.Message}");
+                Log.Error($"Error occured on [DELETE] RemoveShoeComment Error -> {ex.Message}");
                 return BadRequest(ex.Message);
             }
         }
-
-
-        [HttpGet("getShoeId")]
-        public async Task<ActionResult<GetShoeInfoDto>> GetShoeId(string shoeId)
-        {
-            try
-            {
-                return Ok(await _clientService.GetShoeId(shoeId));
-            }
-            catch (Exception ex)
-            {
-                Log.Error($"Error occured on [GET] GetShoeByCategoryId => {ex.Message}");
-                return BadRequest(ex.Message);
-            }
-        }
-
-
         #endregion
 
 
@@ -125,56 +113,6 @@ namespace WebApi.Controllers
         #endregion
 
 
-        #region Order
-
-
-        [HttpPost("makeOrder")]
-        public async Task<ActionResult<bool>> MakeOrder(MakeOrderDto dto)
-        {
-            try
-            {
-                return Ok(await _clientService.MakeOrder(dto));
-            }
-            catch (Exception ex)
-            {
-                Log.Error($"Error occured on [POST] MakeOrder => {ex.Message}");
-                return BadRequest(ex.Message);
-            }
-        }
-
-
-        [HttpGet("getAllOrder")]
-        public ActionResult<List<GetOrderDto>> GetAllOrder(string clientId)
-        {
-            try
-            {
-                return Ok(_clientService.GetAllOrder(clientId));
-            }
-            catch (Exception ex)
-            {
-                Log.Error($"Error occured on [GET] GetAllOrder => {ex.Message}");
-                return BadRequest(ex.Message);
-            }
-        }
-
-
-        [HttpGet("getOrder")]
-        public async Task<ActionResult<GetOrderDto>> GetOrder(string orderId)
-        {
-            try
-            {
-                return Ok(await _clientService.GetOrder(orderId));
-            }
-            catch (Exception ex)
-            {
-                Log.Error($"Error occured on [GET] GetOrder => {ex.Message}");
-                return BadRequest(ex.Message);
-            }
-        }
-
-        #endregion
-
-
         #region ShoppingList
 
 
@@ -224,6 +162,7 @@ namespace WebApi.Controllers
 
         #endregion
 
+
         #region Profile
 
         [HttpGet("getProfile")]
@@ -244,6 +183,24 @@ namespace WebApi.Controllers
         }
 
 
+        [HttpPost("updateProfile")]
+        public async Task<ActionResult<bool>> UpdateProfile(UpdateClientProfileDto dto)
+        {
+            try
+            {
+                var result = await _clientService.UpdateProfile(dto);
+                if (result)
+                    return Ok(result);
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured on [POST] UpdateProfile Error -> {ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+
         [HttpDelete("removeProfile")]
         public async Task<ActionResult<bool>> RemoveProfile(string clientId)
         {
@@ -256,10 +213,111 @@ namespace WebApi.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error($"Error occured on [DELETE] RemoveProfile Error ->{ex.Message}");
+                Log.Error($"Error occured on [DELETE] RemoveProfile Error -> {ex.Message}");
                 return BadRequest(ex.Message);
             }
         }
+
+        #endregion
+
+
+        #region Shoe 
+
+        [HttpGet("getAllShoes")]
+        public async Task<ActionResult<List<GetShoeDto>>> GetAllShoes(string storeId)
+        {
+            try
+            {
+                return Ok(await _clientService.GetAllShoes(storeId));
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured on [GET] GetAllShoes => {ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpGet("getShoeByCategoryId")]
+        public async Task<ActionResult<List<GetShoeDto>>> GetShoeByCategoryId(string categoryId)
+        {
+            try
+            {
+                return Ok(await _clientService.GetShoeByCategoryId(categoryId));
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured on [GET] GetShoeByCategoryId => {ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpGet("getShoeId")]
+        public async Task<ActionResult<GetShoeInfoDto>> GetShoeId(string shoeId)
+        {
+            try
+            {
+                return Ok(await _clientService.GetShoeId(shoeId));
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured on [GET] GetShoeByCategoryId => {ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        #endregion
+
+
+        #region Order
+
+
+        [HttpPost("makeOrder")]
+        public async Task<ActionResult<bool>> MakeOrder(MakeOrderDto dto)
+        {
+            try
+            {
+                return Ok(await _clientService.MakeOrder(dto));
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured on [POST] MakeOrder => {ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpGet("getAllOrder")]
+        public ActionResult<List<GetOrderDto>> GetAllOrder(string clientId)
+        {
+            try
+            {
+                return Ok(_clientService.GetAllOrder(clientId));
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured on [GET] GetAllOrder => {ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpGet("getOrder")]
+        public async Task<ActionResult<GetOrderDto>> GetOrder(string orderId)
+        {
+            try
+            {
+                return Ok(await _clientService.GetOrder(orderId));
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured on [GET] GetOrder => {ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
         #endregion
 
     }
