@@ -1,4 +1,5 @@
 ﻿using Application.IRepositories;
+using Application.Models.DTOs.AdminDTOs;
 using Application.Models.DTOs.CategoryDTOs;
 using Application.Models.DTOs.OderDTOs;
 using Application.Models.DTOs.OrderCommentDTOs;
@@ -286,6 +287,7 @@ namespace Infrastructure.Services.UserServices
 
 
         #endregion
+
 
         #region Store
 
@@ -718,6 +720,63 @@ namespace Infrastructure.Services.UserServices
         }
 
 
+
         #endregion
+
+
+        #region Profile
+        public async Task<GetAdminProfileDto> GetProfile(string adminId)
+        {
+            var admin = await _unitOfWork.ReadAdminRepository.GetAsync(adminId);
+            if (admin is null)
+                throw new ArgumentNullException($"{adminId} is null");
+
+            var adminDto = new GetAdminProfileDto();
+
+            adminDto.Name = admin.Name;
+            adminDto.Email = admin.Email;
+            adminDto.PhoneNumber = admin.PhoneNumber;
+            adminDto.Surname = admin.Surname;
+            adminDto.BrithDate = admin.BrithDate;
+
+            return adminDto;
+        }
+
+        public async Task<bool> RemoveProfile(string adminId)
+        {
+            var admin = await _unitOfWork.ReadAdminRepository.GetAsync(adminId);
+            if (admin is null)
+                throw new ArgumentNullException();
+
+            var result = _unitOfWork.WriteAdminRepository.Remove(admin);
+            await _unitOfWork.WriteAdminRepository.SaveChangesAsync();
+
+            return result;
+        }
+
+        public async Task<bool> UpdateProfile(UpdateAdminProfileDto dto)
+        {
+            var admin = await _unitOfWork.ReadAdminRepository.GetAsync(dto.Id);
+            if (admin is null)
+                throw new ArgumentNullException();
+
+            admin.Name = dto.Name;
+            admin.Email = dto.Email;
+            admin.PhoneNumber = dto.PhoneNumber;
+            admin.Surname= dto.Surname;
+            admin.BrithDate= dto.BrithDate;
+
+            var result = _unitOfWork.WriteAdminRepository.Update(admin);
+            await _unitOfWork.WriteAdminRepository.SaveChangesAsync();
+            return result;
+        }
+
+
+
+
+
+        #endregion
+
+
     }
 }

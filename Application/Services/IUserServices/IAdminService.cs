@@ -1,4 +1,5 @@
-﻿using Application.Models.DTOs.CategoryDTOs;
+﻿using Application.Models.DTOs.AdminDTOs;
+using Application.Models.DTOs.CategoryDTOs;
 using Application.Models.DTOs.OderDTOs;
 using Application.Models.DTOs.OrderCommentDTOs;
 using Application.Models.DTOs.ShoesCommentDTOs;
@@ -92,5 +93,14 @@ namespace Application.Services.IUserServices
 
         #endregion
 
+
+        #region Profile
+
+        Task<GetAdminProfileDto> GetProfile(string adminId);
+
+        Task<bool> RemoveProfile(string adminId);
+
+        Task<bool> UpdateProfile(UpdateAdminProfileDto dto);
+        #endregion
     }
 }
