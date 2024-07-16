@@ -2,12 +2,34 @@
 using Application.Models.DTOs.OderDTOs;
 using Application.Models.DTOs.OrderCommentDTOs;
 using Application.Models.DTOs.ShoesCommentDTOs;
+using Application.Models.DTOs.ShoesDTOs;
 using Application.Models.DTOs.StoreDTOs;
 
 namespace Application.Services.IUserServices
 {
     public interface IAdminService
     {
+
+
+        #region Shoe
+
+        Task<bool> CreateShoe(AddShoeDto shoeDto);
+
+        Task<bool> CreateShoeImages(AddShoeImageDto dto);
+
+        Task<bool> UpdateShoeImage(UpdateShoeImageDto dto);
+
+        Task<GetShoeInfoDto> GetShoeId(string shoeId);
+
+        Task<List<GetShoeDto>> GetAllShoes(string storeId);
+
+        Task<bool> UpdateShoeCount(UpdateShoeCountDto dto);
+
+        Task<bool> RemoveShoe(string shoeId);
+
+        Task<bool> UpdateShoe(UpdateShoeDto dto);
+
+        #endregion
 
 
         #region Store

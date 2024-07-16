@@ -2,13 +2,11 @@
 using Application.Models.DTOs.OderDTOs;
 using Application.Models.DTOs.OrderCommentDTOs;
 using Application.Models.DTOs.ShoesCommentDTOs;
+using Application.Models.DTOs.ShoesDTOs;
 using Application.Models.DTOs.StoreDTOs;
 using Application.Services.IUserServices;
-using Domain.Models;
-using Infrastructure.Services.UserServices;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
-using System.ComponentModel.Design;
 
 namespace WebApi.Controllers
 {
@@ -16,8 +14,6 @@ namespace WebApi.Controllers
     [ApiController]
     public class AdminController : ControllerBase
     {
-
-
         private readonly IAdminService _adminService;
 
         public AdminController(IAdminService adminService)
@@ -26,8 +22,158 @@ namespace WebApi.Controllers
         }
 
 
+        #region Shoe
+
+        [HttpPost("createShoe")]
+        public async Task<ActionResult<bool>> CreateShoe(AddShoeDto dto)
+        {
+            try
+            {
+                var result = await _adminService.CreateShoe(dto);
+                if (result)
+                    return Ok(result);
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured on [POST] CreateShoe Error ->{ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpPost("createShoeImages")]
+        public async Task<ActionResult<bool>> CreateShoeImages([FromForm] AddShoeImageDto dto)
+        {
+            try
+            {
+                var result = await _adminService.CreateShoeImages(dto);
+                if (result)
+                    return Ok(result);
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured on [POST] CreateShoeImages Error ->{ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpPost("updateShoeImage")]
+        public async Task<ActionResult<bool>> UpdateShoeImage(UpdateShoeImageDto dto)
+        {
+            try
+            {
+                var result = await _adminService.UpdateShoeImage(dto);
+                if (result)
+                    return Ok(result);
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured on [POST] UpdateShoeImage Error ->{ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpPost("updateShoeCount")]
+        public async Task<ActionResult<bool>> UpdateShoeCount(UpdateShoeCountDto dto)
+        {
+            try
+            {
+                var result = await _adminService.UpdateShoeCount(dto);
+                if (result)
+                    return Ok(result);
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured on [POST] UpdateShoeCount Error ->{ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpPost("updateShoe")]
+        public async Task<ActionResult<bool>> UpdateShoe(UpdateShoeDto dto)
+        {
+            try
+            {
+                var result = await _adminService.UpdateShoe(dto);
+                if (result)
+                    return Ok(result);
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured on [POST] UpdateShoe Error ->{ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpGet("getShoeId")]
+        public async Task<ActionResult<GetShoeInfoDto>> GetShoeId(string shoeId)
+        {
+            try
+            {
+                var result = await _adminService.GetShoeId(shoeId);
+                if (result is not null)
+                    return Ok(result);
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured on [GET] GetShoeId Error ->{ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpGet("getAllShoes")]
+        public async Task<ActionResult<List<GetShoeDto>>> GetAllShoes(string storeId)
+        {
+            try
+            {
+                var result = await _adminService.GetAllShoes(storeId);
+                if (result is not null)
+                    return Ok(result);
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured on [GET] GetAllShoes Error ->{ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpDelete("removeShoe")]
+        public async Task<ActionResult<bool>> RemoveShoe(string shoeId)
+        {
+            try
+            {
+                var result = await _adminService.RemoveShoe(shoeId);
+                if (result)
+                    return Ok(result);
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured on [DELETE] RemoveShoe Error ->{ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+
+        #endregion
+
+
         #region Store
-        
+
         [HttpPost("createStore")]
         public async Task<ActionResult<bool>> CreateStore(AddStoreDto dto)
         {
@@ -375,9 +521,6 @@ namespace WebApi.Controllers
 
 
         #endregion
-
-
-
 
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Net.Sockets;
-
-namespace Domain.Models
+﻿namespace Domain.Models
 {
     public class Client: AppUser
     {

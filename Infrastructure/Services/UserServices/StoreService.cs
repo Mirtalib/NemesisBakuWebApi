@@ -694,7 +694,6 @@ namespace Infrastructure.Services.UserServices
                         ClientId = comment.Client.Id,
                         ShoesId = comment.Shoe.Id,
                         Content = comment.Content,
-                        OrderId = comment.Order.Id,
                         Rate = comment.Rate,
                     });
             }
@@ -715,7 +714,6 @@ namespace Infrastructure.Services.UserServices
                 ClientId = comment.Client.Id,
                 ShoesId = comment.Shoe.Id,
                 Content = comment.Content,
-                OrderId = comment.Order.Id,
                 Rate = comment.Rate,
             };
             return commentDto;
