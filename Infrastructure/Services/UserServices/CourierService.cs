@@ -22,7 +22,7 @@ namespace Infrastructure.Services.UserServices
 
         public List<GetOrderDto> GetAllOrder(string courierId)
         {
-            var orders = _unitOfWork.ReadOrderRepository.GetWhere(order => order.Courier.Id == courierId);
+            var orders = _unitOfWork.ReadOrderRepository.GetWhere(order => order.Courier.Id.ToString() == courierId);
             if (orders.Count() == 0)
                 throw new ArgumentNullException("You do not have an Order");
             
@@ -35,11 +35,11 @@ namespace Infrastructure.Services.UserServices
                 {
                     var orderDto = new GetOrderDto
                     {
-                        Id = order.Id,
-                        StoreId = order.Store.Id,
-                        CourierId = order.Courier.Id,
+                        Id = order.Id.ToString(),
+                        StoreId = order.Store.Id.ToString(),
+                        CourierId = order.Courier.Id.ToString(),
                         Amount = order.Amount,
-                        OrderCommentId = order.OrderComment.Id,
+                        OrderCommentId = order.OrderComment.Id.ToString(),
                         OrderFinishTime = order.OrderFinishTime,
                         OrderMakeTime = order.OrderMakeTime,
                         OrderStatus = order.OrderStatus,
@@ -61,10 +61,10 @@ namespace Infrastructure.Services.UserServices
             var orderDto = new GetOrderDto
             {
                 Id = orderId,
-                StoreId= order.Store.Id,
-                CourierId = order.Courier.Id,
+                StoreId= order.Store.Id.ToString(),
+                CourierId = order.Courier.Id.ToString(),
                 Amount = order.Amount,
-                OrderCommentId = order.OrderComment.Id,
+                OrderCommentId = order.OrderComment.Id.ToString(),
                 OrderFinishTime = order.OrderFinishTime,
                 OrderMakeTime = order.OrderMakeTime,
                 OrderStatus = order.OrderStatus,

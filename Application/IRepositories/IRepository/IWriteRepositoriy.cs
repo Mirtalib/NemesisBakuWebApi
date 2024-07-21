@@ -4,7 +4,7 @@
 
 namespace Application.IRepositories.IRepository
 {
-    public interface IWriteRepository<T> where T : BaseEntity
+    public interface IWriteRepository<T> where T : class
     {
         Task<bool> AddAsync(T entity);
         

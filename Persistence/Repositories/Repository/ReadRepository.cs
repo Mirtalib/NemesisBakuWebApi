@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace Persistence.Repositories.Repository
 {
-    public class ReadRepository<T> : IReadRepository<T> where T : BaseEntity
+    public class ReadRepository<T> : IReadRepository<T> where T : class
     {
         private readonly AppDbContext _context;
         public ReadRepository(AppDbContext context)
@@ -20,7 +20,7 @@ namespace Persistence.Repositories.Repository
 
         public async Task<T?> GetAsync(Expression<Func<T, bool>> expression) => await Table.FirstOrDefaultAsync(expression);
 
-        public async Task<T?> GetAsync(string id) => await Table.FirstOrDefaultAsync(e => e.Id == id);
+        public async Task<T?> GetAsync(string id) => await Table.FindAsync(id);
 
         public IEnumerable<T?> GetAll(bool tracking = true)
         {

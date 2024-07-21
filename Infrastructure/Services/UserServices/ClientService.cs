@@ -29,13 +29,13 @@ namespace Infrastructure.Services.UserServices
                 throw new ArgumentNullException("Store is not found");
 
             var shoesDto = new List<GetShoeDto>();
-            var shoes = _unitOfWork.ReadShoesRepository.GetWhere(x => x.Store.Id == storeId).ToList();
+            var shoes = _unitOfWork.ReadShoesRepository.GetWhere(x => x.Store.Id.ToString() == storeId).ToList();
             foreach (var shoe in shoes)
             {
                 if (shoe is not null)
                     shoesDto.Add(new GetShoeDto
                     {
-                        Id = shoe.Id,
+                        Id = shoe.Id.ToString(),
                         Brend = shoe.Brend,
                         ImageUrls = shoe.ImageUrls,
                         Model = shoe.Model,
@@ -54,7 +54,7 @@ namespace Infrastructure.Services.UserServices
                 throw new ArgumentNullException($"Category {categoryId}");
 
 
-            var shoes = _unitOfWork.ReadShoesRepository.GetWhere(shoe => shoe.Category.Id == categoryId);
+            var shoes = _unitOfWork.ReadShoesRepository.GetWhere(shoe => shoe.Category.Id.ToString() == categoryId);
 
             var shoesDto = new List<GetShoeDto>();
             foreach (var shoe in shoes)
@@ -62,7 +62,7 @@ namespace Infrastructure.Services.UserServices
                 if (shoe is not null)
                     shoesDto.Add(new GetShoeDto
                     {
-                        Id = shoe.Id,
+                        Id = shoe.Id.ToString(),
                         Brend = shoe.Brend,
                         ImageUrls = shoe.ImageUrls,
                         Model = shoe.Model,
@@ -82,12 +82,12 @@ namespace Infrastructure.Services.UserServices
 
             var shoeDto = new GetShoeInfoDto
             {
-                Id = shoe.Id,
+                Id = shoe.Id.ToString(),
                 Brend = shoe.Brend,
                 ImageUrls = shoe.ImageUrls,
                 Model = shoe.Model,
                 Price = shoe.Price,
-                CategoryId = shoe.Category.Id,
+                CategoryId = shoe.Category.Id.ToString(),
                 Color = shoe.Color,
                 Description = shoe.Description,
             };
@@ -108,7 +108,7 @@ namespace Infrastructure.Services.UserServices
             if (client is null)
                 throw new ArgumentNullException();
 
-            var shoes = _unitOfWork.ReadShoesRepository.GetWhere(shoe => client.FavoriShoes.Contains(shoe));
+            var shoes = _unitOfWork.ReadShoesRepository.GetWhere(shoe => client.ClientFavoriShoes.Contains(shoe));
 
 
             var shoesDto = new List<GetShoeDto>();
@@ -117,7 +117,7 @@ namespace Infrastructure.Services.UserServices
                 if (shoe is not null)
                     shoesDto.Add(new GetShoeDto
                     {
-                        Id = shoe.Id,
+                        Id = shoe.Id.ToString(),
                         Brend = shoe.Brend,
                         ImageUrls = shoe.ImageUrls,
                         Model = shoe.Model,
@@ -139,7 +139,7 @@ namespace Infrastructure.Services.UserServices
                 throw new ArgumentNullException();
 
 
-            client.FavoriShoes.Add(shoe);
+            client.ClientFavoriShoes.Add(shoe);
 
             var result = _unitOfWork.WriteClientRepository.Update(client);
             await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
@@ -158,7 +158,7 @@ namespace Infrastructure.Services.UserServices
                 throw new ArgumentNullException();
 
 
-            client.FavoriShoes.Remove(shoe);
+            client.ClientFavoriShoes.Remove(shoe);
 
             var result = _unitOfWork.WriteClientRepository.Update(client);
             await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
@@ -185,7 +185,7 @@ namespace Infrastructure.Services.UserServices
 
             var newOrder = new Order
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = Guid.NewGuid(),
                 // Client = dto.ClientId,
                 Store = store,
                 OrderMakeTime = DateTime.UtcNow,
@@ -194,7 +194,7 @@ namespace Infrastructure.Services.UserServices
 
             foreach (var shoeId in dto.ShoesIds)
             {
-                var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(shoeId.Shoe.Id);
+                var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(shoeId.Shoe.Id.ToString());
                 if (shoe is not null)
                     foreach (var item in shoe.ShoeCountSizes)
                     {
@@ -205,7 +205,7 @@ namespace Infrastructure.Services.UserServices
                         item.Count -= x.Count;
 
                         newOrder.Shoes.Add(x);
-                        await _unitOfWork.WriteShoesRepository.UpdateAsync(shoe.Id);
+                        _unitOfWork.WriteShoesRepository.Update(shoe);
                         await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
                     }
             }
@@ -228,7 +228,7 @@ namespace Infrastructure.Services.UserServices
 
         public List<GetOrderDto> GetAllOrder(string clientId)
         {
-            var orders = _unitOfWork.ReadOrderRepository.GetWhere(order => order.Client.Id == clientId);
+            var orders = _unitOfWork.ReadOrderRepository.GetWhere(order => order.Client.Id.ToString() == clientId);
             if (orders.Count() == 0)
                 throw new ArgumentNullException();
 
@@ -239,10 +239,10 @@ namespace Infrastructure.Services.UserServices
                 {
                     var orderDto = new GetOrderDto
                     {
-                        Id = order.Id,
-                        StoreId = order.Store.Id,
-                        CourierId = order.Courier.Id,
-                        OrderCommentId = order.OrderComment.Id,
+                        Id = order.Id.ToString(),
+                        StoreId = order.Store.Id.ToString(),
+                        CourierId = order.Courier.Id.ToString(),
+                        OrderCommentId = order.OrderComment.Id.ToString(),
                         Amount = order.Amount,
                         OrderFinishTime = order.OrderFinishTime,
                         OrderMakeTime = order.OrderMakeTime,
@@ -267,11 +267,11 @@ namespace Infrastructure.Services.UserServices
             var orderDto = new GetOrderDto
             {
                 Id = orderId,
-                StoreId = order.Store.Id,
-                CourierId = order.Courier.Id,
-                ClientId = order.Client.Id,
+                StoreId = order.Store.Id.ToString(),
+                CourierId = order.Courier.Id.ToString(),
+                ClientId = order.Client.Id.ToString(),
                 Amount = order.Amount,
-                OrderCommentId = order.OrderComment.Id,
+                OrderCommentId = order.OrderComment.Id.ToString(),
                 OrderFinishTime = order.OrderFinishTime,
                 OrderMakeTime = order.OrderMakeTime,
                 OrderStatus = order.OrderStatus,
@@ -294,7 +294,7 @@ namespace Infrastructure.Services.UserServices
             if (client is null)
                 throw new ArgumentNullException();
 
-            var shoes = _unitOfWork.ReadShoesRepository.GetWhere(shoe => client.ShoppingList.Contains(shoe));
+            var shoes = _unitOfWork.ReadShoesRepository.GetWhere(shoe => client.ClientShoppingList.Contains(shoe));
 
             var shoesDto = new List<GetShoeDto>();
             foreach (var shoe in shoes)
@@ -302,7 +302,7 @@ namespace Infrastructure.Services.UserServices
                 if (shoe is not null)
                     shoesDto.Add(new GetShoeDto
                     {
-                        Id = shoe.Id,
+                        Id = shoe.Id.ToString(),
                         Brend = shoe.Brend,
                         ImageUrls = shoe.ImageUrls,
                         Model = shoe.Model,
@@ -324,7 +324,7 @@ namespace Infrastructure.Services.UserServices
                 throw new ArgumentNullException();
 
 
-            client.ShoppingList.Add(shoe);
+            client.ClientShoppingList.Add(shoe);
 
             var result = _unitOfWork.WriteClientRepository.Update(client);
             await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
@@ -343,7 +343,7 @@ namespace Infrastructure.Services.UserServices
                 throw new ArgumentNullException();
 
 
-            client.ShoppingList.Remove(shoe);
+            client.ClientShoppingList.Remove(shoe);
 
             var result = _unitOfWork.WriteClientRepository.Update(client);
             await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
@@ -364,7 +364,7 @@ namespace Infrastructure.Services.UserServices
 
             var clientDto = new GetClientProfileDto
             {
-                Id = client.Id,
+                Id = client.Id.ToString(),
                 Name = client.Name,
                 Surname = client.Surname,
                 PhoneNumber = client.PhoneNumber,
@@ -383,7 +383,7 @@ namespace Infrastructure.Services.UserServices
 
             foreach (var shoesComment in client.ShoesCommnets)
             {
-                var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(shoesComment.Id);
+                var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(shoesComment.Id.ToString());
                 if (shoe is null)
                     throw new ArgumentNullException();
 
@@ -454,7 +454,7 @@ namespace Infrastructure.Services.UserServices
                     {
                         var shoeComment = new ShoesComment
                         {
-                            Id = Guid.NewGuid().ToString(),
+                            Id = Guid.NewGuid(),
                             Client = client,
                             Shoe = shoe,
                             Content = dto.Content,

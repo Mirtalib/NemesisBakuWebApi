@@ -1,11 +1,6 @@
 ﻿using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Models.Configuration.DataBaseConfiguration
 {
@@ -13,7 +8,11 @@ namespace Application.Models.Configuration.DataBaseConfiguration
     {
         public void Configure(EntityTypeBuilder<Shoe> builder)
         {
-            throw new NotImplementedException();
+
+            builder.HasKey(x => x.Id);
+
+            builder.HasMany(x => x.ClientShoppingList)
+                .WithMany(x => x.ClientShoppingList);
         }
     }
 }

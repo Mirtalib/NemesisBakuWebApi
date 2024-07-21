@@ -8,7 +8,15 @@ namespace Application.Models.Configuration.DataBaseConfiguration
     {
         public void Configure(EntityTypeBuilder<Category> builder)
         {
-            throw new NotImplementedException();
+            builder.HasKey(x => x.Id);
+                
+
+            builder.Property(x => x.Name)
+                .IsRequired();
+
+            builder.HasOne(x => x.Store)
+                .WithMany(x => x.Categorys)
+                .IsRequired();
         }
     }
 }

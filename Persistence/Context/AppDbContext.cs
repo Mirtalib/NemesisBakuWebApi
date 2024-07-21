@@ -32,15 +32,19 @@ namespace Persistence.Context
         
 
 
+        DbSet<Admin>  Admins { get; set; }
         DbSet<Client> Clients { get; set; }
         DbSet<Category>  Categories { get; set; }
-        DbSet<Admin>  Admins { get; set; }
-        DbSet<Store> Stores { get; set; }
-        DbSet<Shoe> Shoes { get; set; }
-        DbSet<Order>  Orders { get; set; }
         DbSet<Courier>  Couriers { get; set; }
-        DbSet<ShoesComment> ShoesComments { get; set; }
+        DbSet<Order>  Orders { get; set; }
         DbSet<OrderComment> OrderComments   { get; set; }
+        DbSet<OrderShoeSizeCount> OrderShoeSizeCounts { get; set; }
+        DbSet<Shoe> Shoes { get; set; }
+        DbSet<ShoesComment> ShoesComments { get; set; }
+        DbSet<Store> Stores { get; set; }
+        
+
+
 
 
     }

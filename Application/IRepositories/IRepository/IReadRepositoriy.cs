@@ -3,7 +3,7 @@ using Domain.Models.Common;
 
 namespace Application.IRepositories.Repository
 {
-    public interface IReadRepository<T> where T : BaseEntity
+    public interface IReadRepository<T> where T : class
     {
         IEnumerable<T?> GetAll(bool tracking = true);
 

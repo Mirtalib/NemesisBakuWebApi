@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Persistence.Repositories.Repository
 {
-    public class WriteRepository<T> : IWriteRepository<T> where T : BaseEntity
+    public class WriteRepository<T> : IWriteRepository<T> where T : class
     {
         private readonly AppDbContext _context;
         public WriteRepository(AppDbContext context)
@@ -48,7 +48,7 @@ namespace Persistence.Repositories.Repository
 
         public async Task<bool> RemoveAsync(string id)
         {
-            var element = await Table.FirstOrDefaultAsync(e => e.Id == id);
+            var element = await Table.FindAsync(id);
             if (element == null)
                 throw new ArgumentNullException("Id is not found");
 
@@ -69,7 +69,8 @@ namespace Persistence.Repositories.Repository
 
         public async Task<bool> UpdateAsync(string Id)
         {
-            var element = await Table.FirstOrDefaultAsync(e => e.Id == Id);
+            var element = await Table.FindAsync(Id);
+
             if (element == null)
                 throw new ArgumentNullException("Id is not found");
 
