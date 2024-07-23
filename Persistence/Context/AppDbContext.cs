@@ -13,24 +13,25 @@ namespace Persistence.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.ApplyConfiguration(new AdminConfiguration());
-            //modelBuilder.ApplyConfiguration(new ClientConfiguration());
-            //modelBuilder.ApplyConfiguration(new CategoryConfiguration());
-            //modelBuilder.ApplyConfiguration(new CourierConfiguration());
-            //modelBuilder.ApplyConfiguration(new OrderConfiguration());
-            //modelBuilder.ApplyConfiguration(new OrderCommentConfiguration());
-            //modelBuilder.ApplyConfiguration(new OrderShoeSizeCountConfiguration());
-            //modelBuilder.ApplyConfiguration(new ShoeConfiguration());
-            //modelBuilder.ApplyConfiguration(new ShoeCountSizeConfiguration());
-            //modelBuilder.ApplyConfiguration(new ShoeCommentConfiguration());
-            //modelBuilder.ApplyConfiguration(new StoreConfiguration());
+            modelBuilder.ApplyConfiguration(new AdminConfiguration());
+            modelBuilder.ApplyConfiguration(new ClientConfiguration());
+            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+            modelBuilder.ApplyConfiguration(new CourierConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderCommentConfiguration());
+            modelBuilder.ApplyConfiguration(new ShoeCountSizeConfiguration());
+            modelBuilder.ApplyConfiguration(new ShoeConfiguration());
+            modelBuilder.ApplyConfiguration(new ShoeCommentConfiguration());
+            modelBuilder.ApplyConfiguration(new ClientFavoriShoesConfiguration());
+            modelBuilder.ApplyConfiguration(new ClientShoeShoppingListConfiguration());
+
+            modelBuilder.ApplyConfiguration(new StoreConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }
 
 
-        
-
+       
 
         DbSet<Admin>  Admins { get; set; }
         DbSet<Client> Clients { get; set; }
@@ -38,10 +39,12 @@ namespace Persistence.Context
         DbSet<Courier>  Couriers { get; set; }
         DbSet<Order>  Orders { get; set; }
         DbSet<OrderComment> OrderComments   { get; set; }
-        DbSet<OrderShoeSizeCount> OrderShoeSizeCounts { get; set; }
+        DbSet<ShoeCountSize> OrderShoeSizeCounts { get; set; }
         DbSet<Shoe> Shoes { get; set; }
         DbSet<ShoesComment> ShoesComments { get; set; }
         DbSet<Store> Stores { get; set; }
+        DbSet<ClientFavoriShoes> ClientFavoriShoes { get; set; }
+        DbSet<ClientShoeShoppingList>  ClientShoeShoppingLists { get; set; }
         
 
 

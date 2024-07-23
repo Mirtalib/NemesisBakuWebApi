@@ -24,6 +24,7 @@ namespace Application.Models.Configuration.DataBaseConfiguration
 
             builder.Property(x => x.Email)
                 .IsRequired();
+                
 
         }
     }

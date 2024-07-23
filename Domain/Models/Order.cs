@@ -17,7 +17,6 @@ namespace Domain.Models
         public Guid StoreId { get; set; }
         public Guid ClientId { get; set; }
         public Guid CourierId { get; set; }
-        public Guid OrderCommentId { get; set; }
         
 
 
@@ -26,6 +25,6 @@ namespace Domain.Models
         public Client Client { get; set; }
         public Courier Courier { get; set; }
         public OrderComment OrderComment { get; set; }
-        public List<OrderShoeSizeCount> Shoes { get; set; }
+        public List<ShoeCountSize> Shoes { get; set; }
     }
 }

@@ -24,10 +24,8 @@ namespace Domain.Models
         public Category Category { get; set; }
         public Store Store { get; set; }
 
-
-        public List<OrderShoeSizeCount> OrderShoes { get; set; }
-        public List<Client> ClientFavoriShoes { get; set; }
-        public List<Client> ClientShoppingList { get; set; }
+        public List<ClientFavoriShoes> ClientFavoriShoes { get; set; }
+        public List<ClientShoeShoppingList> ClientShoppingList { get; set; }
         public List<ShoeCountSize> ShoeCountSizes { get; set; }
         public List<ShoesComment> ShoeComments { get; set; }
     }

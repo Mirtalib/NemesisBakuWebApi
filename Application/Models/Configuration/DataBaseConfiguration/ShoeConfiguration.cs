@@ -11,8 +11,34 @@ namespace Application.Models.Configuration.DataBaseConfiguration
 
             builder.HasKey(x => x.Id);
 
-            builder.HasMany(x => x.ClientShoppingList)
-                .WithMany(x => x.ClientShoppingList);
+
+            builder.Property(x => x.Model)
+                .IsRequired();
+
+            builder.Property(x => x.Brend)
+                .IsRequired();
+
+            builder.Property(x => x.Description)
+                .IsRequired(); 
+
+            builder.Property(x => x.ImageUrls)
+                .IsRequired(); 
+
+            builder.Property(x => x.Color)
+                .IsRequired(); 
+
+            builder.Property(x => x.Price)
+                .IsRequired();
+
+            builder.HasOne(x => x.Category)
+                .WithMany(x => x.Shoes)
+                .HasForeignKey(x => x.CategoryId);
+
+            builder.HasOne(x => x.Store)
+                .WithMany(x => x.Shoes)
+                .HasForeignKey(x => x.StoreId);
+
+
         }
     }
 }

@@ -8,7 +8,25 @@ namespace Application.Models.Configuration.DataBaseConfiguration
     {
         public void Configure(EntityTypeBuilder<Courier> builder)
         {
-            throw new NotImplementedException();
+            builder.HasKey(x => x.Id);
+
+            builder.Property(x => x.Name)
+                .IsRequired();
+
+            builder.Property(x => x.Surname)
+                .IsRequired();
+
+            builder.Property(x => x.PhoneNumber)
+                .IsRequired();
+
+            builder.Property(x => x.BrithDate)
+                .IsRequired();
+
+            builder.Property(x => x.Email)
+                .IsRequired();
+
+            builder.Property(x => x.Rate)
+                .IsRequired();
         }
     }
 }

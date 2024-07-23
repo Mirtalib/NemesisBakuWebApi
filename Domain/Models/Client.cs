@@ -8,7 +8,8 @@
         // Navigation Property
         public List<ShoesComment> ShoesCommnets { get; set; }
         public List<Order> Orders { get; set; }
-        public List<Shoe> ClientFavoriShoes { get; set; } 
-        public List<Shoe> ClientShoppingList { get; set; } 
+        public List<OrderComment> OrderComments { get; set; }
+        public List<ClientFavoriShoes> ClientFavoriShoes { get; set; } 
+        public List<ClientShoeShoppingList> ClientShoppingList { get; set; } 
     }
 }

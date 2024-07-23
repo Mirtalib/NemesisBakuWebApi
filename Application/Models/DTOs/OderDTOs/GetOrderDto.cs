@@ -12,7 +12,7 @@ namespace Application.Models.DTOs.OderDTOs
     {
         public string Id { get; set; }
         public string StoreId { get; set; }
-        public List<OrderShoeSizeCount> ShoesIds { get; set; }
+        public List<ShoeCountSize> ShoesIds { get; set; }
         public string CourierId { get; set; }
         public string ClientId { get; set; }
         public string OrderCommentId { get; set; }

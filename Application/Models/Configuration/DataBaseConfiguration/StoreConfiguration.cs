@@ -9,11 +9,23 @@ namespace Application.Models.Configuration.DataBaseConfiguration
         public void Configure(EntityTypeBuilder<Store> builder)
         {
 
-            builder.Property(x => x.Id)
+            builder.HasKey(x => x.Id);
+
+            builder.Property(x=>x.Name)
                 .IsRequired();
 
+            builder.Property(x=>x.Description)
+                .IsRequired();  
+
+            builder.Property(x=>x.Email)
+                .IsRequired();    
+
+            builder.Property(x=>x.PhoneNumbers)
+                .IsRequired();   
+            
             builder.Property(x=>x.Addresses)
                 .IsRequired();
+
             
 
         }

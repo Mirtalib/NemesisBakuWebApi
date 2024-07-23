@@ -9,6 +9,7 @@ namespace Domain.Models
         public byte Rate { get; set; }
 
         // Foreign Key With
+
         public Guid ShoeId { get; set; }
         public Guid ClientId { get; set; }
 
