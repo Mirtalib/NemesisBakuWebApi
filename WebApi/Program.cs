@@ -20,7 +20,7 @@ builder.Services.AddSwagger();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Default2"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("nikconstr"));
 });
 
 

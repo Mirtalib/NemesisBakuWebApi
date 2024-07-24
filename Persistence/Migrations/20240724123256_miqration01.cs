@@ -6,27 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class init1 : Migration
+    public partial class miqration01 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Admins",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BrithDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Admins", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Clients",
                 columns: table => new
@@ -35,7 +19,7 @@ namespace Persistence.Migrations
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Surname = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BrithDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -52,7 +36,7 @@ namespace Persistence.Migrations
                     Rate = table.Column<byte>(type: "tinyint", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Surname = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BrithDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -67,7 +51,7 @@ namespace Persistence.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumbers = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Addresses = table.Column<string>(type: "nvarchar(max)", nullable: false)
@@ -78,7 +62,7 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Categorys",
+                name: "Categories",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -87,9 +71,9 @@ namespace Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Categorys", x => x.Id);
+                    table.PrimaryKey("PK_Categories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Categorys_Stores_StoreId",
+                        name: "FK_Categories_Stores_StoreId",
                         column: x => x.StoreId,
                         principalTable: "Stores",
                         principalColumn: "Id",
@@ -150,17 +134,16 @@ namespace Persistence.Migrations
                 {
                     table.PrimaryKey("PK_Shoes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Shoes_Categorys_CategoryId",
+                        name: "FK_Shoes_Categories_CategoryId",
                         column: x => x.CategoryId,
-                        principalTable: "Categorys",
+                        principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Shoes_Stores_StoreId",
                         column: x => x.StoreId,
                         principalTable: "Stores",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -193,12 +176,11 @@ namespace Persistence.Migrations
                         name: "FK_OrderComments_Orders_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Orders",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClientFavoriShoes",
+                name: "ClientFavoriteShoes",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -207,15 +189,15 @@ namespace Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClientFavoriShoes", x => x.Id);
+                    table.PrimaryKey("PK_ClientFavoriteShoes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ClientFavoriShoes_Clients_ClientId",
+                        name: "FK_ClientFavoriteShoes_Clients_ClientId",
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ClientFavoriShoes_Shoes_ShoeId",
+                        name: "FK_ClientFavoriteShoes_Shoes_ShoeId",
                         column: x => x.ShoeId,
                         principalTable: "Shoes",
                         principalColumn: "Id",
@@ -270,8 +252,7 @@ namespace Persistence.Migrations
                         name: "FK_OrderShoeSizeCounts_Shoes_ShoeId",
                         column: x => x.ShoeId,
                         principalTable: "Shoes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -302,19 +283,25 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Categorys_StoreId",
-                table: "Categorys",
+                name: "IX_Categories_StoreId",
+                table: "Categories",
                 column: "StoreId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClientFavoriShoes_ClientId",
-                table: "ClientFavoriShoes",
+                name: "IX_ClientFavoriteShoes_ClientId",
+                table: "ClientFavoriteShoes",
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClientFavoriShoes_ShoeId",
-                table: "ClientFavoriShoes",
+                name: "IX_ClientFavoriteShoes_ShoeId",
+                table: "ClientFavoriteShoes",
                 column: "ShoeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Clients_Email",
+                table: "Clients",
+                column: "Email",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ClientShoeShoppingLists_ClientId",
@@ -325,6 +312,12 @@ namespace Persistence.Migrations
                 name: "IX_ClientShoeShoppingLists_ShoeId",
                 table: "ClientShoeShoppingLists",
                 column: "ShoeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Couriers_Email",
+                table: "Couriers",
+                column: "Email",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderComments_ClientId",
@@ -386,16 +379,19 @@ namespace Persistence.Migrations
                 name: "IX_ShoesComments_ShoeId",
                 table: "ShoesComments",
                 column: "ShoeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Stores_Email",
+                table: "Stores",
+                column: "Email",
+                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Admins");
-
-            migrationBuilder.DropTable(
-                name: "ClientFavoriShoes");
+                name: "ClientFavoriteShoes");
 
             migrationBuilder.DropTable(
                 name: "ClientShoeShoppingLists");
@@ -422,7 +418,7 @@ namespace Persistence.Migrations
                 name: "Couriers");
 
             migrationBuilder.DropTable(
-                name: "Categorys");
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Stores");
