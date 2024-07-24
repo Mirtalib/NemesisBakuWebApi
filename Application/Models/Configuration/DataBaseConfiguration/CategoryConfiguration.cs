@@ -16,6 +16,7 @@ namespace Application.Models.Configuration.DataBaseConfiguration
 
             builder.HasOne(x => x.Store)
                 .WithMany(x => x.Categorys)
+                .HasForeignKey(x => x.StoreId)
                 .IsRequired();
         }
     }

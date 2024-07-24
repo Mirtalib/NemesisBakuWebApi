@@ -92,6 +92,10 @@ namespace Infrastructure.Services.UserServices
                 Description = shoe.Description,
             };
 
+            foreach (var countSizes in shoe.ShoeCountSizes)
+                shoeDto.ShoeCountSizeIds.Add(countSizes.Id.ToString());
+
+
             return shoeDto;
         }
 
