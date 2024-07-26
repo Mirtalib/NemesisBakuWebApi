@@ -7,6 +7,7 @@ using Domain.Models;
 using Infrastructure.Services.UserServices;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
+using System.ComponentModel.Design;
 
 namespace WebApi.Controllers
 {
@@ -41,6 +42,42 @@ namespace WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("getShoeComment")]
+        public async Task<ActionResult<GetShoeCommentDto>> GetShoeComment(string commentId)
+        {
+            try
+            {
+                var result = await _clientService.GetShoeComment(commentId);
+                if (result is not null)
+                    return Ok(result);
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured on [GET] GetShoeComment Error -> {ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpGet("getAllShoeComment")]
+        public ActionResult<List<GetShoeCommentDto>> GetAllShoeComment(string clientId)
+        {
+            try
+            {
+                var result =  _clientService.GetAllShoeComment(clientId);
+                if (result is not null)
+                    return Ok(result);
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured on [GET] GetAllShoeComment Error -> {ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         [HttpDelete("removeShoeComment")]
         public async Task<ActionResult<bool>> RemoveShoeComment(string shoeCommentId)

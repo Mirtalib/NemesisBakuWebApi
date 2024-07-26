@@ -502,6 +502,47 @@ namespace Infrastructure.Services.UserServices
             return result;
         }
 
+        public async Task<GetShoeCommentDto> GetShoeComment(string commentId)
+        {
+            var shoeComment = await _unitOfWork.ReadShoesCommentRepository.GetAsync(commentId);
+            if (shoeComment is null)
+                throw new ArgumentNullException();
+
+            var shoeCommentDto = new GetShoeCommentDto
+            {
+                Id = shoeComment.Id.ToString(),
+                ClientId = shoeComment.ClientId.ToString(),
+                ShoesId = shoeComment.ShoeId.ToString(),
+                Content = shoeComment.Content,
+                Rate = shoeComment.Rate,
+            };
+
+            return shoeCommentDto;
+        }
+
+        public List<GetShoeCommentDto> GetAllShoeComment(string clientId)
+        {
+            var comments = _unitOfWork.ReadShoesCommentRepository.GetWhere(client => client.Id.ToString() == clientId);
+            if (comments.Count() == 0)
+                throw new ArgumentNullException();
+
+            var shoeCommnetDtos  = new List<GetShoeCommentDto>();
+            foreach (var comment in comments)
+                if (comment is not null)
+                    shoeCommnetDtos.Add(new GetShoeCommentDto
+                    {
+                        Id = comment.Id.ToString(),
+                        ClientId = comment.ClientId.ToString(),
+                        ShoesId = comment.ShoeId.ToString(),
+                        Content = comment.Content,
+                        Rate = comment.Rate,
+                    });
+            return shoeCommnetDtos;
+        }
+
+
+
+
         #endregion
     }
 }

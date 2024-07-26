@@ -44,7 +44,6 @@ namespace Application.Services.IUserServices
 
         Task<List<GetShoeDto>> GetShoppingList(string clientId);
 
-
         Task<bool> AddToShoeShoppingList(AddShoppingListDto dto);
 
         Task<bool> RemoveToShoeShoppingList(RemoveShoppingListDto dto);
@@ -53,16 +52,21 @@ namespace Application.Services.IUserServices
 
         #region Profile
 
-
         Task<GetClientProfileDto> GetProfile(string clientId);
 
         Task<bool> RemoveProfile(string clientId);
 
         Task<bool> UpdateProfile(UpdateClientProfileDto dto);
+
         #endregion
 
 
         #region Shoe Comment
+
+        public Task<GetShoeCommentDto> GetShoeComment(string commentId);
+
+        public List<GetShoeCommentDto> GetAllShoeComment(string clientId);
+
         public Task<bool> CreateShoeComment(CreateShoeCommentDto dto);
 
         public Task<bool> RemoveShoeComment(string shoeCommentId);

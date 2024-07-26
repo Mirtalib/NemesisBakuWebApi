@@ -5,6 +5,7 @@ using Application.Models.DTOs.ShoesCommentDTOs;
 using Application.Models.DTOs.ShoesDTOs;
 using Application.Models.DTOs.StoreDTOs;
 using Application.Services.IUserServices;
+using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
@@ -369,7 +370,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                var result = await _storeService.GetOrder(storeId);
+                var result = await _storeService.GetAllOrder(storeId);
                 if (result is not null)
                     return Ok(result);
                 return BadRequest();
@@ -380,6 +381,9 @@ namespace WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+
+
 
         [HttpGet("getActiveOrder")]
         public async Task<ActionResult<List<GetOrderDto>>> GetActiveOrder(string storeId)
@@ -499,7 +503,7 @@ namespace WebApi.Controllers
         #region Shoe Comment
 
 
-        [HttpGet("GetAllShoeComment")]
+        [HttpGet("getAllShoeComment")]
         public async Task<ActionResult<List<GetShoeCommentDto>>> GetAllShoeComment(string shoeId)
         {
             try
@@ -515,6 +519,43 @@ namespace WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+
+        [HttpGet("getShoeComment")]
+        public async Task<ActionResult<GetShoeCommentDto>> GetShoeComment(string commentId)
+        {
+            try
+            {
+                var result = await _storeService.GetShoeComment(commentId);
+                if (result is not null)
+                    return Ok(result);
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured on [GET] GetShoeComment Error ->{ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpDelete("removeShoeComment")]
+        public async Task<ActionResult<bool>> RemoveShoeComment(string commentId)
+        {
+            try
+            {
+                var result = await _storeService.RemoveShoeComment(commentId);
+                if (result)
+                    return Ok(result);
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured on [DELETE] RemoveShoeComment Error ->{ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         #endregion
     }
