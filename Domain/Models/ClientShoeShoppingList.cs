@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Models
 {
     public class ClientShoeShoppingList
     {
+        [Key]
         public Guid Id { get; set; }
 
         // Foreign Key With

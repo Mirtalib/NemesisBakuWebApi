@@ -12,7 +12,7 @@ namespace Application.Models.DTOs.ShoesDTOs
         public float Price { get; set; }
         public byte Count { get; set; }
         public byte Size { get; set; }
-        public List<ShoeCountSize> ShoeCountSizes { get; set; }
+        public List<string> ShoeCountSizesIds { get; set; }
         public string StoreId { get; set; }
         public List<string> ImageUrls { get; set; }
     }

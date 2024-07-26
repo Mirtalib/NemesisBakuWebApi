@@ -1,6 +1,4 @@
-﻿using Domain.Models;
-
-namespace Application.Models.DTOs.ShoesDTOs
+﻿namespace Application.Models.DTOs.ShoesDTOs
 {
     public class GetShoeInfoDto
     {

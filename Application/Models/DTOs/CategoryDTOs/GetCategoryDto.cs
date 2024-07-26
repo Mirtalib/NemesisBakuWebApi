@@ -1,7 +1,4 @@
-﻿using Application.Models.DTOs.ShoesDTOs;
-using Domain.Models;
-
-namespace Application.Models.DTOs.CategoryDTOs
+﻿namespace Application.Models.DTOs.CategoryDTOs
 {
     public class GetCategoryDto
     {

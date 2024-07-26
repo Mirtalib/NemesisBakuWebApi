@@ -2,7 +2,6 @@
 using Application.Models.DTOs.CourierDTOs;
 using Application.Models.DTOs.OderDTOs;
 using Application.Services.IUserServices;
-using Domain.Models;
 
 namespace Infrastructure.Services.UserServices
 {

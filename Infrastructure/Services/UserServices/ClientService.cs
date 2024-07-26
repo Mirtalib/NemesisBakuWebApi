@@ -5,7 +5,6 @@ using Application.Models.DTOs.ShoesCommentDTOs;
 using Application.Models.DTOs.ShoesDTOs;
 using Application.Services.IUserServices;
 using Domain.Models;
-using System.Drawing;
 
 namespace Infrastructure.Services.UserServices
 {
@@ -182,55 +181,57 @@ namespace Infrastructure.Services.UserServices
 
         public async Task<bool> MakeOrder(MakeOrderDto dto)
         {
-            var store = await _unitOfWork.ReadStoreRepository.GetAsync(dto.StoreId);
-            if (store is null)
-                throw new ArgumentNullException();
-            var client = await _unitOfWork.ReadClientRepository.GetAsync(dto.ClientId);
-            if (client is null)
-                throw new ArgumentNullException();
+            //var store = await _unitOfWork.ReadStoreRepository.GetAsync(dto.StoreId);
+            //if (store is null)
+            //    throw new ArgumentNullException();
+            //var client = await _unitOfWork.ReadClientRepository.GetAsync(dto.ClientId);
+            //if (client is null)
+            //    throw new ArgumentNullException();
             
 
 
-            var newOrder = new Order
-            {
-                Id = Guid.NewGuid(),
-                // Client = dto.ClientId,
-                Store = store,
-                OrderMakeTime = DateTime.UtcNow,
-                OrderStatus = Domain.Models.Enum.OrderStatus.Waiting,
-            };
+            //var newOrder = new Order
+            //{
+            //    Id = Guid.NewGuid(),
+            //    // Client = dto.ClientId,
+            //    Store = store,
+            //    OrderMakeTime = DateTime.UtcNow,
+            //    OrderStatus = Domain.Models.Enum.OrderStatus.Waiting,
+            //};
 
-            foreach (var shoeId in dto.ShoesIds)
-            {
-                var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(shoeId.Shoe.Id.ToString());
-                if (shoe is not null)
-                    foreach (var item in shoe.ShoeCountSizes)
-                    {
-                        var x = dto.ShoesIds.FirstOrDefault(x => x.Size == item.Size && x.Count - item.Count < 0);
-                        if (x == default)
-                            throw new ArgumentException();
+            //foreach (var shoeId in dto.ShoesIds)
+            //{
+            //    var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(shoeId.Shoe.Id.ToString());
+            //    if (shoe is not null)
+            //        foreach (var item in shoe.ShoeCountSizes)
+            //        {
+            //            var x = dto.ShoesIds.FirstOrDefault(x => x.Size == item.Size && x.Count - item.Count < 0);
+            //            if (x == default)
+            //                throw new ArgumentException();
 
-                        item.Count -= x.Count;
+            //            item.Count -= x.Count;
 
-                        newOrder.Shoes.Add(x);
-                        _unitOfWork.WriteShoesRepository.Update(shoe);
-                        await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
-                    }
-            }
+            //            newOrder.Shoes.Add(x);
+            //            _unitOfWork.WriteShoesRepository.Update(shoe);
+            //            await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
+            //        }
+            //}
 
-            store.Orders.Add(newOrder);
-            client.Orders.Add(newOrder);
+            //store.Orders.Add(newOrder);
+            //client.Orders.Add(newOrder);
 
-            _unitOfWork.WriteStoreRepository.Update(store);
-            await _unitOfWork.WriteStoreRepository.SaveChangesAsync();
+            //_unitOfWork.WriteStoreRepository.Update(store);
+            //await _unitOfWork.WriteStoreRepository.SaveChangesAsync();
 
-            _unitOfWork.WriteClientRepository.Update(client);
-            await _unitOfWork.WriteClientRepository.SaveChangesAsync();
+            //_unitOfWork.WriteClientRepository.Update(client);
+            //await _unitOfWork.WriteClientRepository.SaveChangesAsync();
 
-            var result =  await _unitOfWork.WriteOrderRepository.AddAsync(newOrder);
-            await _unitOfWork.WriteOrderRepository.SaveChangesAsync();
+            //var result =  await _unitOfWork.WriteOrderRepository.AddAsync(newOrder);
+            //await _unitOfWork.WriteOrderRepository.SaveChangesAsync();
 
-            return result;
+            //return result;
+
+            throw new NotImplementedException();
         }
 
 
