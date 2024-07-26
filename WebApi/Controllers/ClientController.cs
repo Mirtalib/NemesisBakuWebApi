@@ -70,7 +70,10 @@ namespace WebApi.Controllers
 
             try
             {
-                return Ok(await _clientService.GetFavoriteList(clientId));
+                var result = await  _clientService.GetFavoriteList(clientId);
+                if (result is not null)
+                    return Ok(result);
+                return BadRequest();
             }
             catch (Exception ex)
             {
@@ -85,7 +88,10 @@ namespace WebApi.Controllers
         {
             try
             {
-                return Ok(await _clientService.AddToShoeFavoriteList(dto));
+                var result = await _clientService.AddToShoeFavoriteList(dto);
+                if (result)
+                    return Ok(result);
+                return BadRequest();
             }
             catch (Exception ex)
             {
@@ -100,7 +106,10 @@ namespace WebApi.Controllers
         {
             try
             {
-                return Ok(await _clientService.RemoveToShoeFavoriteList(dto));
+                var result = await _clientService.RemoveToShoeFavoriteList(dto);
+                if (result)
+                    return Ok(result);
+                return BadRequest();
             }
             catch (Exception ex)
             {
@@ -121,7 +130,10 @@ namespace WebApi.Controllers
         {
             try
             {
-                return Ok(await _clientService.GetShoppingList(clientId));
+                var result = await _clientService.GetShoppingList(clientId);
+                if (result is not null)
+                    return Ok(result);
+                return BadRequest();
             }
             catch (Exception ex)
             {
@@ -136,7 +148,10 @@ namespace WebApi.Controllers
         {
             try
             {
-                return Ok(await _clientService.AddToShoeShoppingList(dto));
+                var result = await _clientService.AddToShoeShoppingList(dto);
+                if (result)
+                    return Ok(result);
+                return BadRequest();
             }
             catch (Exception ex)
             {
@@ -151,7 +166,10 @@ namespace WebApi.Controllers
         {
             try
             {
-                return Ok(await _clientService.RemoveToShoeShoppingList(dto));
+                var result = await _clientService.RemoveToShoeShoppingList(dto);
+                if (result)
+                    return Ok(result);
+                return BadRequest();
             }
             catch (Exception ex)
             {
@@ -228,7 +246,10 @@ namespace WebApi.Controllers
         {
             try
             {
-                return Ok(await _clientService.GetAllShoes(storeId));
+                var result = await _clientService.GetAllShoes(storeId);
+                if (result is not null)
+                    return Ok(result);
+                return BadRequest();
             }
             catch (Exception ex)
             {
@@ -243,7 +264,10 @@ namespace WebApi.Controllers
         {
             try
             {
-                return Ok(await _clientService.GetShoeByCategoryId(categoryId));
+                var result = await _clientService.GetShoeByCategoryId(categoryId);
+                if (result is not null)
+                    return Ok(result);
+                return BadRequest();
             }
             catch (Exception ex)
             {
@@ -258,7 +282,10 @@ namespace WebApi.Controllers
         {
             try
             {
-                return Ok(await _clientService.GetShoeId(shoeId));
+                var result = await _clientService.GetShoeId(shoeId);
+                if (result is not null)
+                    return Ok(result);
+                return BadRequest();
             }
             catch (Exception ex)
             {
@@ -279,7 +306,10 @@ namespace WebApi.Controllers
         {
             try
             {
-                return Ok(await _clientService.MakeOrder(dto));
+                var result = await _clientService.MakeOrder(dto);
+                if (result)
+                    return Ok(result);
+                return BadRequest();
             }
             catch (Exception ex)
             {
@@ -294,7 +324,10 @@ namespace WebApi.Controllers
         {
             try
             {
-                return Ok(_clientService.GetAllOrder(clientId));
+                var result = _clientService.GetAllOrder(clientId);
+                if (result is not  null)
+                    return Ok(result);
+                return BadRequest();
             }
             catch (Exception ex)
             {
@@ -309,7 +342,10 @@ namespace WebApi.Controllers
         {
             try
             {
-                return Ok(await _clientService.GetOrder(orderId));
+                var result = await _clientService.GetOrder(orderId);
+                if (result is not null)
+                    return Ok(result);
+                return BadRequest();
             }
             catch (Exception ex)
             {
