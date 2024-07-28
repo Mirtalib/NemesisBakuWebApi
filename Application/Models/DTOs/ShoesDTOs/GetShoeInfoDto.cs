@@ -9,6 +9,8 @@
         public string CategoryId { get; set; }
         public string Color { get; set; }
         public float Price { get; set; }
+        public ushort FavoriSize { get; set; }
+        public ushort ShoppingBoxSize { get; set; }
         public List<string> ShoeCountSizeIds { get; set; }
         public List<string> ImageUrls { get; set; }
     }

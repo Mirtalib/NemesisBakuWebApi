@@ -7,6 +7,9 @@ using Application.IRepositories.IShoesCommentRepository;
 using Application.IRepositories.IShoesRepository;
 using Application.IRepositories.IStoreRepository;
 using Application.IRepositories.IOrderCommentRepository;
+using Application.IRepositories.IClientFavoriShoesRepository;
+using Application.IRepositories.IShoeCountSizeRepository;
+using Application.IRepositories.IClientShoeShoppingListRepository;
 
 namespace Application.IRepositories
 {
@@ -39,5 +42,17 @@ namespace Application.IRepositories
 
         IReadOrderCommentRepository ReadOrderCommentRepository { get; }
         IWriteOrderCommentRepository WriteOrderCommentRepository { get; }
+
+
+        IReadClientFavoriShoesRepository ReadClientFavoriShoesRepository { get; }
+        IWriteClientFavoriShoesRepository WriteClientFavoriShoesRepository { get; }
+
+        IReadShoeCountSizeRepository ReadShoeCountSizeRepository { get; }
+        IReadShoeCountSizeRepository WriteShoeCountSizeRepository { get; }
+
+        IReadClientShoeShoppingListRepository ReadClientShoeShoppingListRepository { get;}
+        IWriteClientShoeShoppingListRepository WriteClientShoeShoppingListRepository { get;}
+
+
     }
 }

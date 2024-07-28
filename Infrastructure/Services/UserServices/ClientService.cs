@@ -107,71 +107,65 @@ namespace Infrastructure.Services.UserServices
 
         public async Task<List<GetShoeDto>> GetFavoriteList(string clientId)
         {
-            //var client = await _unitOfWork.ReadClientRepository.GetAsync(clientId);
-            //if (client is null)
-            //    throw new ArgumentNullException();
 
-            //var shoes = _unitOfWork.ReadShoesRepository.GetWhere(shoe => client.ClientFavoriShoes.Contains(shoe));
+            var favorishoes = _unitOfWork.ReadClientFavoriShoesRepository.GetWhere(shoe => shoe.ClientId.ToString() == clientId);
+            if (favorishoes is null)
+                throw new ArgumentNullException();
 
 
-            //var shoesDto = new List<GetShoeDto>();
-            //foreach (var shoe in shoes)
-            //{
-            //    if (shoe is not null)
-            //        shoesDto.Add(new GetShoeDto
-            //        {
-            //            Id = shoe.Id.ToString(),
-            //            Brend = shoe.Brend,
-            //            ImageUrls = shoe.ImageUrls,
-            //            Model = shoe.Model,
-            //            Price = shoe.Price,
-            //        });
-            //}
+            var shoesDto = new List<GetShoeDto>();
+            foreach (var favorishoe in favorishoes)
+                if (favorishoe is not null)
+                {
+                    var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(favorishoe.ShoeId.ToString());
+                    if (shoe is not null)
+                        shoesDto.Add(new GetShoeDto
+                        {
+                            Id = shoe.Id.ToString(),
+                            Brend = shoe.Brend,
+                            ImageUrls = shoe.ImageUrls,
+                            Model = shoe.Model,
+                            Price = shoe.Price,
+                        });
+                }
 
-            //return shoesDto;
-
-            throw new NotImplementedException();
+            return shoesDto;
         }
 
 
         public async Task<bool> AddToShoeFavoriteList(AddFavoriteListDto dto)
         {
-            //var client = await _unitOfWork.ReadClientRepository.GetAsync(dto.ClientId);
-            //if (client is null)
-            //    throw new ArgumentNullException();
-            //var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(dto.ShoeId);
-            //if (shoe is null)
-            //    throw new ArgumentNullException();
+            var client = await _unitOfWork.ReadClientRepository.GetAsync(dto.ClientId);
+            if (client is null)
+                throw new ArgumentNullException();
+            var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(dto.ShoeId);
+            if (shoe is null)
+                throw new ArgumentNullException();
+
+            var favorishoe = new ClientFavoriShoes
+            {
+                Id = Guid.NewGuid(),
+                ClientId = client.Id,
+                ShoeId = shoe.Id,
+            };
 
 
-            //client.ClientFavoriShoes.Add(shoe);
-
-            //var result = _unitOfWork.WriteClientRepository.Update(client);
-            //await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
-
-            //return result;
-            throw new NotImplementedException();
+            var result = await _unitOfWork.WriteClientFavoriShoesRepository.AddAsync(favorishoe);
+            await _unitOfWork.WriteClientFavoriShoesRepository.SaveChangesAsync();
+            return result;
         }
 
 
-        public async Task<bool> RemoveToShoeFavoriteList(RemoveFavoriteListDto dto)
+        public async Task<bool> RemoveToShoeFavoriteList(string favoriShoeId)
         {
-            //var client = await _unitOfWork.ReadClientRepository.GetAsync(dto.ClientId);
-            //if (client is null)
-            //    throw new ArgumentNullException();
-            //var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(dto.ShoeId);
-            //if (shoe is null)
-            //    throw new ArgumentNullException();
+            var favorishoe = await _unitOfWork.ReadClientFavoriShoesRepository.GetAsync(favoriShoeId);
+            if (favorishoe is null)
+                throw new ArgumentNullException();
 
 
-            //client.ClientFavoriShoes.Remove(shoe);
-
-            //var result = _unitOfWork.WriteClientRepository.Update(client);
-            //await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
-
-            //return result;
-            throw new NotImplementedException();
-
+            var result = _unitOfWork.WriteClientFavoriShoesRepository.Remove(favorishoe);
+            await _unitOfWork.WriteClientFavoriShoesRepository.SaveChangesAsync();
+            return result;
         }
 
         #endregion
@@ -299,68 +293,65 @@ namespace Infrastructure.Services.UserServices
 
         public async Task<List<GetShoeDto>> GetShoppingList(string clientId)
         {
-            //var client = await _unitOfWork.ReadClientRepository.GetAsync(clientId);
-            //if (client is null)
-            //    throw new ArgumentNullException();
+            var shoppingLists = _unitOfWork.ReadClientShoeShoppingListRepository.GetWhere(shoe => shoe.ClientId.ToString() == clientId);
+            if (shoppingLists is null)
+                throw new ArgumentNullException();
 
-            //var shoes = _unitOfWork.ReadShoesRepository.GetWhere(shoe => client.ClientShoppingList.Contains(shoe));
 
-            //var shoesDto = new List<GetShoeDto>();
-            //foreach (var shoe in shoes)
-            //{
-            //    if (shoe is not null)
-            //        shoesDto.Add(new GetShoeDto
-            //        {
-            //            Id = shoe.Id.ToString(),
-            //            Brend = shoe.Brend,
-            //            ImageUrls = shoe.ImageUrls,
-            //            Model = shoe.Model,
-            //            Price = shoe.Price,
-            //        });
-            //}
+            var shoesDto = new List<GetShoeDto>();
+            foreach (var shoppingShoe in shoppingLists)
+                if (shoppingShoe is not null)
+                {
+                    var shoe =await _unitOfWork.ReadShoesRepository.GetAsync(shoppingShoe.ShoeId.ToString());
+                    if (shoe is not null)
+                        shoesDto.Add(new GetShoeDto
+                        {
+                            Id = shoe.Id.ToString(),
+                            Brend = shoe.Brend,
+                            ImageUrls = shoe.ImageUrls,
+                            Model = shoe.Model,
+                            Price = shoe.Price,
+                        });
+                }
 
-            //return shoesDto;
-            throw new NotImplementedException();
+            return shoesDto;
         }
 
 
         public async Task<bool> AddToShoeShoppingList(AddShoppingListDto dto)
         {
-            //var client = await _unitOfWork.ReadClientRepository.GetAsync(dto.ClientId);
-            //if (client is null)
-            //    throw new ArgumentNullException();
-            //var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(dto.ShoeId);
-            //if (shoe is null)
-            //    throw new ArgumentNullException();
+            var client = await _unitOfWork.ReadClientRepository.GetAsync(dto.ClientId);
+            if (client is null)
+                throw new ArgumentNullException();
+            var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(dto.ShoeId);
+            if (shoe is null)
+                throw new ArgumentNullException();
 
 
-            //client.ClientShoppingList.Add(shoe);
+            var shoppingList = new ClientShoeShoppingList
+            {
+                Id = Guid.NewGuid(),
+                ShoeId = shoe.Id,
+                ClientId = client.Id,
+            };
 
-            //var result = _unitOfWork.WriteClientRepository.Update(client);
-            //await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
-
-            //return result;
-            throw new NotImplementedException();
+            var result = await _unitOfWork.WriteClientShoeShoppingListRepository.AddAsync(shoppingList);
+            await _unitOfWork.WriteClientShoeShoppingListRepository.SaveChangesAsync();
+            
+            return result;
         }
 
 
-        public async Task<bool> RemoveToShoeShoppingList(RemoveShoppingListDto dto)
+        public async Task<bool> RemoveToShoeShoppingList(string shoppingShoeId)
         {
-            //var client = await _unitOfWork.ReadClientRepository.GetAsync(dto.ClientId);
-            //if (client is null)
-            //    throw new ArgumentNullException();
-            //var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(dto.ShoeId);
-            //if (shoe is null)
-            //    throw new ArgumentNullException();
+            var shoppingShoe = await _unitOfWork.ReadClientShoeShoppingListRepository.GetAsync(shoppingShoeId);
+            if (shoppingShoe is null)
+                throw new ArgumentNullException();
 
 
-            //client.ClientShoppingList.Remove(shoe);
-
-            //var result = _unitOfWork.WriteClientRepository.Update(client);
-            //await _unitOfWork.WriteShoesRepository.SaveChangesAsync();
-
-            //return result;
-            throw new NotImplementedException();
+            var result = _unitOfWork.WriteClientShoeShoppingListRepository.Remove(shoppingShoe);
+            await _unitOfWork.WriteClientShoeShoppingListRepository.SaveChangesAsync();
+            return result;
         }
 
         #endregion

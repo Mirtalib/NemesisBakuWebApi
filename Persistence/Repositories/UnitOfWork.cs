@@ -1,10 +1,13 @@
 ﻿using Application.IRepositories;
 using Application.IRepositories.IAdminRepository;
 using Application.IRepositories.ICategoryRepository;
+using Application.IRepositories.IClientFavoriShoesRepository;
 using Application.IRepositories.IClientRepository;
+using Application.IRepositories.IClientShoeShoppingListRepository;
 using Application.IRepositories.ICourierRepository;
 using Application.IRepositories.IOrderCommentRepository;
 using Application.IRepositories.IOrderRepository;
+using Application.IRepositories.IShoeCountSizeRepository;
 using Application.IRepositories.IShoesCommentRepository;
 using Application.IRepositories.IShoesRepository;
 using Application.IRepositories.IStoreRepository;
@@ -13,7 +16,7 @@ namespace Persistence.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {
-        public UnitOfWork(IReadAdminRepository readAdminRepository, IWriteAdminRepository writeAdminRepository, IReadClientRepository readClientRepository, IWriteClientRepository writeClientRepository, IReadCourierRepository readCourierRepository, IWriteCourierRepository writeCourierRepository, IReadShoesRepository readShoesRepository, IWriteShoesRepository writeShoesRepository, IReadShoesCommentRepository readShoesCommentRepository, IWriteShoesCommentRepository writeShoesCommentRepository, IReadStoreRepository readStoreRepository, IWriteStoreRepository writeStoreRepository, IReadOrderRepository readOrderRepository, IWriteOrderRepository writeOrderRepository, IReadCategoryRepository readCategoryRepository, IWriteCategoryRepository writeCategoryRepository, IReadOrderCommentRepository readOrderCommentRepository, IWriteOrderCommentRepository writeOrderCommentRepository)
+        public UnitOfWork(IReadAdminRepository readAdminRepository, IWriteAdminRepository writeAdminRepository, IReadClientRepository readClientRepository, IWriteClientRepository writeClientRepository, IReadCourierRepository readCourierRepository, IWriteCourierRepository writeCourierRepository, IReadShoesRepository readShoesRepository, IWriteShoesRepository writeShoesRepository, IReadShoesCommentRepository readShoesCommentRepository, IWriteShoesCommentRepository writeShoesCommentRepository, IReadStoreRepository readStoreRepository, IWriteStoreRepository writeStoreRepository, IReadOrderRepository readOrderRepository, IWriteOrderRepository writeOrderRepository, IReadCategoryRepository readCategoryRepository, IWriteCategoryRepository writeCategoryRepository, IReadOrderCommentRepository readOrderCommentRepository, IWriteOrderCommentRepository writeOrderCommentRepository, IReadClientFavoriShoesRepository readClientFavoriShoesRepository, IWriteClientFavoriShoesRepository writeClientFavoriShoesRepository, IReadShoeCountSizeRepository readShoeCountSizeRepository, IReadShoeCountSizeRepository writeShoeCountSizeRepository, IReadClientShoeShoppingListRepository readClientShoeShoppingListRepository, IWriteClientShoeShoppingListRepository writeClientShoeShoppingListRepository)
         {
             ReadAdminRepository = readAdminRepository;
             WriteAdminRepository = writeAdminRepository;
@@ -33,6 +36,12 @@ namespace Persistence.Repositories
             WriteCategoryRepository = writeCategoryRepository;
             ReadOrderCommentRepository = readOrderCommentRepository;
             WriteOrderCommentRepository = writeOrderCommentRepository;
+            ReadClientFavoriShoesRepository = readClientFavoriShoesRepository;
+            WriteClientFavoriShoesRepository = writeClientFavoriShoesRepository;
+            ReadShoeCountSizeRepository = readShoeCountSizeRepository;
+            WriteShoeCountSizeRepository = writeShoeCountSizeRepository;
+            ReadClientShoeShoppingListRepository = readClientShoeShoppingListRepository;
+            WriteClientShoeShoppingListRepository = writeClientShoeShoppingListRepository;
         }
 
         public IReadAdminRepository ReadAdminRepository { get; }
@@ -70,5 +79,17 @@ namespace Persistence.Repositories
         public IReadOrderCommentRepository ReadOrderCommentRepository { get; }
 
         public IWriteOrderCommentRepository WriteOrderCommentRepository { get; }
+
+        public IReadClientFavoriShoesRepository ReadClientFavoriShoesRepository { get; }
+
+        public IWriteClientFavoriShoesRepository WriteClientFavoriShoesRepository { get; }
+
+        public IReadShoeCountSizeRepository ReadShoeCountSizeRepository  { get; }
+
+        public IReadShoeCountSizeRepository WriteShoeCountSizeRepository { get; }
+
+        public IReadClientShoeShoppingListRepository ReadClientShoeShoppingListRepository { get; }
+
+        public IWriteClientShoeShoppingListRepository WriteClientShoeShoppingListRepository { get; }
     }
 }

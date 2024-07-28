@@ -139,11 +139,11 @@ namespace WebApi.Controllers
 
 
         [HttpDelete("removeToShoeFavoriteList")]
-        public async Task<ActionResult<bool>> RemoveToShoeFavoriteList(RemoveFavoriteListDto dto)
+        public async Task<ActionResult<bool>> RemoveToShoeFavoriteList(string favoriShoeId)
         {
             try
             {
-                var result = await _clientService.RemoveToShoeFavoriteList(dto);
+                var result = await _clientService.RemoveToShoeFavoriteList(favoriShoeId);
                 if (result)
                     return Ok(result);
                 return BadRequest();
@@ -199,11 +199,11 @@ namespace WebApi.Controllers
 
 
         [HttpDelete("removeToShoeShoppingList")]
-        public async Task<ActionResult<bool>> RemoveToShoeShoppingList(RemoveShoppingListDto dto)
+        public async Task<ActionResult<bool>> RemoveToShoeShoppingList(string shoppingShoeId)
         {
             try
             {
-                var result = await _clientService.RemoveToShoeShoppingList(dto);
+                var result = await _clientService.RemoveToShoeShoppingList(shoppingShoeId);
                 if (result)
                     return Ok(result);
                 return BadRequest();

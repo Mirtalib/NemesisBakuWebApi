@@ -25,7 +25,7 @@ namespace Application.Services.IUserServices
 
         Task<bool> AddToShoeFavoriteList(AddFavoriteListDto dto);
 
-        Task<bool> RemoveToShoeFavoriteList(RemoveFavoriteListDto dto);
+        Task<bool> RemoveToShoeFavoriteList(string favoriShoeId);
 
         #endregion
 
@@ -46,7 +46,7 @@ namespace Application.Services.IUserServices
 
         Task<bool> AddToShoeShoppingList(AddShoppingListDto dto);
 
-        Task<bool> RemoveToShoeShoppingList(RemoveShoppingListDto dto);
+        Task<bool> RemoveToShoeShoppingList(string shoppingShoeId);
         #endregion
 
 
