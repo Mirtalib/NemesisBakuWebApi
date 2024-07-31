@@ -105,7 +105,7 @@ namespace Infrastructure.Services.UserServices
         #region Favori List
 
 
-        public async Task<List<GetShoeDto>> GetFavoriteList(string clientId)
+        public List<GetShoeDto> GetFavoriteList(string clientId)
         {
 
             var favorishoes = _unitOfWork.ReadClientFavoriShoesRepository.GetWhere(shoe => shoe.ClientId.ToString() == clientId);
@@ -117,16 +117,14 @@ namespace Infrastructure.Services.UserServices
             foreach (var favorishoe in favorishoes)
                 if (favorishoe is not null)
                 {
-                    var shoe = await _unitOfWork.ReadShoesRepository.GetAsync(favorishoe.ShoeId.ToString());
-                    if (shoe is not null)
-                        shoesDto.Add(new GetShoeDto
-                        {
-                            Id = shoe.Id.ToString(),
-                            Brend = shoe.Brend,
-                            ImageUrls = shoe.ImageUrls,
-                            Model = shoe.Model,
-                            Price = shoe.Price,
-                        });
+                    shoesDto.Add(new GetShoeDto
+                    {
+                        Id = favorishoe.Shoe.Id.ToString(),
+                        Brend = favorishoe.Shoe.Brend,
+                        ImageUrls = favorishoe.Shoe.ImageUrls,
+                        Model = favorishoe.Shoe.Model,
+                        Price = favorishoe.Shoe.Price,
+                    });
                 }
 
             return shoesDto;

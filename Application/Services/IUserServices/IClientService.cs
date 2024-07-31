@@ -15,13 +15,13 @@ namespace Application.Services.IUserServices
         Task<GetShoeInfoDto> GetShoeId(string shoeId);
 
         Task<List<GetShoeDto>> GetShoeByCategoryId(string categoryId);
-        
+
         #endregion
 
 
         #region Favori List
-        
-        Task<List<GetShoeDto>> GetFavoriteList(string clientId);
+
+        List<GetShoeDto> GetFavoriteList(string clientId);
 
         Task<bool> AddToShoeFavoriteList(AddFavoriteListDto dto);
 
