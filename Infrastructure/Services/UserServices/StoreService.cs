@@ -484,7 +484,8 @@ namespace Infrastructure.Services.UserServices
                 OrderMakeTime = order.OrderMakeTime,
                 OrderStatus = order.OrderStatus,
             };
-            orderDto.ShoesIds.AddRange(order.Shoes);
+            foreach (var shoe in order.Shoes)
+                orderDto.ShoesIds.Add(shoe.Id.ToString());
 
             return orderDto;
         }
@@ -510,16 +511,16 @@ namespace Infrastructure.Services.UserServices
                         CourierId = order.Courier.Id.ToString(),
                         ClientId = order.Client.Id.ToString(),
                         OrderCommentId = order.OrderComment.Id.ToString(),
-                        ShoesIds = order.Shoes,
                         Amount = order.Amount,                        
                         OrderFinishTime = order.OrderFinishTime,
                         OrderMakeTime = order.OrderMakeTime,
                         OrderStatus = order.OrderStatus,
                     };
-                    orderDto.ShoesIds.AddRange(order.Shoes);
 
+                    foreach (var shoe in order.Shoes)
+                        orderDto.ShoesIds.Add(shoe.Id.ToString());
+                    
                     ordersDto.Add(orderDto);
-
                 }
             }
             return ordersDto;
@@ -538,19 +539,25 @@ namespace Infrastructure.Services.UserServices
             foreach (var order in orders)
             {
                 if (order is not null)
-                    ordersDto.Add(new GetOrderDto
+                {
+                    var orderDto = new GetOrderDto
                     {
                         Id = order.Id.ToString(),
                         StoreId = order.Store.Id.ToString(),
                         CourierId = order.Courier.Id.ToString(),
-                        ShoesIds = order.Shoes,
+
                         OrderCommentId = order.OrderComment.Id.ToString(),
-                        ClientId = order.Client.Id.ToString(), 
+                        ClientId = order.Client.Id.ToString(),
                         Amount = order.Amount,
                         OrderFinishTime = default,
                         OrderMakeTime = order.OrderMakeTime,
                         OrderStatus = order.OrderStatus,
-                    });
+                    };
+                    foreach (var shoe in order.Shoes)
+                        orderDto.ShoesIds.Add(shoe.Id.ToString());
+
+                    ordersDto.Add(orderDto);
+                }
             }
             return ordersDto;
         }

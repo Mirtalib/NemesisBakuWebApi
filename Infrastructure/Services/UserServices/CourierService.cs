@@ -42,8 +42,12 @@ namespace Infrastructure.Services.UserServices
                         OrderFinishTime = order.OrderFinishTime,
                         OrderMakeTime = order.OrderMakeTime,
                         OrderStatus = order.OrderStatus,
+                        ShoesIds = new List<string>(),
+                        ClientId = order.ClientId.ToString(),
                     };
-                    orderDto.ShoesIds.AddRange(order.Shoes);
+                    foreach (var shoe in order.Shoes)
+                        orderDto.ShoesIds.Add(shoe.Id.ToString());
+
                     ordersDto.Add(orderDto);
                 }
             }
@@ -68,8 +72,8 @@ namespace Infrastructure.Services.UserServices
                 OrderMakeTime = order.OrderMakeTime,
                 OrderStatus = order.OrderStatus,
             };
-
-            orderDto.ShoesIds.AddRange(order.Shoes);
+            foreach (var shoe in order.Shoes)
+                orderDto.ShoesIds.Add(shoe.Id.ToString());
 
             return orderDto;
 

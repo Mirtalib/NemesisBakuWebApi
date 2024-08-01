@@ -5,6 +5,7 @@ using Application.Models.DTOs.ShoesCommentDTOs;
 using Application.Models.DTOs.ShoesDTOs;
 using Application.Services.IUserServices;
 using Domain.Models;
+using System.Collections.Generic;
 
 namespace Infrastructure.Services.UserServices
 {
@@ -248,9 +249,10 @@ namespace Infrastructure.Services.UserServices
                         OrderFinishTime = order.OrderFinishTime,
                         OrderMakeTime = order.OrderMakeTime,
                         OrderStatus = order.OrderStatus,
-                        ShoesIds = new List<ShoeCountSize>()
+                        ShoesIds = new List<string>()
                     };
-                    orderDto.ShoesIds.AddRange(order.Shoes);
+                    foreach (var shoe in order.Shoes)
+                        orderDto.ShoesIds.Add(shoe.Id.ToString());
 
                     ordersDto.Add(orderDto);
                 }
@@ -278,7 +280,8 @@ namespace Infrastructure.Services.UserServices
                 OrderStatus = order.OrderStatus,
             };
 
-            orderDto.ShoesIds.AddRange(order.Shoes);
+            foreach (var shoe in order.Shoes)
+                orderDto.ShoesIds.Add(shoe.Id.ToString());
 
             return orderDto;
 
