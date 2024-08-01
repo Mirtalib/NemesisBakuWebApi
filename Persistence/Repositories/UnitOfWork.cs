@@ -16,7 +16,7 @@ namespace Persistence.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {
-        public UnitOfWork(IReadAdminRepository readAdminRepository, IWriteAdminRepository writeAdminRepository, IReadClientRepository readClientRepository, IWriteClientRepository writeClientRepository, IReadCourierRepository readCourierRepository, IWriteCourierRepository writeCourierRepository, IReadShoesRepository readShoesRepository, IWriteShoesRepository writeShoesRepository, IReadShoesCommentRepository readShoesCommentRepository, IWriteShoesCommentRepository writeShoesCommentRepository, IReadStoreRepository readStoreRepository, IWriteStoreRepository writeStoreRepository, IReadOrderRepository readOrderRepository, IWriteOrderRepository writeOrderRepository, IReadCategoryRepository readCategoryRepository, IWriteCategoryRepository writeCategoryRepository, IReadOrderCommentRepository readOrderCommentRepository, IWriteOrderCommentRepository writeOrderCommentRepository, IReadClientFavoriShoesRepository readClientFavoriShoesRepository, IWriteClientFavoriShoesRepository writeClientFavoriShoesRepository, IReadShoeCountSizeRepository readShoeCountSizeRepository, IReadShoeCountSizeRepository writeShoeCountSizeRepository, IReadClientShoeShoppingListRepository readClientShoeShoppingListRepository, IWriteClientShoeShoppingListRepository writeClientShoeShoppingListRepository)
+        public UnitOfWork(IReadAdminRepository readAdminRepository, IWriteAdminRepository writeAdminRepository, IReadClientRepository readClientRepository, IWriteClientRepository writeClientRepository, IReadCourierRepository readCourierRepository, IWriteCourierRepository writeCourierRepository, IReadShoesRepository readShoesRepository, IWriteShoesRepository writeShoesRepository, IReadShoesCommentRepository readShoesCommentRepository, IWriteShoesCommentRepository writeShoesCommentRepository, IReadStoreRepository readStoreRepository, IWriteStoreRepository writeStoreRepository, IReadOrderRepository readOrderRepository, IWriteOrderRepository writeOrderRepository, IReadCategoryRepository readCategoryRepository, IWriteCategoryRepository writeCategoryRepository, IReadOrderCommentRepository readOrderCommentRepository, IWriteOrderCommentRepository writeOrderCommentRepository, IReadClientFavoriShoesRepository readClientFavoriShoesRepository, IWriteClientFavoriShoesRepository writeClientFavoriShoesRepository, IReadShoeCountSizeRepository readShoeCountSizeRepository, IWriteShoeCountSizeRepository writeShoeCountSizeRepository, IReadClientShoeShoppingListRepository readClientShoeShoppingListRepository, IWriteClientShoeShoppingListRepository writeClientShoeShoppingListRepository)
         {
             ReadAdminRepository = readAdminRepository;
             WriteAdminRepository = writeAdminRepository;
@@ -86,7 +86,7 @@ namespace Persistence.Repositories
 
         public IReadShoeCountSizeRepository ReadShoeCountSizeRepository  { get; }
 
-        public IReadShoeCountSizeRepository WriteShoeCountSizeRepository { get; }
+        public IWriteShoeCountSizeRepository WriteShoeCountSizeRepository { get; }
 
         public IReadClientShoeShoppingListRepository ReadClientShoeShoppingListRepository { get; }
 

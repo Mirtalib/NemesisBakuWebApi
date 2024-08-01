@@ -153,18 +153,20 @@ namespace Infrastructure.Services.UserServices
             if (shoe is null)
                 throw new ArgumentNullException("Shoe not found");
 
-            shoe.ShoeCountSizes.ForEach(x =>
+            shoe.ShoeCountSizes.ForEach(async x =>
             {
                 foreach (var item in dto.ShoeCountSizes)
                 {
                     if (x.Size == item.Size)
                     {
                         x.Count += item.Count;
+                        _unitOfWork.WriteShoeCountSizeRepository.Update(x);
+                        await _unitOfWork.WriteShoeCountSizeRepository.SaveChangesAsync();
                     }
-                    else
-                        shoe.ShoeCountSizes.Add(item);
                 }
             });
+
+
 
             var result = _unitOfWork.WriteShoesRepository.Update(shoe);
             await _unitOfWork.WriteShoesRepository.SaveChangesAsync();

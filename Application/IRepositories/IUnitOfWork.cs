@@ -48,7 +48,7 @@ namespace Application.IRepositories
         IWriteClientFavoriShoesRepository WriteClientFavoriShoesRepository { get; }
 
         IReadShoeCountSizeRepository ReadShoeCountSizeRepository { get; }
-        IReadShoeCountSizeRepository WriteShoeCountSizeRepository { get; }
+        IWriteShoeCountSizeRepository WriteShoeCountSizeRepository { get; }
 
         IReadClientShoeShoppingListRepository ReadClientShoeShoppingListRepository { get;}
         IWriteClientShoeShoppingListRepository WriteClientShoeShoppingListRepository { get;}

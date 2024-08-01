@@ -1,10 +1,11 @@
-﻿using Domain.Models;
+﻿using Application.Models.DTOs.ShoeCountSizeDTOs;
+using Domain.Models;
 
 namespace Application.Models.DTOs.ShoesDTOs
 {
     public class UpdateShoeCountDto
     {
-        public List<ShoeCountSize> ShoeCountSizes { get; set; }
-        public string ShoeId { get; set;}
+        public List<UpdateShoeCountSizeDto> ShoeCountSizes { get; set; }
+        public string ShoeId { get; set; }
     }
 }

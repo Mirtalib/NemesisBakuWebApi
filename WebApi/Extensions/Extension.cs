@@ -1,10 +1,13 @@
 ﻿using Application.IRepositories;
 using Application.IRepositories.IAdminRepository;
 using Application.IRepositories.ICategoryRepository;
+using Application.IRepositories.IClientFavoriShoesRepository;
 using Application.IRepositories.IClientRepository;
+using Application.IRepositories.IClientShoeShoppingListRepository;
 using Application.IRepositories.ICourierRepository;
 using Application.IRepositories.IOrderCommentRepository;
 using Application.IRepositories.IOrderRepository;
+using Application.IRepositories.IShoeCountSizeRepository;
 using Application.IRepositories.IShoesCommentRepository;
 using Application.IRepositories.IShoesRepository;
 using Application.IRepositories.IStoreRepository;
@@ -23,10 +26,13 @@ using Microsoft.OpenApi.Models;
 using Persistence.Repositories;
 using Persistence.Repositories.AdminRepository;
 using Persistence.Repositories.CategoryRepository;
+using Persistence.Repositories.ClientFavoriShoesRepository;
 using Persistence.Repositories.ClientRepository;
+using Persistence.Repositories.ClientShoeShoppingListRepository;
 using Persistence.Repositories.CourierRepository;
 using Persistence.Repositories.OrderCommentRepository;
 using Persistence.Repositories.OrderRepository;
+using Persistence.Repositories.ShoeCountSizeRepository;
 using Persistence.Repositories.ShoesCommentRepository;
 using Persistence.Repositories.ShoesRepository;
 using Persistence.Repositories.StoreRepository;
@@ -163,6 +169,16 @@ namespace WebApi.Extensions
             
             services.AddScoped<IReadOrderCommentRepository, ReadOrderCommentRepository>();
             services.AddScoped<IWriteOrderCommentRepository, WriteOrderCommentRepository>();
+
+
+            services.AddScoped<IReadShoeCountSizeRepository, ReadShoeCountSizeRepository>();
+            services.AddScoped<IWriteShoeCountSizeRepository, WriteShoeCountSizeRepository>();
+
+            services.AddScoped<IReadClientFavoriShoesRepository, ReadClientFavoriShoesRepository>();
+            services.AddScoped<IWriteClientFavoriShoesRepository, WriteClientFavoriShoesRepository>();
+
+            services.AddScoped<IReadClientShoeShoppingListRepository, ReadClientShoeShoppingListRepository>();
+            services.AddScoped<IWriteClientShoeShoppingListRepository, WriteClientShoeShoppingListRepository>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
