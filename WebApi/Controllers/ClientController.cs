@@ -102,12 +102,12 @@ namespace WebApi.Controllers
 
 
         [HttpGet("getFavoriteList")]
-        public async Task<ActionResult<List<GetShoeDto>>> GetFavoriteList(string clientId)
+        public ActionResult<List<GetShoeDto>> GetFavoriteList(string clientId)
         {
 
             try
             {
-                var result = await  _clientService.GetFavoriteList(clientId);
+                var result =  _clientService.GetFavoriteList(clientId);
                 if (result is not null)
                     return Ok(result);
                 return BadRequest();
