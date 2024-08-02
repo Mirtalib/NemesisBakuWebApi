@@ -65,10 +65,29 @@ namespace Infrastructure.Services.UserServices
 
                 };
 
-                newShoe.ShoeCountSizes.AddRange(shoeDto.ShoeCountSizes);
+
+
+                foreach (var item in shoeDto.ShoeCountSizes)
+                    if (item is not null)
+                    {
+                        var shoeCountSize = new ShoeCountSize 
+                        {
+                            Id  = Guid.NewGuid(),
+                            Count = item.Count,
+                            ShoeId = newShoe.Id,
+                            Shoe = newShoe,
+                            Size = item.Size,
+                        };
+                        newShoe.ShoeCountSizes.Add(shoeCountSize);
+
+                        await _unitOfWork.WriteShoeCountSizeRepository.AddAsync(shoeCountSize);
+                    }
+
 
                 store.Shoes.Add(newShoe);
                 category.Shoes.Add(newShoe);
+
+                await _unitOfWork.WriteShoeCountSizeRepository.SaveChangesAsync();
 
                 await _unitOfWork.WriteShoesRepository.AddAsync(newShoe);
                 await _unitOfWork.WriteShoesRepository.SaveChangesAsync();

@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Application.Models.DTOs.ShoeCountSizeDTOs;
+using Domain.Models;
 
 namespace Application.Models.DTOs.ShoesDTOs
 {
@@ -11,7 +12,7 @@ namespace Application.Models.DTOs.ShoesDTOs
         public string Color { get; set; }
         public string StoreId { get; set; }
         public float Price { get; set; }
-        public List<ShoeCountSize> ShoeCountSizes { get; set; }
+        public List<AddShoeCountSizeDto> ShoeCountSizes { get; set; }
     }
 }
 
